@@ -1,0 +1,290 @@
+# =============================================================================
+# Gitignore para proyecto FPGA - Robot Seguidor de Línea
+# Creado para: Quartus Prime, FPGA Cyclone IV
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Archivos de Quartus Prime (generados)
+# -----------------------------------------------------------------------------
+# Directorios de compilación
+db/
+incremental_db/
+output_files/
+simulation/
+greybox_tmp/
+hc_output/
+tmp/
+tmp_stx/
+
+# Archivos de proyecto generados
+*.qpf
+*.qsf
+*.qws
+*.qws.bak
+*.qws.info
+*.settings
+*.sopc
+*.sysinfo
+
+# Archivos de compilación
+*.asm
+*.cdb
+*.cmp
+*.cvt
+*.do
+*.dump
+*.ec
+*.ed
+*.efd
+*.em
+*.err
+*.est
+*.ff
+*.fix
+*.h
+*.hex
+*.hoc
+*.i
+*.ii
+*.ip
+*.ism
+*.iss
+*.l
+*.lnk
+*.log
+*.mps
+*.msg
+*.nlf
+*.nsm
+*.obj
+*.opc
+*.p
+*.pi
+*.po
+*.pp
+*.rpt
+*.s
+*.sim
+*.sm
+*.sml
+*.ss
+*.ssp
+*.st
+*.stp
+*.t
+*.tbl
+*.tc
+*.tcl
+*.tex
+*.tr
+*.tss
+*.txt
+*.v
+*.vhd
+*.vht
+*.vhf
+*.vo
+*.vp
+*.vq
+*.w
+*.x
+*.xml
+*.xdc
+
+# Excepciones: archivos VHDL fuente
+!Robot.vhd
+!polarPWM.vhd
+!LIDAR.vhd
+!MaquinaEstados.vhd
+!Practica5.vhd
+
+# Excepciones: archivos de configuración del proyecto
+!Robot.qpf
+!Robot.qsf
+!Robot.qws
+
+# Excepciones: documentación
+!*.md
+!*.png
+!*.jpg
+!*.jpeg
+!*.pdf
+
+# -----------------------------------------------------------------------------
+# Archivos del sistema operativo
+# -----------------------------------------------------------------------------
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Mac
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.fuse_hidden*
+.nfs*
+.Trash-*
+
+# -----------------------------------------------------------------------------
+# Editores de código
+# -----------------------------------------------------------------------------
+# VS Code
+.vscode/
+*.code-workspace
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# Eclipse
+.project
+.classpath
+.settings/
+*.launch
+
+# -----------------------------------------------------------------------------
+# Archivos temporales y de backup
+# -----------------------------------------------------------------------------
+*.bak
+*.backup
+*.old
+*.orig
+*.tmp
+*.temp
+*~
+\#*\#
+
+# -----------------------------------------------------------------------------
+# Logs y debug
+# -----------------------------------------------------------------------------
+*.log
+*.pid
+*.seed
+*.lst
+
+# -----------------------------------------------------------------------------
+# Herramientas de programación
+# -----------------------------------------------------------------------------
+# USB-Blaster
+*.jdi
+*.jor
+*.jse
+*.jrf
+
+# Programación
+*.pof
+*.sof
+*.rbf
+*.rbf.bak
+
+# -----------------------------------------------------------------------------
+# Documentación generada
+# -----------------------------------------------------------------------------
+# Si no quieres incluir documentación generada
+# documentation/
+# reports/
+
+# -----------------------------------------------------------------------------
+# Archivos específicos del proyecto
+# -----------------------------------------------------------------------------
+# Archivos de configuración local
+*.local
+*.private
+*.secret
+
+# Credenciales (NUNCA incluir en git)
+*.env
+.env
+.env.*
+credentials.json
+credentials.txt
+*.key
+*.pem
+
+# -----------------------------------------------------------------------------
+# Archivos de simulación
+# -----------------------------------------------------------------------------
+# ModelSim
+*.wlf
+*.wlft
+*.mpf
+*.dbg
+*.crf
+*.f
+*.in
+*.out
+
+# -----------------------------------------------------------------------------
+# Archivos de síntesis
+# -----------------------------------------------------------------------------
+*.syn
+*.synp
+*.tcl.in
+
+# -----------------------------------------------------------------------------
+# Otros
+# -----------------------------------------------------------------------------
+# Archivos grandes binarios
+*.bin
+*.dat
+*.hexdump
+
+# Memoria
+*.mem
+*.mif
+
+# Ondas y formas de onda
+*.wdf
+*.wave
+*.waves
+
+# -----------------------------------------------------------------------------
+# Excepciones importantes (NUNCA ignorar)
+# ----------------------------------------------------------------_none
+# Asegurar que los archivos fuente VHDL siempre se incluyan
+!*.vhd
+!*.v
+
+# Asegurar que la documentación siempre se incluya
+!*.md
+!README*
+!LICENSE
+!COPYING
+
+# Asegurar que los scripts de build se incluyan
+!*.tcl
+!Makefile
+!makefile
+
+# -----------------------------------------------------------------------------
+# Fin del archivo .gitignore
+# -----------------------------------------------------------------------------
