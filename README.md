@@ -86,11 +86,11 @@ flowchart TB
         direction TB
 
         SM["Maquina<br/>Estados"]
-        PWM1["Modulo<br/>PolarPWM"]
-        PWM2["Modulo<br/>PolarPWM"]
+        PWM["Modulo<br/>PolarPWM"]
+        LIDAR["Modulo<br/>LIDAR"]
 
         SM <--> PWM1
-        PWM1 <--> PWM2
+        PWM <--> LIDAR
     end
 
     subgraph MODULOS
@@ -105,8 +105,9 @@ flowchart TB
     IR --> SM
     SM --> HBRIDGE
 
-    PROX --> PWM1
-    PWM1 --> SERVO
+    PROX <--> LIDAR
+    PWM --> SERVO
+    LIDAR --> SERVO
 ```
 ---
 
