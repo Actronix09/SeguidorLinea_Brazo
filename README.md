@@ -123,19 +123,19 @@ Módulo superior que integra todos los subsistemas.
 **Archivo:** `polarPWM.vhd`
 
 Convierte coordenadas polares a PWM para 4 servomotores.
-- Frecuencia: 50Hz (20ms)
-- Rango: 0.5ms - 2.0ms duty cycle
-- Resolución: 8 bits (0-180°)
-- LUT: 181 valores precalculados
+- Frecuencia: 50Hz (20ms).
+- Rango: 0.5ms - 2.0ms duty cycle.
+- Resolución: 8 bits (0-180°).
+- LUT: 181 valores precalculados.
 
 ### 3. LIDAR
 **Archivo:** `LIDAR.vhd`
 
 Controla el VL6180X mediante I2C para escanear de -45° a +45°.
-- 19 puntos de escaneo
-- Resolución: 5° por paso
-- I2C a 100 kHz
-- Algoritmo: mínimo + promedio ponderado
+- 19 puntos de escaneo.
+- Resolución: 5° por paso.
+- I2C a 100 kHz.
+- Algoritmo: mínimo + promedio ponderado.
 
 **Estados:** IDLE → INIT → STARTING → WAIT_M → READ_M → NEXT_PT → REFINE → CALC → OUTPUT → COMPLETE
 
@@ -185,10 +185,10 @@ flowchart TD
 El módulo `polarPWM` convierte coordenadas polares a señales PWM para los 4 servomotores.
 
 **Especificaciones:**
-- Frecuencia: 50Hz (20ms)
-- Duty cycle: 0.5ms - 2.0ms
-- Resolución: 8 bits (0-180°)
-- LUT: 181 valores precalculados
+- Frecuencia: 50Hz (20ms).
+- Duty cycle: 0.5ms - 2.0ms.
+- Resolución: 8 bits (0-180°).
+- LUT: 181 valores precalculados.
 
 **Fórmula:**
 ```
@@ -247,35 +247,35 @@ donde: PWM_MIN=25000, PWM_MAX=100000
 
 ## Lista de Materiales
 
-- ALTERA FPGA Cyclone II EP2C5T144 Mini placa
-- PCB personalizada
-- Piezas de impresión 3D en PLA y TPU
-- Insertos de latón M2 y M3
-- Tornillos M2, M3 y M4
-- Tuercas M3 y M4
-- Motores reductores
-- Capacitor Electrolítico 16V (470 uF, 100 uF, 1000 uF)
-- Capacitor Cerámico 50V 100nF
-- Jack DC Hembra DC-005-2.1
-- Base Socket DIP-16 y DIP-8
-- LM393P Comparador Diferencial Dual
-- Tira Header Macho y Hembra 2.54mm
-- Plug DC 5.5mm x 2.1mm
-- STPS0560Z Diodo 60V 500mA SMD
-- LD1117AS33TR Regulador 3.3V 1A
-- LD1117S50CTR Regulador 5V 800mA
-- Resistor 470 Ohms 1/4W 1206 SMD
-- Resistor 10K Ohms 1/4W 1206 SMD
-- LED Rojo SMD 1206
-- Potenciómetro de Precisión 3362P 10k
-- Conector XT30 Par Macho Hembra
-- Batería 18650 7.4V 2S1P 2200mAh
-- Conectores Dupont Hembra 2.54mm (3P, 4P, 7P)
-- Servomotor SG90 RC 9g
-- Separador de Latón M3 (5mm, 10mm, 20mm)
-- CY-15A Rueda Loca Universal de Metal
-- VL6180X Sensor de Distancia Óptico
-- Alambre de Cobre 30 AWG
+- ALTERA FPGA Cyclone II EP2C5T144 Mini placa.
+- PCB personalizada.
+- Piezas de impresión 3D en PLA y TPU.
+- Insertos de latón M2 y M3.
+- Tornillos M2, M3 y M4.
+- Tuercas M3 y M4.
+- Motores reductores.
+- Capacitor Electrolítico 16V (470 uF, 100 uF, 1000 uF).
+- Capacitor Cerámico 50V 100nF.
+- Jack DC Hembra DC-005-2.1.
+- Base Socket DIP-16 y DIP-8.
+- LM393P Comparador Diferencial Dual.
+- Tira Header Macho y Hembra 2.54mm.
+- Plug DC 5.5mm x 2.1mm.
+- STPS0560Z Diodo 60V 500mA SMD.
+- LD1117AS33TR Regulador 3.3V 1A.
+- LD1117S50CTR Regulador 5V 800mA.
+- Resistor 470 Ohms 1/4W 1206 SMD.
+- Resistor 10K Ohms 1/4W 1206 SMD.
+- LED Rojo SMD 1206.
+- Potenciómetro de Precisión 3362P 10k.
+- Conector XT30 Par Macho Hembra.
+- Batería 18650 7.4V 2S1P 2200mAh.
+- Conectores Dupont Hembra 2.54mm (3P, 4P, 7P).
+- Servomotor SG90 RC 9g.
+- Separador de Latón M3 (5mm, 10mm, 20mm).
+- CY-15A Rueda Loca Universal de Metal.
+- VL6180X Sensor de Distancia Óptico.
+- Alambre de Cobre 30 AWG.
 
 ---
 
@@ -314,14 +314,11 @@ SeguidorLinea_Brazo/
 
 ## Licencia
 Este proyecto está bajo la [Licencia MIT](LICENSE). Eres libre de:
-- ✅ Usar el proyecto con fines personales o comerciales
-- ✅ Modificar el código, PCB y diseños
-- ✅ Distribuir copias
-- ✅ Vender productos basados en este proyecto
+- Usar el proyecto con fines personales o comerciales.
+- Modificar el código, PCB y diseños.
+- Distribuir copias.
+- Vender productos basados en este proyecto.
 **Único requisito:** Incluir el aviso de licencia original.
-## GitHub
-**Repositorio:** [github.com/Actronix09/SeguidorLinea_Brazo](https://github.com/Actronix09/SeguidorLinea_Brazo)
-**Créditos:** Adrian Damas Garnica (Actronix09) - 2026
 
 ---
 
