@@ -102,7 +102,7 @@ flowchart TB
         SERVO["Servomotores<br/>4 ejes"]
     end
 
-    SM <-- IR
+    IR --> SM
     SM --> HBRIDGE
 
     PWM --> SERVO
