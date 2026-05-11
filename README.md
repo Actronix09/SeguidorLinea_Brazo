@@ -149,27 +149,69 @@ INICIO → SEGUIR_LINEA → DETECTA_ZONA_NEGRA → EXPLORAR_ZONA → BUSCAR_OBJE
 
 ## Máquina de Estados
 
-```mermaid
-stateDiagram-v2
-    [*] --> INICIO
-    INICIO --> SEGUIR_LINEA
-    SEGUIR_LINEA --> DETECTA_ZONA_NEGRA: 3 sensores negro
-    SEGUIR_LINEA --> BUSQUEDA: ambos=0
-    SEGUIR_LINEA --> ZONA_BLANCA: fin pista
-    DETECTA_ZONA_NEGRA --> EXPLORAR_ZONA
-    EXPLORAR_ZONA --> BUSCAR_OBJETO: LIDAR < 200mm
-    EXPLORAR_ZONA --> MEMORIZAR_ZONA: LIDAR >= 200mm
-    BUSCAR_OBJETO --> AGARRAR_OBJETO: distancia < 50mm
-    AGARRAR_OBJETO --> CALCULAR_RETORNO
-    CALCULAR_RETORNO --> RETORNAR_INICIO
-    RETORNAR_INICIO --> DEJAR_OBJETO: detecta inicio
-    RETORNAR_INICIO --> ERROR: timeout
-    DEJAR_OBJETO --> CONTINUAR_PISTA
-    CONTINUAR_PISTA --> SEGUIR_LINEA
-    MEMORIZAR_ZONA --> SEGUIR_LINEA
-    BUSQUEDA --> SEGUIR_LINEA
-    ERROR --> [*]
-    ZONA_BLANCA --> [*]
+```
+                     ┌─────────────────┐
+                     │    INICIO       │
+                     └────────┬────────┘
+                              │
+                              ▼
+                     ┌─────────────────┐
+                     │  SEGUIR_LINEA   │
+                     └────────┬────────┘
+                              │
+              ┌───────────────┼───────────────┐
+              │               │               │
+              ▼               ▼               ▼
+     ┌────────────────┐ ┌─────────┐   ┌──────────────┐
+     │ DETECTA_ZONA   │ │ Búsqueda│   │ ZONA_BLANCA  │
+     │    NEGRA       │ │  (ambos=0)│  │ (fin pista)  │
+     └────────┬───────┘ └─────────┘   └──────────────┘
+              │
+              ▼
+     ┌─────────────────┐
+     │  EXPLORAR_ZONA  │
+     │   (LIDAR on)    │
+     └────────┬────────┘
+              │
+     ┌────────┴────────┐
+     │                 │
+     ▼                 ▼
+┌─────────┐       ┌──────────┐
+│ BUSCAR  │       │ MEMORIZAR│
+│ OBJETO  │       │  ZONA    │
+└────┬────┘       └──────────┘
+     │
+     ▼
+┌─────────┐
+│ AGARRAR │
+│ OBJETO  │
+└────┬────┘
+     │
+     ▼
+┌─────────────┐
+│ CALCULAR    │
+│ RETORNO     │
+└────┬────────┘
+     │
+     ▼
+┌─────────────┐
+│ RETORNAR    │
+│ INICIO      │
+└────┬────────┘
+     │
+     ▼
+┌─────────────┐
+│ DEJAR       │
+│ OBJETO      │
+└────┬────────┘
+     │
+     ▼
+┌─────────────┐
+│ CONTINUAR   │
+│ PISTA       │
+└─────────────┘
+
+Nota: Estado ERROR se activa por timeout o condición inválida
 ```
 
 **Transiciones clave:**
