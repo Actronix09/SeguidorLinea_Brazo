@@ -83,31 +83,20 @@ Robot seguidor de línea autónomo con brazo robótico de 4 grados de libertad c
 flowchart LR
     subgraph FPGA ["FPGA Cyclone II"]
         direction TB
-        ME[Maquina Estados]
-        PWM[polarPWM Module]
-        LID[LIDAR Module]
+        ME[┌──────────────────┐\n│  Maquina         │\n│  Estados         │\n└──────────▲───────┘]
+        
+        PWM1[┌──────────────────┐\n│  Modulo          │\n│  PolarPWM        │\n└──────────▲───────┘]
+        
+        LID[┌──────────────────┐\n│  Modulo          │\n│  PolarPWM        │\n└──────────────────┘]
     end
 
-    SENS[Sensores QRD1114]
-    MOT[Motores L293D]
-    VL[Sensor VL6180X]
-    SERV[Servos 4 ejes]
+    SENS[┌──────────────────┐\n│  Sensores IR     │\n│  QRD1114         │\n└──────────────────┘] 
+    MOT[┌──────────────────┐\n│  Puente H        │\n│  Motores L293D   │\n└──────────────────┘]
+    VL[┌──────────────────┐\n│  Sensor          │\n│  VL6180X         │\n└──────────────────┘]
+    SERV[┌──────────────────┐\n│  Servomotores    │\n│  4 ejes          │\n└──────────────────┘]
 
     SENS --> ME
     ME --> MOT
-    ME --> PWM
-    PWM --> SERV
-    PWM --> LID
-    LID --> VL
-```
-
-**Flujo de señales:**
-1. Sensores QRD1114 → MaquinaEstados
-2. MaquinaEstados → Motores L293D
-3. MaquinaEstados → polarPWM
-4. polarPWM → Servos
-5. polarPWM ↔ LIDAR
-6. LIDAR ↔ Sensor VL6180X
 
 ---
 
