@@ -80,29 +80,35 @@ Robot seguidor de línea autónomo con brazo robótico de 4 grados de libertad c
 ## Arquitectura del Sistema
 
 ```mermaid
-flowchart LR
+flowchart TB
+
     subgraph FPGA["FPGA Cyclone II"]
-        MaqEst["Maquina<br/>Estados"]
-        PWM["Modulo<br/>PolarPWM"]
-        LIDAR["Modulo<br/>LIDAR"]
+        direction TB
+
+        SM["Maquina<br/>Estados"]
+
+        PWM1["Modulo<br/>PolarPWM"]
+
+        PWM2["Modulo<br/>PolarPWM"]
+
+        SM <--> PWM1
+        PWM1 <--> PWM2
     end
 
-    SenIR["Sensores IR<br/>QRD1114"]
-    PuenteH["Puente H + Motores<br/>L293D"]
-    SenProx["Sensor Proximidad<br/>VL6180X"]
-    SERVO["Servomotores<br/>4 ejes"]
+    subgraph MODULOS[""]
+        direction TB
 
-    SenIR --> MaqEst
-    MaqEst --> PuenteH
+        IR["Sensores IR<br/>QRD1114"]
+        HBRIDGE["Puente H + Motores<br/>L293D"]
+        PROX["Sensor Proximidad<br/>VL6180X"]
+        SERVO["Servomotores<br/>4 ejes"]
+    end
 
-    PWM --> SERVO
+    IR --> SM
+    SM --> HBRIDGE
 
-    SenProx <--> LIDAR
-    LIDAR --> SERVO
-
-    MaqEst <--> PWM
-    LIDAR <--> MaqEst
-    PWM <--> LIDAR
+    PROX --> PWM1
+    PWM1 --> SERVO
 ```
 ---
 
