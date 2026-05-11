@@ -109,6 +109,8 @@ flowchart TB
 
     LIDAR --> SERVO
     LIDAR <--> PROX
+
+    IR ~~~ HBRIDGE ~~~ PROX ~~~ SERVO
 ```
 ---
 
