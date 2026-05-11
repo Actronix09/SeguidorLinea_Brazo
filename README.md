@@ -62,10 +62,10 @@ Robot seguidor de línea autónomo con brazo robótico de 4 grados de libertad c
 
 ### Modelo 3D del Robot
 
+![Robot ISO](Imagenes/Robot%20ISO.png)
 ![Robot Front](Imagenes/Robot%20FRONT.png)
 ![Robot Side](Imagenes/Robot%20SIDE.png)
 ![Robot Top](Imagenes/Robot%20TOP.png)
-![Robot ISO](Imagenes/Robot%20ISO.png)
 
 *Figura 3: Modelo 3D del robot con multiples ángulos.*
 
