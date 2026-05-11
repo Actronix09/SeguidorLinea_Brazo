@@ -80,22 +80,20 @@ Robot seguidor de línea autónomo con brazo robótico de 4 grados de libertad c
 ## Arquitectura del Sistema
 
 ```mermaid
-flowchart TB
+flowchart LR
 
     subgraph FPGA["FPGA Cyclone II"]
         direction TB
 
         SM["Maquina<br/>Estados"]
-
         PWM1["Modulo<br/>PolarPWM"]
-
         PWM2["Modulo<br/>PolarPWM"]
 
         SM <--> PWM1
         PWM1 <--> PWM2
     end
 
-    subgraph MODULOS[""]
+    subgraph MODULOS
         direction TB
 
         IR["Sensores IR<br/>QRD1114"]
