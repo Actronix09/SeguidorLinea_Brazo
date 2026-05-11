@@ -79,41 +79,26 @@ Robot seguidor de línea autónomo con brazo robótico de 4 grados de libertad c
 
 ## Arquitectura del Sistema
 
-```mermaid
-%%{init: {'flowchart': {'curve': 'step'}} }%%
-
-flowchart LR
-
-    subgraph FPGA["FPGA Cyclone II"]
-        direction TB
-
-        SM["Maquina<br/>Estados"]
-        PWM["Modulo<br/>PolarPWM"]
-        LIDAR["Modulo<br/>LIDAR"]
-
-        SM <--> PWM
-        PWM <--> LIDAR
-    end
-
-    subgraph MODULOS
-        direction TB
-
-        IR["Sensores IR<br/>QRD1114"]
-        HBRIDGE["Puente H + Motores<br/>L293D"]
-        PROX["Sensor Proximidad<br/>VL6180X"]
-        SERVO["Servomotores<br/>4 ejes"]
-    end
-
-    %% conexiones reales
-    IR --> SM
-    SM --> HBRIDGE
-
-    PWM --> SERVO
-
-    LIDAR <--> PROX
-    LIDAR --> SERVO
-
-    IR ~~~ HBRIDGE ~~~ PROX ~~~ SERVO
+```
+┌────────────────────┐    ┌──────────────────────┐
+│  FPGA Cyclone II   │    │  Sensores IR         │    
+│  ┌──────────────┐◄─┼────┤  QRD1114             │
+│  │ Maquina      │  │    └──────────────────────┘
+│  │ Estados      │  │    ┌──────────────────────┐
+│  └──────▲───────┴──┼───►│  Puente H + Motores  │
+│         │          │    │  L293D               │
+│         │          │    └──────────────────────┘
+│         │          │    ┌──────────────────────┐
+│         │          │    │  Sensor Proximidad   │
+│  ┌──────▼───────┐◄─┼────┤  VL6180X             │
+│  │ Modulo       │  │    └──────────────────────┘
+│  │ PolarPWM     │  │    ┌──────────────────────┐
+│  └──────▲───────┴──┼───►│  Servomotores        │
+│  ┌──────▼───────┬──┼───►│  4 ejes              │
+│  │ Modulo       │  │    └──────────────────────┘
+│  │ PolarPWM     │  │
+│  └──────────────┘  │
+└────────────────────┘
 ```
 ---
 
