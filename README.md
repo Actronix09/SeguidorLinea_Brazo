@@ -69,12 +69,11 @@ Robot seguidor de línea autónomo con brazo robótico de 4 grados de libertad c
 
 *Figura 3: Modelo 3D del robot con multiples ángulos.*
 
-**Dimensiones del brazo:**
-- **Eje 1 (φ):** Base rotativa - 180°
-- **Eje 2 (θ₁):** Primer segmento - 100mm
-- **Eje 3 (θ₂):** Segundo segmento - 100mm  
-- **Eje 4 (θ₃):** Tercer segmento con pinza - 77.6mm
-- **Pinza:** Apertura de 25.269mm
+**Ejes del brazo:**
+- **Eje 1 (φ):** Base rotativa
+- **Eje 2 (θ₁):** Primer segmento
+- **Eje 3 (θ₂):** Segundo segmento 
+- **Eje 4 (θ₃):** Tercer segmento con pinza
 
 ---
 
