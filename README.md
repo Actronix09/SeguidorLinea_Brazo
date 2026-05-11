@@ -24,11 +24,11 @@
 Robot seguidor de línea autónomo con brazo robótico de 4 grados de libertad controlado por FPGA Cyclone IV. Integra sensores QRD1114 para seguimiento de línea, sensor VL6180X para detección de objetos (LIDAR), y control PWM para posicionamiento del brazo.
 
 **Características:**
-- Navegación autónoma por pista de línea negra
-- Detección y localización de objetos con LIDAR
-- Brazo de 4 ejes con control de posición preciso
-- Sistema de adquisición y depósito de objetos
-- Retroalimentación visual mediante LEDs
+- Navegación autónoma por pista de línea negra.
+- Detección y localización de objetos con LIDAR.
+- Brazo de 4 ejes con control de posición preciso.
+- Sistema de adquisición y depósito de objetos.
+- Retroalimentación visual mediante LEDs.
 
 ---
 
