@@ -89,7 +89,7 @@ flowchart TB
         PWM["Modulo<br/>PolarPWM"]
         LIDAR["Modulo<br/>LIDAR"]
 
-        SM <--> PWM1
+        SM <--> PWM
         PWM <--> LIDAR
     end
 
