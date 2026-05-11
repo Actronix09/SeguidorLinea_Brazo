@@ -98,8 +98,8 @@ flowchart LR
 
         IR["Sensores IR<br/>QRD1114"]
         HBRIDGE["Puente H + Motores<br/>L293D"]
-        PROX["Sensor Proximidad<br/>VL6180X"]
         SERVO["Servomotores<br/>4 ejes"]
+        PROX["Sensor Proximidad<br/>VL6180X"]
     end
 
     IR --> SM
