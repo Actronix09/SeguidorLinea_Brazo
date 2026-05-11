@@ -308,8 +308,20 @@ SeguidorLinea_Brazo/
 │   └── output_files/ # SOF para programación
 ├── Imagenes/         # Renderizados
 ├── Documentos/       # PDFs y STL
-└── README.md
+├── README.md         # Documentación
+└── LICENSE           # Licencia MIT
 ```
+
+## Licencia
+Este proyecto está bajo la [Licencia MIT](LICENSE). Eres libre de:
+- ✅ Usar el proyecto con fines personales o comerciales
+- ✅ Modificar el código, PCB y diseños
+- ✅ Distribuir copias
+- ✅ Vender productos basados en este proyecto
+**Único requisito:** Incluir el aviso de licencia original.
+## GitHub
+**Repositorio:** [github.com/Actronix09/SeguidorLinea_Brazo](https://github.com/Actronix09/SeguidorLinea_Brazo)
+**Créditos:** Adrian Damas Garnica (Actronix09) - 2026
 
 ---
 
