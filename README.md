@@ -80,7 +80,7 @@ Robot seguidor de línea autónomo con brazo robótico de 4 grados de libertad c
 ## Arquitectura del Sistema
 
 ```mermaid
-flowchart LR
+flowchart TB
 
     subgraph FPGA["FPGA Cyclone II"]
         direction TB
