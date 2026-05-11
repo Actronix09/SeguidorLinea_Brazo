@@ -175,7 +175,7 @@ INICIO → SEGUIR_LINEA → DETECTA_ZONA_NEGRA → EXPLORAR_ZONA → BUSCAR_OBJE
               ▼               ▼               ▼
      ┌────────────────┐ ┌─────────┐   ┌──────────────┐
      │ DETECTA_ZONA   │ │ Búsqueda│   │ ZONA_BLANCA  │
-     │    NEGRA       │ │  (ambos=0)│  │ (fin pista)  │
+     │    NEGRA       │ │(ambos=0)│   │ (fin pista)  │
      └────────┬───────┘ └─────────┘   └──────────────┘
               │
               ▼
