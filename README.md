@@ -112,6 +112,8 @@ flowchart LR
 
     LIDAR <--> PROX
     LIDAR --> SERVO
+
+    IR ~~ HBRIDGE ~~ PROX ~~ SERVO
 ```
 ---
 
