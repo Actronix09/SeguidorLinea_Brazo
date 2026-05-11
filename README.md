@@ -41,11 +41,11 @@ Robot seguidor de línea autónomo con brazo robótico de 4 grados de libertad c
 *Figura 1: Diagrama esquemático del sistema mostrando la interconexión de sensores QRD1114, controlador L293D, reguladores de voltaje y conexiones a la FPGA.*
 
 **Componentes principales:**
-- **Sensores QRD1114:** Detectan la línea negra mediante reflexión infrarroja
-- **LM393:** Comparadores para señal digital de sensores
-- **L293D:** Puente H para control de motores DC
-- **VL6180X:** Sensor de distancia por tiempo de vuelo (ToF)
-- **Reguladores:** LM317 para 5V y 3.3V estables
+- **Sensores QRD1114:** Detectan la línea negra mediante reflexión infrarroja.
+- **LM393:** Comparadores para señal digital de sensores.
+- **L293D:** Puente H para control de motores DC.
+- **VL6180X:** Sensor de distancia por tiempo de vuelo (ToF).
+- **Reguladores:** LM317 para 5V y 3.3V estables.
 
 ### PCB Diseñado
 
@@ -54,11 +54,11 @@ Robot seguidor de línea autónomo con brazo robótico de 4 grados de libertad c
 *Figura 2: Diseño de la PCB mostrando la distribución de componentes y ruteo de pistas. Dimensiones: 100mm x 84mm.*
 
 **Características del PCB:**
-- **Capas:** 2 capas (superior e inferior)
-- **Conectores:** Headers de 2.54mm para fácil conexión
-- **Alimentación:** Jack DC barrel + reguladores lineales
-- **Sensores:** 3 módulos QRD1114 configurables
-- **Motores:** Conectores para 2 motores DC con reductora
+- **Capas:** 2 capas (superior e inferior).
+- **Conectores:** Headers de 2.54mm para fácil conexión.
+- **Alimentación:** Jack DC barrel + reguladores lineales.
+- **Sensores:** 3 módulos QRD1114 configurables.
+- **Motores:** Conectores para 2 motores DC con reductora.
 
 ### Modelo 3D del Robot
 
@@ -70,10 +70,10 @@ Robot seguidor de línea autónomo con brazo robótico de 4 grados de libertad c
 *Figura 3: Modelo 3D del robot con multiples ángulos.*
 
 **Ejes del brazo:**
-- **Eje 1 (φ):** Base rotativa
-- **Eje 2 (θ₁):** Primer segmento
-- **Eje 3 (θ₂):** Segundo segmento 
-- **Eje 4 (θ₃):** Tercer segmento con pinza
+- **Eje 1 (φ):** Base rotativa.
+- **Eje 2 (θ₁):** Primer segmento.
+- **Eje 3 (θ₂):** Segundo segmento.
+- **Eje 4 (θ₃):** Tercer segmento con pinza.
 
 ---
 
