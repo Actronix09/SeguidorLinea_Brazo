@@ -160,21 +160,79 @@ INICIO → SEGUIR_LINEA → DETECTA_ZONA_NEGRA → EXPLORAR_ZONA → BUSCAR_OBJE
 
 ## Máquina de Estados
 
-**Flujo principal:**
-INICIO → SEGUIR_LINEA → DETECTA_ZONA_NEGRA → EXPLORAR_ZONA → BUSCAR_OBJETO → AGARRAR_OBJETO → CALCULAR_RETORNO → RETORNAR_INICIO → DEJAR_OBJETO → CONTINUAR_PISTA
+```
+                     ┌─────────────────┐
+                     │    INICIO       │
+                     └────────┬────────┘
+                              │
+                              ▼
+                     ┌─────────────────┐
+                     │  SEGUIR_LINEA   │
+                     └────────┬────────┘
+                              │
+              ┌───────────────┼───────────────┐
+              │               │               │
+              ▼               ▼               ▼
+     ┌────────────────┐ ┌─────────┐   ┌──────────────┐
+     │ DETECTA_ZONA   │ │ Búsqueda│   │ ZONA_BLANCA  │
+     │    NEGRA       │ │  (ambos=0)│  │ (fin pista)  │
+     └────────┬───────┘ └─────────┘   └──────────────┘
+              │
+              ▼
+     ┌─────────────────┐
+     │  EXPLORAR_ZONA  │
+     │   (LIDAR on)    │
+     └────────┬────────┘
+              │
+     ┌────────┴────────┐
+     │                 │
+     ▼                 ▼
+┌─────────┐       ┌──────────┐
+│ BUSCAR  │       │ MEMORIZAR│
+│ OBJETO  │       │  ZONA    │
+└────┬────┘       └──────────┘
+     │
+     ▼
+┌─────────┐
+│ AGARRAR │
+│ OBJETO  │
+└────┬────┘
+     │
+     ▼
+┌─────────────┐
+│ CALCULAR    │
+│ RETORNO     │
+└────┬────────┘
+     │
+     ▼
+┌─────────────┐
+│ RETORNAR    │
+│ INICIO      │
+└────┬────────┘
+     │
+     ▼
+┌─────────────┐
+│ DEJAR       │
+│ OBJETO      │
+└────┬────────┘
+     │
+     ▼
+┌─────────────┐
+│ CONTINUAR   │
+│ PISTA       │
+└─────────────┘
 
-**Estados secundarios:**
-- MEMORIZAR_ZONA (sin objeto detectado)
-- ZONA_BLANCA (final de pista)
-- ERROR (timeout o fallo)
+Nota: Estado ERROR se activa por timeout o condición inválida
+```
 
 **Transiciones clave:**
 | Condición | Transición |
 |-----------|------------|
-| 3 sensores en negro | DETECTA_ZONA_NEGRA |
-| LIDAR < 200mm | BUSCAR_OBJETO |
-| LIDAR >= 200mm | MEMORIZAR_ZONA |
-| Distancia < 50mm | AGARRAR_OBJETO |
+| 3 sensores en negro | SEGUIR_LINEA → DETECTA_ZONA_NEGRA |
+| LIDAR < 200mm | EXPLORAR_ZONA → BUSCAR_OBJETO |
+| LIDAR >= 200mm | EXPLORAR_ZONA → MEMORIZAR_ZONA |
+| Distancia < 50mm | BUSCAR_OBJETO → AGARRAR_OBJETO |
+| Timeout retorno | RETORNAR_INICIO → ERROR |
 
 ## Conversión Polar-PWM
 
