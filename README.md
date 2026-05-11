@@ -104,11 +104,6 @@ flowchart LR
         SERVO["Servomotores<br/>4 ejes"]
     end
 
-    %% alineacion
-    SM ~~~ IR
-    PWM ~~~ PROX
-    LIDAR ~~~ SERVO
-
     %% conexiones reales
     IR --> SM
     SM --> HBRIDGE
