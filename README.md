@@ -80,7 +80,9 @@ Robot seguidor de línea autónomo con brazo robótico de 4 grados de libertad c
 ## Arquitectura del Sistema
 
 ```mermaid
-flowchart TB
+%%{init: {'flowchart': {'curve': 'step'}} }%%
+
+flowchart LR
 
     subgraph FPGA["FPGA Cyclone II"]
         direction TB
@@ -102,15 +104,18 @@ flowchart TB
         SERVO["Servomotores<br/>4 ejes"]
     end
 
+    %% alineacion
+    SM ~~~ IR
+    PWM ~~~ PROX
+    LIDAR ~~~ SERVO
+
+    %% conexiones reales
     IR --> SM
     SM --> HBRIDGE
 
     PWM --> SERVO
 
-    LIDAR --> SERVO
     LIDAR <--> PROX
-
-    IR ~~~ HBRIDGE ~~~ PROX ~~~ SERVO
 ```
 ---
 
