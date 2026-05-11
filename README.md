@@ -98,16 +98,17 @@ flowchart TB
 
         IR["Sensores IR<br/>QRD1114"]
         HBRIDGE["Puente H + Motores<br/>L293D"]
-        SERVO["Servomotores<br/>4 ejes"]
         PROX["Sensor Proximidad<br/>VL6180X"]
+        SERVO["Servomotores<br/>4 ejes"]
     end
 
-    IR --> SM
+    SM <-- IR
     SM --> HBRIDGE
 
-    PROX <--> LIDAR
     PWM --> SERVO
+
     LIDAR --> SERVO
+    LIDAR <--> PROX
 ```
 ---
 
