@@ -321,11 +321,6 @@ SeguidorLinea_Brazo/
 4. Texas Instruments. "L293D Quadruple Half-H Driver." Datasheet.
 5. IEEE Standard 1076-2008. "VHDL Language Reference Manual."
 
-### D. Enlaces de Interés
-
-- **Repositorio GitHub:** [github.com/Actronix09/SeguidorLinea_Brazo](https://github.com/Actronix09/SeguidorLinea_Brazo)
-- **Quartus Prime Lite:** [Descargar](https://www.intel.com/content/www/us/en/software-kit/750675/quartus-prime-lite-edition-version-23-1-0-991-linux-installation.html)
-
 ---
 
 **Última actualización:** 10 de Mayo del 2026
