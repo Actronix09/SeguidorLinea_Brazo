@@ -111,6 +111,7 @@ flowchart LR
     PWM --> SERVO
 
     LIDAR <--> PROX
+    LIDAR --> SERVO
 ```
 ---
 
