@@ -1,0 +1,1425 @@
+Analysis & Synthesis report for SeguidorLinea_Brazo
+Tue Jun 09 20:53:59 2026
+Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Analysis & Synthesis Summary
+  3. Analysis & Synthesis Settings
+  4. Parallel Compilation
+  5. Analysis & Synthesis Source Files Read
+  6. Analysis & Synthesis Resource Usage Summary
+  7. Analysis & Synthesis Resource Utilization by Entity
+  8. Analysis & Synthesis RAM Summary
+  9. Analysis & Synthesis DSP Block Usage Summary
+ 10. State Machine - |SeguidorLinea_Brazo|MaquinaEstados:u_me|ultimo_giro
+ 11. State Machine - |SeguidorLinea_Brazo|MaquinaEstados:u_me|est
+ 12. State Machine - |SeguidorLinea_Brazo|grab_ctrl:u_grab|gst
+ 13. State Machine - |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|cordic_ret
+ 14. State Machine - |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|st
+ 15. State Machine - |SeguidorLinea_Brazo|LIDAR:u_lidar|st
+ 16. State Machine - |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|op_r
+ 17. State Machine - |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state
+ 18. State Machine - |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|\app:cur.op
+ 19. State Machine - |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_state
+ 20. State Machine - |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_st
+ 21. Registers Removed During Synthesis
+ 22. Removed Registers Triggering Further Register Optimizations
+ 23. General Register Statistics
+ 24. Inverted Register Statistics
+ 25. Registers Packed Into Inferred Megafunctions
+ 26. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 27. Source assignments for grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated
+ 28. Parameter Settings for User Entity Instance: LIDAR:u_lidar
+ 29. Parameter Settings for User Entity Instance: LIDAR:u_lidar|VL53L0X:u_VL53L0X
+ 30. Parameter Settings for User Entity Instance: grab_ctrl:u_grab
+ 31. Parameter Settings for User Entity Instance: grab_ctrl:u_grab|kinematics:u_kin
+ 32. Parameter Settings for User Entity Instance: MaquinaEstados:u_me
+ 33. Parameter Settings for Inferred Entity Instance: grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0
+ 34. Parameter Settings for Inferred Entity Instance: grab_ctrl:u_grab|kinematics:u_kin|lpm_add_sub:Add34
+ 35. Parameter Settings for Inferred Entity Instance: grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult4
+ 36. Parameter Settings for Inferred Entity Instance: grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult2
+ 37. Parameter Settings for Inferred Entity Instance: grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult0
+ 38. Parameter Settings for Inferred Entity Instance: grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult1
+ 39. Parameter Settings for Inferred Entity Instance: grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult3
+ 40. altsyncram Parameter Settings by Entity Instance
+ 41. lpm_mult Parameter Settings by Entity Instance
+ 42. Port Connectivity Checks: "MaquinaEstados:u_me"
+ 43. Port Connectivity Checks: "grab_ctrl:u_grab"
+ 44. Port Connectivity Checks: "LIDAR:u_lidar|VL53L0X:u_VL53L0X"
+ 45. Port Connectivity Checks: "LIDAR:u_lidar"
+ 46. Elapsed Time Per Partition
+ 47. Analysis & Synthesis Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 1991-2013 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+
+
+
++--------------------------------------------------------------------------------------+
+; Analysis & Synthesis Summary                                                         ;
++------------------------------------+-------------------------------------------------+
+; Analysis & Synthesis Status        ; Successful - Tue Jun 09 20:53:59 2026           ;
+; Quartus II 64-Bit Version          ; 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition ;
+; Revision Name                      ; SeguidorLinea_Brazo                             ;
+; Top-level Entity Name              ; SeguidorLinea_Brazo                             ;
+; Family                             ; Cyclone II                                      ;
+; Total logic elements               ; 4,388                                           ;
+;     Total combinational functions  ; 4,280                                           ;
+;     Dedicated logic registers      ; 1,069                                           ;
+; Total registers                    ; 1069                                            ;
+; Total pins                         ; 18                                              ;
+; Total virtual pins                 ; 0                                               ;
+; Total memory bits                  ; 1,024                                           ;
+; Embedded Multiplier 9-bit elements ; 12                                              ;
+; Total PLLs                         ; 0                                               ;
++------------------------------------+-------------------------------------------------+
+
+
++------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Settings                                                                                          ;
++----------------------------------------------------------------------------+---------------------+---------------------+
+; Option                                                                     ; Setting             ; Default Value       ;
++----------------------------------------------------------------------------+---------------------+---------------------+
+; Device                                                                     ; EP2C5T144C7         ;                     ;
+; Top-level entity name                                                      ; SeguidorLinea_Brazo ; SeguidorLinea_Brazo ;
+; Family name                                                                ; Cyclone II          ; Cyclone IV GX       ;
+; DSP Block Balancing                                                        ; DSP blocks          ; Auto                ;
+; Use smart compilation                                                      ; Off                 ; Off                 ;
+; Enable parallel Assembler and TimeQuest Timing Analyzer during compilation ; On                  ; On                  ;
+; Enable compact report table                                                ; Off                 ; Off                 ;
+; Restructure Multiplexers                                                   ; Auto                ; Auto                ;
+; Create Debugging Nodes for IP Cores                                        ; Off                 ; Off                 ;
+; Preserve fewer node names                                                  ; On                  ; On                  ;
+; Disable OpenCore Plus hardware evaluation                                  ; Off                 ; Off                 ;
+; Verilog Version                                                            ; Verilog_2001        ; Verilog_2001        ;
+; VHDL Version                                                               ; VHDL_1993           ; VHDL_1993           ;
+; State Machine Processing                                                   ; Auto                ; Auto                ;
+; Safe State Machine                                                         ; Off                 ; Off                 ;
+; Extract Verilog State Machines                                             ; On                  ; On                  ;
+; Extract VHDL State Machines                                                ; On                  ; On                  ;
+; Ignore Verilog initial constructs                                          ; Off                 ; Off                 ;
+; Iteration limit for constant Verilog loops                                 ; 5000                ; 5000                ;
+; Iteration limit for non-constant Verilog loops                             ; 250                 ; 250                 ;
+; Add Pass-Through Logic to Inferred RAMs                                    ; On                  ; On                  ;
+; Infer RAMs from Raw Logic                                                  ; On                  ; On                  ;
+; Parallel Synthesis                                                         ; On                  ; On                  ;
+; NOT Gate Push-Back                                                         ; On                  ; On                  ;
+; Power-Up Don't Care                                                        ; On                  ; On                  ;
+; Remove Redundant Logic Cells                                               ; Off                 ; Off                 ;
+; Remove Duplicate Registers                                                 ; On                  ; On                  ;
+; Ignore CARRY Buffers                                                       ; Off                 ; Off                 ;
+; Ignore CASCADE Buffers                                                     ; Off                 ; Off                 ;
+; Ignore GLOBAL Buffers                                                      ; Off                 ; Off                 ;
+; Ignore ROW GLOBAL Buffers                                                  ; Off                 ; Off                 ;
+; Ignore LCELL Buffers                                                       ; Off                 ; Off                 ;
+; Ignore SOFT Buffers                                                        ; On                  ; On                  ;
+; Limit AHDL Integers to 32 Bits                                             ; Off                 ; Off                 ;
+; Optimization Technique                                                     ; Balanced            ; Balanced            ;
+; Carry Chain Length                                                         ; 70                  ; 70                  ;
+; Auto Carry Chains                                                          ; On                  ; On                  ;
+; Auto Open-Drain Pins                                                       ; On                  ; On                  ;
+; Perform WYSIWYG Primitive Resynthesis                                      ; Off                 ; Off                 ;
+; Auto ROM Replacement                                                       ; On                  ; On                  ;
+; Auto RAM Replacement                                                       ; On                  ; On                  ;
+; Auto Shift Register Replacement                                            ; Auto                ; Auto                ;
+; Allow Shift Register Merging across Hierarchies                            ; Auto                ; Auto                ;
+; Auto Clock Enable Replacement                                              ; On                  ; On                  ;
+; Strict RAM Replacement                                                     ; Off                 ; Off                 ;
+; Allow Synchronous Control Signals                                          ; On                  ; On                  ;
+; Force Use of Synchronous Clear Signals                                     ; Off                 ; Off                 ;
+; Auto RAM to Logic Cell Conversion                                          ; Off                 ; Off                 ;
+; Auto Resource Sharing                                                      ; Off                 ; Off                 ;
+; Allow Any RAM Size For Recognition                                         ; Off                 ; Off                 ;
+; Allow Any ROM Size For Recognition                                         ; Off                 ; Off                 ;
+; Allow Any Shift Register Size For Recognition                              ; Off                 ; Off                 ;
+; Use LogicLock Constraints during Resource Balancing                        ; On                  ; On                  ;
+; Ignore translate_off and synthesis_off directives                          ; Off                 ; Off                 ;
+; Timing-Driven Synthesis                                                    ; Off                 ; Off                 ;
+; Report Parameter Settings                                                  ; On                  ; On                  ;
+; Report Source Assignments                                                  ; On                  ; On                  ;
+; Report Connectivity Checks                                                 ; On                  ; On                  ;
+; Ignore Maximum Fan-Out Assignments                                         ; Off                 ; Off                 ;
+; Synchronization Register Chain Length                                      ; 2                   ; 2                   ;
+; PowerPlay Power Optimization                                               ; Normal compilation  ; Normal compilation  ;
+; HDL message level                                                          ; Level2              ; Level2              ;
+; Suppress Register Optimization Related Messages                            ; Off                 ; Off                 ;
+; Number of Removed Registers Reported in Synthesis Report                   ; 5000                ; 5000                ;
+; Number of Swept Nodes Reported in Synthesis Report                         ; 5000                ; 5000                ;
+; Number of Inverted Registers Reported in Synthesis Report                  ; 100                 ; 100                 ;
+; Clock MUX Protection                                                       ; On                  ; On                  ;
+; Auto Gated Clock Conversion                                                ; Off                 ; Off                 ;
+; Block Design Naming                                                        ; Auto                ; Auto                ;
+; SDC constraint protection                                                  ; Off                 ; Off                 ;
+; Synthesis Effort                                                           ; Auto                ; Auto                ;
+; Shift Register Replacement - Allow Asynchronous Clear Signal               ; On                  ; On                  ;
+; Pre-Mapping Resynthesis Optimization                                       ; Off                 ; Off                 ;
+; Analysis & Synthesis Message Level                                         ; Medium              ; Medium              ;
+; Disable Register Merging Across Hierarchies                                ; Auto                ; Auto                ;
+; Resource Aware Inference For Block RAM                                     ; On                  ; On                  ;
+; Synthesis Seed                                                             ; 1                   ; 1                   ;
++----------------------------------------------------------------------------+---------------------+---------------------+
+
+
+Parallel compilation was disabled, but you have multiple processors available. Enable parallel compilation to reduce compilation time.
++-------------------------------------+
+; Parallel Compilation                ;
++----------------------------+--------+
+; Processors                 ; Number ;
++----------------------------+--------+
+; Number detected on machine ; 12     ;
+; Maximum allowed            ; 1      ;
++----------------------------+--------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                                                  ;
++----------------------------------+-----------------+------------------------------+---------------------------------------------------------------------------+---------+
+; File Name with User-Entered Path ; Used in Netlist ; File Type                    ; File Name with Absolute Path                                              ; Library ;
++----------------------------------+-----------------+------------------------------+---------------------------------------------------------------------------+---------+
+; vl53l0x_pkg.vhd                  ; yes             ; User VHDL File               ; D:/SeguidorLinea_Brazo/Codigo/vl53l0x_pkg.vhd                             ;         ;
+; VL53L0X.vhd                      ; yes             ; User VHDL File               ; D:/SeguidorLinea_Brazo/Codigo/VL53L0X.vhd                                 ;         ;
+; kinematics.vhd                   ; yes             ; User VHDL File               ; D:/SeguidorLinea_Brazo/Codigo/kinematics.vhd                              ;         ;
+; LIDAR.vhd                        ; yes             ; User VHDL File               ; D:/SeguidorLinea_Brazo/Codigo/LIDAR.vhd                                   ;         ;
+; grab_ctrl.vhd                    ; yes             ; User VHDL File               ; D:/SeguidorLinea_Brazo/Codigo/grab_ctrl.vhd                               ;         ;
+; MaquinaEstados.vhd               ; yes             ; User VHDL File               ; D:/SeguidorLinea_Brazo/Codigo/MaquinaEstados.vhd                          ;         ;
+; polarPWM.vhd                     ; yes             ; User VHDL File               ; D:/SeguidorLinea_Brazo/Codigo/polarPWM.vhd                                ;         ;
+; SeguidorLinea_Brazo.vhd          ; yes             ; User VHDL File               ; D:/SeguidorLinea_Brazo/Codigo/SeguidorLinea_Brazo.vhd                     ;         ;
+; altsyncram.tdf                   ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/altsyncram.tdf          ;         ;
+; stratix_ram_block.inc            ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/stratix_ram_block.inc   ;         ;
+; lpm_mux.inc                      ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/lpm_mux.inc             ;         ;
+; lpm_decode.inc                   ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/lpm_decode.inc          ;         ;
+; aglobal130.inc                   ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/aglobal130.inc          ;         ;
+; a_rdenreg.inc                    ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/a_rdenreg.inc           ;         ;
+; altrom.inc                       ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/altrom.inc              ;         ;
+; altram.inc                       ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/altram.inc              ;         ;
+; altdpram.inc                     ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/altdpram.inc            ;         ;
+; db/altsyncram_hu11.tdf           ; yes             ; Auto-Generated Megafunction  ; D:/SeguidorLinea_Brazo/Codigo/db/altsyncram_hu11.tdf                      ;         ;
+; lpm_add_sub.tdf                  ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/lpm_add_sub.tdf         ;         ;
+; addcore.inc                      ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/addcore.inc             ;         ;
+; look_add.inc                     ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/look_add.inc            ;         ;
+; bypassff.inc                     ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/bypassff.inc            ;         ;
+; altshift.inc                     ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/altshift.inc            ;         ;
+; alt_stratix_add_sub.inc          ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/alt_stratix_add_sub.inc ;         ;
+; db/add_sub_8ri.tdf               ; yes             ; Auto-Generated Megafunction  ; D:/SeguidorLinea_Brazo/Codigo/db/add_sub_8ri.tdf                          ;         ;
+; lpm_mult.tdf                     ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/lpm_mult.tdf            ;         ;
+; lpm_add_sub.inc                  ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/lpm_add_sub.inc         ;         ;
+; multcore.inc                     ; yes             ; Megafunction                 ; c:/altera/13.0sp1/quartus/libraries/megafunctions/multcore.inc            ;         ;
+; db/mult_imt.tdf                  ; yes             ; Auto-Generated Megafunction  ; D:/SeguidorLinea_Brazo/Codigo/db/mult_imt.tdf                             ;         ;
+; db/mult_tit.tdf                  ; yes             ; Auto-Generated Megafunction  ; D:/SeguidorLinea_Brazo/Codigo/db/mult_tit.tdf                             ;         ;
+; db/mult_0lt.tdf                  ; yes             ; Auto-Generated Megafunction  ; D:/SeguidorLinea_Brazo/Codigo/db/mult_0lt.tdf                             ;         ;
++----------------------------------+-----------------+------------------------------+---------------------------------------------------------------------------+---------+
+
+
++-----------------------------------------------------+
+; Analysis & Synthesis Resource Usage Summary         ;
++---------------------------------------------+-------+
+; Resource                                    ; Usage ;
++---------------------------------------------+-------+
+; Estimated Total logic elements              ; 4,388 ;
+;                                             ;       ;
+; Total combinational functions               ; 4280  ;
+; Logic element usage by number of LUT inputs ;       ;
+;     -- 4 input functions                    ; 2063  ;
+;     -- 3 input functions                    ; 1016  ;
+;     -- <=2 input functions                  ; 1201  ;
+;                                             ;       ;
+; Logic elements by mode                      ;       ;
+;     -- normal mode                          ; 2963  ;
+;     -- arithmetic mode                      ; 1317  ;
+;                                             ;       ;
+; Total registers                             ; 1069  ;
+;     -- Dedicated logic registers            ; 1069  ;
+;     -- I/O registers                        ; 0     ;
+;                                             ;       ;
+; I/O pins                                    ; 18    ;
+; Total memory bits                           ; 1024  ;
+; Embedded Multiplier 9-bit elements          ; 12    ;
+; Maximum fan-out node                        ; clk   ;
+; Maximum fan-out                             ; 1073  ;
+; Total fan-out                               ; 17604 ;
+; Average fan-out                             ; 3.27  ;
++---------------------------------------------+-------+
+
+
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Resource Utilization by Entity                                                                                                                                                                                                                                   ;
++----------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+-------------------------------------------------------------------------------------------------------------+--------------+
+; Compilation Hierarchy Node                   ; LC Combinationals ; LC Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name                                                                                         ; Library Name ;
++----------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+-------------------------------------------------------------------------------------------------------------+--------------+
+; |SeguidorLinea_Brazo                         ; 4280 (9)          ; 1069 (0)     ; 1024        ; 12           ; 0       ; 6         ; 18   ; 0            ; |SeguidorLinea_Brazo                                                                                        ; work         ;
+;    |LIDAR:u_lidar|                           ; 910 (405)         ; 450 (183)    ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |SeguidorLinea_Brazo|LIDAR:u_lidar                                                                          ; work         ;
+;       |VL53L0X:u_VL53L0X|                    ; 505 (505)         ; 267 (267)    ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X                                                        ; work         ;
+;    |MaquinaEstados:u_me|                     ; 400 (400)         ; 196 (196)    ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |SeguidorLinea_Brazo|MaquinaEstados:u_me                                                                    ; work         ;
+;    |grab_ctrl:u_grab|                        ; 2031 (131)        ; 305 (71)     ; 1024        ; 12           ; 0       ; 6         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab                                                                       ; work         ;
+;       |kinematics:u_kin|                     ; 1900 (1835)       ; 234 (234)    ; 1024        ; 12           ; 0       ; 6         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin                                                      ; work         ;
+;          |altsyncram:Mux2_rtl_0|             ; 0 (0)             ; 0 (0)        ; 1024        ; 0            ; 0       ; 0         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0                                ; work         ;
+;             |altsyncram_hu11:auto_generated| ; 0 (0)             ; 0 (0)        ; 1024        ; 0            ; 0       ; 0         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated ; work         ;
+;          |lpm_add_sub:Add34|                 ; 39 (0)            ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_add_sub:Add34                                    ; work         ;
+;             |add_sub_8ri:auto_generated|     ; 39 (39)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_add_sub:Add34|add_sub_8ri:auto_generated         ; work         ;
+;          |lpm_mult:Mult0|                    ; 0 (0)             ; 0 (0)        ; 0           ; 2            ; 0       ; 1         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult0                                       ; work         ;
+;             |mult_0lt:auto_generated|        ; 0 (0)             ; 0 (0)        ; 0           ; 2            ; 0       ; 1         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult0|mult_0lt:auto_generated               ; work         ;
+;          |lpm_mult:Mult1|                    ; 0 (0)             ; 0 (0)        ; 0           ; 2            ; 0       ; 1         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult1                                       ; work         ;
+;             |mult_0lt:auto_generated|        ; 0 (0)             ; 0 (0)        ; 0           ; 2            ; 0       ; 1         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult1|mult_0lt:auto_generated               ; work         ;
+;          |lpm_mult:Mult2|                    ; 0 (0)             ; 0 (0)        ; 0           ; 2            ; 0       ; 1         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult2                                       ; work         ;
+;             |mult_tit:auto_generated|        ; 0 (0)             ; 0 (0)        ; 0           ; 2            ; 0       ; 1         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult2|mult_tit:auto_generated               ; work         ;
+;          |lpm_mult:Mult3|                    ; 0 (0)             ; 0 (0)        ; 0           ; 2            ; 0       ; 1         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult3                                       ; work         ;
+;             |mult_tit:auto_generated|        ; 0 (0)             ; 0 (0)        ; 0           ; 2            ; 0       ; 1         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult3|mult_tit:auto_generated               ; work         ;
+;          |lpm_mult:Mult4|                    ; 26 (0)            ; 0 (0)        ; 0           ; 4            ; 0       ; 2         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult4                                       ; work         ;
+;             |mult_imt:auto_generated|        ; 26 (26)           ; 0 (0)        ; 0           ; 4            ; 0       ; 2         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult4|mult_imt:auto_generated               ; work         ;
+;    |polarPWM:u_pwm|                          ; 930 (930)         ; 118 (118)    ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |SeguidorLinea_Brazo|polarPWM:u_pwm                                                                         ; work         ;
++----------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+-------------------------------------------------------------------------------------------------------------+--------------+
+Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
+
+
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis RAM Summary                                                                                                                                                                                                      ;
++---------------------------------------------------------------------------------------------------+------+------+--------------+--------------+--------------+--------------+------+--------------------------------------------------+
+; Name                                                                                              ; Type ; Mode ; Port A Depth ; Port A Width ; Port B Depth ; Port B Width ; Size ; MIF                                              ;
++---------------------------------------------------------------------------------------------------+------+------+--------------+--------------+--------------+--------------+------+--------------------------------------------------+
+; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ALTSYNCRAM ; AUTO ; ROM  ; 256          ; 4            ; --           ; --           ; 1024 ; SeguidorLinea_Brazo.SeguidorLinea_Brazo0.rtl.mif ;
++---------------------------------------------------------------------------------------------------+------+------+--------------+--------------+--------------+--------------+------+--------------------------------------------------+
+
+
++-----------------------------------------------------+
+; Analysis & Synthesis DSP Block Usage Summary        ;
++---------------------------------------+-------------+
+; Statistic                             ; Number Used ;
++---------------------------------------+-------------+
+; Simple Multipliers (9-bit)            ; 0           ;
+; Simple Multipliers (18-bit)           ; 6           ;
+; Embedded Multiplier Blocks            ; --          ;
+; Embedded Multiplier 9-bit elements    ; 12          ;
+; Signed Embedded Multipliers           ; 5           ;
+; Unsigned Embedded Multipliers         ; 0           ;
+; Mixed Sign Embedded Multipliers       ; 1           ;
+; Variable Sign Embedded Multipliers    ; 0           ;
+; Dedicated Input Shift Register Chains ; 0           ;
++---------------------------------------+-------------+
+Note: number of Embedded Multiplier Blocks used is only available after a successful fit.
+
+
+Encoding Type:  One-Hot
++-----------------------------------------------------------------------------------+
+; State Machine - |SeguidorLinea_Brazo|MaquinaEstados:u_me|ultimo_giro              ;
++---------------------+-------------------+-------------------+---------------------+
+; Name                ; ultimo_giro.G_DER ; ultimo_giro.G_IZQ ; ultimo_giro.G_RECTO ;
++---------------------+-------------------+-------------------+---------------------+
+; ultimo_giro.G_RECTO ; 0                 ; 0                 ; 0                   ;
+; ultimo_giro.G_IZQ   ; 0                 ; 1                 ; 1                   ;
+; ultimo_giro.G_DER   ; 1                 ; 0                 ; 1                   ;
++---------------------+-------------------+-------------------+---------------------+
+
+
+Encoding Type:  One-Hot
++--------------------------------------------------------------------------------------------------------------------+
+; State Machine - |SeguidorLinea_Brazo|MaquinaEstados:u_me|est                                                       ;
++--------------------+--------------+------------+--------------------+----------------+--------------+--------------+
+; Name               ; est.E_ACCION ; est.E_SCAN ; est.E_BUSCAR_LINEA ; est.E_ACOMODAR ; est.E_SEGUIR ; est.E_INICIO ;
++--------------------+--------------+------------+--------------------+----------------+--------------+--------------+
+; est.E_INICIO       ; 0            ; 0          ; 0                  ; 0              ; 0            ; 0            ;
+; est.E_SEGUIR       ; 0            ; 0          ; 0                  ; 0              ; 1            ; 1            ;
+; est.E_ACOMODAR     ; 0            ; 0          ; 0                  ; 1              ; 0            ; 1            ;
+; est.E_BUSCAR_LINEA ; 0            ; 0          ; 1                  ; 0              ; 0            ; 1            ;
+; est.E_SCAN         ; 0            ; 1          ; 0                  ; 0              ; 0            ; 1            ;
+; est.E_ACCION       ; 1            ; 0          ; 0                  ; 0              ; 0            ; 1            ;
++--------------------+--------------+------------+--------------------+----------------+--------------+--------------+
+
+
+Encoding Type:  One-Hot
++---------------------------------------------------------------------------------------------------------------------------------------------+
+; State Machine - |SeguidorLinea_Brazo|grab_ctrl:u_grab|gst                                                                                   ;
++----------------+---------------+------------+------------+------------+------------+---------------+----------+----------------+------------+
+; Name           ; gst.G_RELEASE ; gst.G_DROP ; gst.G_HOLD ; gst.G_GRIP ; gst.G_MOVE ; gst.G_IK_WAIT ; gst.G_IK ; gst.G_SCANWAIT ; gst.G_REST ;
++----------------+---------------+------------+------------+------------+------------+---------------+----------+----------------+------------+
+; gst.G_REST     ; 0             ; 0          ; 0          ; 0          ; 0          ; 0             ; 0        ; 0              ; 0          ;
+; gst.G_SCANWAIT ; 0             ; 0          ; 0          ; 0          ; 0          ; 0             ; 0        ; 1              ; 1          ;
+; gst.G_IK       ; 0             ; 0          ; 0          ; 0          ; 0          ; 0             ; 1        ; 0              ; 1          ;
+; gst.G_IK_WAIT  ; 0             ; 0          ; 0          ; 0          ; 0          ; 1             ; 0        ; 0              ; 1          ;
+; gst.G_MOVE     ; 0             ; 0          ; 0          ; 0          ; 1          ; 0             ; 0        ; 0              ; 1          ;
+; gst.G_GRIP     ; 0             ; 0          ; 0          ; 1          ; 0          ; 0             ; 0        ; 0              ; 1          ;
+; gst.G_HOLD     ; 0             ; 0          ; 1          ; 0          ; 0          ; 0             ; 0        ; 0              ; 1          ;
+; gst.G_DROP     ; 0             ; 1          ; 0          ; 0          ; 0          ; 0             ; 0        ; 0              ; 1          ;
+; gst.G_RELEASE  ; 1             ; 0          ; 0          ; 0          ; 0          ; 0             ; 0        ; 0              ; 1          ;
++----------------+---------------+------------+------------+------------+------------+---------------+----------+----------------+------------+
+
+
+Encoding Type:  One-Hot
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; State Machine - |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|cordic_ret                                                                                                                                                                                                                                                                ;
++-----------------------+-------------------+---------------------+--------------------+--------------------+---------------------+---------------------+---------------------+-----------------------+-----------------+-------------------+---------------------+----------------------+-----------------+-------------------+-------------------+
+; Name                  ; cordic_ret.S_DONE ; cordic_ret.S_CORDIC ; cordic_ret.S_POST2 ; cordic_ret.S_ELBOW ; cordic_ret.S_LUT2_W ; cordic_ret.S_THETA1 ; cordic_ret.S_ACOS_W ; cordic_ret.S_ACOS_SET ; cordic_ret.S_IK ; cordic_ret.S_IK_W ; cordic_ret.S_IK_SET ; cordic_ret.S_FK_POST ; cordic_ret.S_FK ; cordic_ret.S_FK_W ; cordic_ret.S_IDLE ;
++-----------------------+-------------------+---------------------+--------------------+--------------------+---------------------+---------------------+---------------------+-----------------------+-----------------+-------------------+---------------------+----------------------+-----------------+-------------------+-------------------+
+; cordic_ret.S_IDLE     ; 0                 ; 0                   ; 0                  ; 0                  ; 0                   ; 0                   ; 0                   ; 0                     ; 0               ; 0                 ; 0                   ; 0                    ; 0               ; 0                 ; 0                 ;
+; cordic_ret.S_FK_W     ; 0                 ; 0                   ; 0                  ; 0                  ; 0                   ; 0                   ; 0                   ; 0                     ; 0               ; 0                 ; 0                   ; 0                    ; 0               ; 1                 ; 1                 ;
+; cordic_ret.S_FK       ; 0                 ; 0                   ; 0                  ; 0                  ; 0                   ; 0                   ; 0                   ; 0                     ; 0               ; 0                 ; 0                   ; 0                    ; 1               ; 0                 ; 1                 ;
+; cordic_ret.S_FK_POST  ; 0                 ; 0                   ; 0                  ; 0                  ; 0                   ; 0                   ; 0                   ; 0                     ; 0               ; 0                 ; 0                   ; 1                    ; 0               ; 0                 ; 1                 ;
+; cordic_ret.S_IK_SET   ; 0                 ; 0                   ; 0                  ; 0                  ; 0                   ; 0                   ; 0                   ; 0                     ; 0               ; 0                 ; 1                   ; 0                    ; 0               ; 0                 ; 1                 ;
+; cordic_ret.S_IK_W     ; 0                 ; 0                   ; 0                  ; 0                  ; 0                   ; 0                   ; 0                   ; 0                     ; 0               ; 1                 ; 0                   ; 0                    ; 0               ; 0                 ; 1                 ;
+; cordic_ret.S_IK       ; 0                 ; 0                   ; 0                  ; 0                  ; 0                   ; 0                   ; 0                   ; 0                     ; 1               ; 0                 ; 0                   ; 0                    ; 0               ; 0                 ; 1                 ;
+; cordic_ret.S_ACOS_SET ; 0                 ; 0                   ; 0                  ; 0                  ; 0                   ; 0                   ; 0                   ; 1                     ; 0               ; 0                 ; 0                   ; 0                    ; 0               ; 0                 ; 1                 ;
+; cordic_ret.S_ACOS_W   ; 0                 ; 0                   ; 0                  ; 0                  ; 0                   ; 0                   ; 1                   ; 0                     ; 0               ; 0                 ; 0                   ; 0                    ; 0               ; 0                 ; 1                 ;
+; cordic_ret.S_THETA1   ; 0                 ; 0                   ; 0                  ; 0                  ; 0                   ; 1                   ; 0                   ; 0                     ; 0               ; 0                 ; 0                   ; 0                    ; 0               ; 0                 ; 1                 ;
+; cordic_ret.S_LUT2_W   ; 0                 ; 0                   ; 0                  ; 0                  ; 1                   ; 0                   ; 0                   ; 0                     ; 0               ; 0                 ; 0                   ; 0                    ; 0               ; 0                 ; 1                 ;
+; cordic_ret.S_ELBOW    ; 0                 ; 0                   ; 0                  ; 1                  ; 0                   ; 0                   ; 0                   ; 0                     ; 0               ; 0                 ; 0                   ; 0                    ; 0               ; 0                 ; 1                 ;
+; cordic_ret.S_POST2    ; 0                 ; 0                   ; 1                  ; 0                  ; 0                   ; 0                   ; 0                   ; 0                     ; 0               ; 0                 ; 0                   ; 0                    ; 0               ; 0                 ; 1                 ;
+; cordic_ret.S_CORDIC   ; 0                 ; 1                   ; 0                  ; 0                  ; 0                   ; 0                   ; 0                   ; 0                     ; 0               ; 0                 ; 0                   ; 0                    ; 0               ; 0                 ; 1                 ;
+; cordic_ret.S_DONE     ; 1                 ; 0                   ; 0                  ; 0                  ; 0                   ; 0                   ; 0                   ; 0                     ; 0               ; 0                 ; 0                   ; 0                    ; 0               ; 0                 ; 1                 ;
++-----------------------+-------------------+---------------------+--------------------+--------------------+---------------------+---------------------+---------------------+-----------------------+-----------------+-------------------+---------------------+----------------------+-----------------+-------------------+-------------------+
+
+
+Encoding Type:  One-Hot
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; State Machine - |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|st                                                                                                                                        ;
++---------------+-----------+-------------+------------+------------+-------------+-------------+-------------+---------------+---------+-----------+-------------+--------------+---------+-----------+-----------+
+; Name          ; st.S_DONE ; st.S_CORDIC ; st.S_POST2 ; st.S_ELBOW ; st.S_LUT2_W ; st.S_THETA1 ; st.S_ACOS_W ; st.S_ACOS_SET ; st.S_IK ; st.S_IK_W ; st.S_IK_SET ; st.S_FK_POST ; st.S_FK ; st.S_FK_W ; st.S_IDLE ;
++---------------+-----------+-------------+------------+------------+-------------+-------------+-------------+---------------+---------+-----------+-------------+--------------+---------+-----------+-----------+
+; st.S_IDLE     ; 0         ; 0           ; 0          ; 0          ; 0           ; 0           ; 0           ; 0             ; 0       ; 0         ; 0           ; 0            ; 0       ; 0         ; 0         ;
+; st.S_FK_W     ; 0         ; 0           ; 0          ; 0          ; 0           ; 0           ; 0           ; 0             ; 0       ; 0         ; 0           ; 0            ; 0       ; 1         ; 1         ;
+; st.S_FK       ; 0         ; 0           ; 0          ; 0          ; 0           ; 0           ; 0           ; 0             ; 0       ; 0         ; 0           ; 0            ; 1       ; 0         ; 1         ;
+; st.S_FK_POST  ; 0         ; 0           ; 0          ; 0          ; 0           ; 0           ; 0           ; 0             ; 0       ; 0         ; 0           ; 1            ; 0       ; 0         ; 1         ;
+; st.S_IK_SET   ; 0         ; 0           ; 0          ; 0          ; 0           ; 0           ; 0           ; 0             ; 0       ; 0         ; 1           ; 0            ; 0       ; 0         ; 1         ;
+; st.S_IK_W     ; 0         ; 0           ; 0          ; 0          ; 0           ; 0           ; 0           ; 0             ; 0       ; 1         ; 0           ; 0            ; 0       ; 0         ; 1         ;
+; st.S_IK       ; 0         ; 0           ; 0          ; 0          ; 0           ; 0           ; 0           ; 0             ; 1       ; 0         ; 0           ; 0            ; 0       ; 0         ; 1         ;
+; st.S_ACOS_SET ; 0         ; 0           ; 0          ; 0          ; 0           ; 0           ; 0           ; 1             ; 0       ; 0         ; 0           ; 0            ; 0       ; 0         ; 1         ;
+; st.S_ACOS_W   ; 0         ; 0           ; 0          ; 0          ; 0           ; 0           ; 1           ; 0             ; 0       ; 0         ; 0           ; 0            ; 0       ; 0         ; 1         ;
+; st.S_THETA1   ; 0         ; 0           ; 0          ; 0          ; 0           ; 1           ; 0           ; 0             ; 0       ; 0         ; 0           ; 0            ; 0       ; 0         ; 1         ;
+; st.S_LUT2_W   ; 0         ; 0           ; 0          ; 0          ; 1           ; 0           ; 0           ; 0             ; 0       ; 0         ; 0           ; 0            ; 0       ; 0         ; 1         ;
+; st.S_ELBOW    ; 0         ; 0           ; 0          ; 1          ; 0           ; 0           ; 0           ; 0             ; 0       ; 0         ; 0           ; 0            ; 0       ; 0         ; 1         ;
+; st.S_POST2    ; 0         ; 0           ; 1          ; 0          ; 0           ; 0           ; 0           ; 0             ; 0       ; 0         ; 0           ; 0            ; 0       ; 0         ; 1         ;
+; st.S_CORDIC   ; 0         ; 1           ; 0          ; 0          ; 0           ; 0           ; 0           ; 0             ; 0       ; 0         ; 0           ; 0            ; 0       ; 0         ; 1         ;
+; st.S_DONE     ; 1         ; 0           ; 0          ; 0          ; 0           ; 0           ; 0           ; 0             ; 0       ; 0         ; 0           ; 0            ; 0       ; 0         ; 1         ;
++---------------+-----------+-------------+------------+------------+-------------+-------------+-------------+---------------+---------+-----------+-------------+--------------+---------+-----------+-----------+
+
+
+Encoding Type:  One-Hot
++--------------------------------------------------------------------------------------+
+; State Machine - |SeguidorLinea_Brazo|LIDAR:u_lidar|st                                ;
++-------------+-----------+-----------+----------+-------------+-----------+-----------+
+; Name        ; st.S_DONE ; st.S_NEXT ; st.S_AVG ; st.S_SETTLE ; st.S_MOVE ; st.S_IDLE ;
++-------------+-----------+-----------+----------+-------------+-----------+-----------+
+; st.S_IDLE   ; 0         ; 0         ; 0        ; 0           ; 0         ; 0         ;
+; st.S_MOVE   ; 0         ; 0         ; 0        ; 0           ; 1         ; 1         ;
+; st.S_SETTLE ; 0         ; 0         ; 0        ; 1           ; 0         ; 1         ;
+; st.S_AVG    ; 0         ; 0         ; 1        ; 0           ; 0         ; 1         ;
+; st.S_NEXT   ; 0         ; 1         ; 0        ; 0           ; 0         ; 1         ;
+; st.S_DONE   ; 1         ; 0         ; 0        ; 0           ; 0         ; 1         ;
++-------------+-----------+-----------+----------+-------------+-----------+-----------+
+
+
+Encoding Type:  One-Hot
++----------------------------------------------------------------------------------------------------------------------------------------+
+; State Machine - |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|op_r                                                              ;
++----------------+-------------+----------------+----------------+---------------+---------------+-------------+------------+------------+
+; Name           ; op_r.OP_END ; op_r.OP_TUNING ; op_r.OP_CHK_ID ; op_r.OP_WR_SV ; op_r.OP_RD_SV ; op_r.OP_AND ; op_r.OP_OR ; op_r.OP_WR ;
++----------------+-------------+----------------+----------------+---------------+---------------+-------------+------------+------------+
+; op_r.OP_WR     ; 0           ; 0              ; 0              ; 0             ; 0             ; 0           ; 0          ; 0          ;
+; op_r.OP_OR     ; 0           ; 0              ; 0              ; 0             ; 0             ; 0           ; 1          ; 1          ;
+; op_r.OP_AND    ; 0           ; 0              ; 0              ; 0             ; 0             ; 1           ; 0          ; 1          ;
+; op_r.OP_RD_SV  ; 0           ; 0              ; 0              ; 0             ; 1             ; 0           ; 0          ; 1          ;
+; op_r.OP_WR_SV  ; 0           ; 0              ; 0              ; 1             ; 0             ; 0           ; 0          ; 1          ;
+; op_r.OP_CHK_ID ; 0           ; 0              ; 1              ; 0             ; 0             ; 0           ; 0          ; 1          ;
+; op_r.OP_TUNING ; 0           ; 1              ; 0              ; 0             ; 0             ; 0           ; 0          ; 1          ;
+; op_r.OP_END    ; 1           ; 0              ; 0              ; 0             ; 0             ; 0           ; 0          ; 1          ;
++----------------+-------------+----------------+----------------+---------------+---------------+-------------+------------+------------+
+
+
+Encoding Type:  One-Hot
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; State Machine - |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ;
++---------------------------+-------------------+--------------------+------------------------+-------------------+------------------------+-------------------+-----------------------+------------------+------------------------+---------------------------+-------------------------+------------------------+----------------------+-----------------------+---------------------+------------------------+----------------------+----------------------+--------------------+-------------------------+-----------------------+-----------------------+------------------+----------------------+--------------------+------------------+------------------+-------------------+
+; Name                      ; app_state.A_ERROR ; app_state.A_UPDATE ; app_state.A_CLEAR_WAIT ; app_state.A_CLEAR ; app_state.A_RANGE_WAIT ; app_state.A_RANGE ; app_state.A_POLL_WAIT ; app_state.A_POLL ; app_state.A_AFTER_INIT ; app_state.A_CAL_RESTORE_W ; app_state.A_CAL_RESTORE ; app_state.A_CAL_STOP_W ; app_state.A_CAL_STOP ; app_state.A_CAL_CLR_W ; app_state.A_CAL_CLR ; app_state.A_CAL_POLL_W ; app_state.A_CAL_POLL ; app_state.A_CAL_GO_W ; app_state.A_CAL_GO ; app_state.A_CAL_BEGIN_W ; app_state.A_CAL_BEGIN ; app_state.A_TUNE_WAIT ; app_state.A_TUNE ; app_state.A_RMW_WAIT ; app_state.A_RMW_WR ; app_state.A_WAIT ; app_state.A_EXEC ; app_state.A_PWRUP ;
++---------------------------+-------------------+--------------------+------------------------+-------------------+------------------------+-------------------+-----------------------+------------------+------------------------+---------------------------+-------------------------+------------------------+----------------------+-----------------------+---------------------+------------------------+----------------------+----------------------+--------------------+-------------------------+-----------------------+-----------------------+------------------+----------------------+--------------------+------------------+------------------+-------------------+
+; app_state.A_PWRUP         ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 0                 ;
+; app_state.A_EXEC          ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 1                ; 1                 ;
+; app_state.A_WAIT          ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 1                ; 0                ; 1                 ;
+; app_state.A_RMW_WR        ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 1                  ; 0                ; 0                ; 1                 ;
+; app_state.A_RMW_WAIT      ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 1                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_TUNE          ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 1                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_TUNE_WAIT     ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 1                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_CAL_BEGIN     ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 1                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_CAL_BEGIN_W   ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 1                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_CAL_GO        ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 1                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_CAL_GO_W      ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 1                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_CAL_POLL      ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 1                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_CAL_POLL_W    ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 1                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_CAL_CLR       ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 1                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_CAL_CLR_W     ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 1                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_CAL_STOP      ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 1                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_CAL_STOP_W    ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 1                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_CAL_RESTORE   ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 1                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_CAL_RESTORE_W ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 1                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_AFTER_INIT    ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 1                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_POLL          ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 1                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_POLL_WAIT     ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 1                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_RANGE         ; 0                 ; 0                  ; 0                      ; 0                 ; 0                      ; 1                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_RANGE_WAIT    ; 0                 ; 0                  ; 0                      ; 0                 ; 1                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_CLEAR         ; 0                 ; 0                  ; 0                      ; 1                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_CLEAR_WAIT    ; 0                 ; 0                  ; 1                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_UPDATE        ; 0                 ; 1                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
+; app_state.A_ERROR         ; 1                 ; 0                  ; 0                      ; 0                 ; 0                      ; 0                 ; 0                     ; 0                ; 0                      ; 0                         ; 0                       ; 0                      ; 0                    ; 0                     ; 0                   ; 0                      ; 0                    ; 0                    ; 0                  ; 0                       ; 0                     ; 0                     ; 0                ; 0                    ; 0                  ; 0                ; 0                ; 1                 ;
++---------------------------+-------------------+--------------------+------------------------+-------------------+------------------------+-------------------+-----------------------+------------------+------------------------+---------------------------+-------------------------+------------------------+----------------------+-----------------------+---------------------+------------------------+----------------------+----------------------+--------------------+-------------------------+-----------------------+-----------------------+------------------+----------------------+--------------------+------------------+------------------+-------------------+
+
+
+Encoding Type:  One-Hot
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; State Machine - |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|\app:cur.op                                                                                                                      ;
++-----------------------+--------------------+-----------------------+-----------------------+----------------------+----------------------+--------------------+-------------------+-------------------+
+; Name                  ; \app:cur.op.OP_END ; \app:cur.op.OP_TUNING ; \app:cur.op.OP_CHK_ID ; \app:cur.op.OP_WR_SV ; \app:cur.op.OP_RD_SV ; \app:cur.op.OP_AND ; \app:cur.op.OP_OR ; \app:cur.op.OP_WR ;
++-----------------------+--------------------+-----------------------+-----------------------+----------------------+----------------------+--------------------+-------------------+-------------------+
+; \app:cur.op.OP_WR     ; 0                  ; 0                     ; 0                     ; 0                    ; 0                    ; 0                  ; 0                 ; 0                 ;
+; \app:cur.op.OP_OR     ; 0                  ; 0                     ; 0                     ; 0                    ; 0                    ; 0                  ; 1                 ; 1                 ;
+; \app:cur.op.OP_AND    ; 0                  ; 0                     ; 0                     ; 0                    ; 0                    ; 1                  ; 0                 ; 1                 ;
+; \app:cur.op.OP_RD_SV  ; 0                  ; 0                     ; 0                     ; 0                    ; 1                    ; 0                  ; 0                 ; 1                 ;
+; \app:cur.op.OP_WR_SV  ; 0                  ; 0                     ; 0                     ; 1                    ; 0                    ; 0                  ; 0                 ; 1                 ;
+; \app:cur.op.OP_CHK_ID ; 0                  ; 0                     ; 1                     ; 0                    ; 0                    ; 0                  ; 0                 ; 1                 ;
+; \app:cur.op.OP_TUNING ; 0                  ; 1                     ; 0                     ; 0                    ; 0                    ; 0                  ; 0                 ; 1                 ;
+; \app:cur.op.OP_END    ; 1                  ; 0                     ; 0                     ; 0                    ; 0                    ; 0                  ; 0                 ; 1                 ;
++-----------------------+--------------------+-----------------------+-----------------------+----------------------+----------------------+--------------------+-------------------+-------------------+
+
+
+Encoding Type:  One-Hot
++------------------------------------------------------------------------------------------------+
+; State Machine - |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_state                 ;
++-------------------+------------------+------------------+-------------------+------------------+
+; Name              ; txn_state.T_DONE ; txn_state.T_WAIT ; txn_state.T_ISSUE ; txn_state.T_IDLE ;
++-------------------+------------------+------------------+-------------------+------------------+
+; txn_state.T_IDLE  ; 0                ; 0                ; 0                 ; 0                ;
+; txn_state.T_ISSUE ; 0                ; 0                ; 1                 ; 1                ;
+; txn_state.T_WAIT  ; 0                ; 1                ; 0                 ; 1                ;
+; txn_state.T_DONE  ; 1                ; 0                ; 0                 ; 1                ;
++-------------------+------------------+------------------+-------------------+------------------+
+
+
+Encoding Type:  One-Hot
++----------------------------------------------------------------------------------------------------------+
+; State Machine - |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_st                                ;
++---------------+-------------+--------------+---------------+--------------+---------------+--------------+
+; Name          ; e_st.ES_FIN ; e_st.ES_READ ; e_st.ES_WRITE ; e_st.ES_STOP ; e_st.ES_START ; e_st.ES_IDLE ;
++---------------+-------------+--------------+---------------+--------------+---------------+--------------+
+; e_st.ES_IDLE  ; 0           ; 0            ; 0             ; 0            ; 0             ; 0            ;
+; e_st.ES_START ; 0           ; 0            ; 0             ; 0            ; 1             ; 1            ;
+; e_st.ES_STOP  ; 0           ; 0            ; 0             ; 1            ; 0             ; 1            ;
+; e_st.ES_WRITE ; 0           ; 0            ; 1             ; 0            ; 0             ; 1            ;
+; e_st.ES_READ  ; 0           ; 1            ; 0             ; 0            ; 0             ; 1            ;
+; e_st.ES_FIN   ; 1           ; 0            ; 0             ; 0            ; 0             ; 1            ;
++---------------+-------------+--------------+---------------+--------------+---------------+--------------+
+
+
++---------------------------------------------------------------------------------------------------------------------------+
+; Registers Removed During Synthesis                                                                                        ;
++-------------------------------------------------------+-------------------------------------------------------------------+
+; Register name                                         ; Reason for Removal                                                ;
++-------------------------------------------------------+-------------------------------------------------------------------+
+; polarPWM:u_pwm|tgt_grip[2..4,7]                       ; Stuck at GND due to stuck port data_in                            ;
+; grab_ctrl:u_grab|kinematics:u_kin|acosrom_q[7]        ; Stuck at GND due to stuck port data_in                            ;
+; polarPWM:u_pwm|tgt_grip[1,5,6]                        ; Merged with polarPWM:u_pwm|tgt_grip[0]                            ;
+; MaquinaEstados:u_me|tgt_l[1]                          ; Merged with MaquinaEstados:u_me|tgt_l[2]                          ;
+; MaquinaEstados:u_me|tgt_r[0..2]                       ; Merged with MaquinaEstados:u_me|tgt_l[2]                          ;
+; MaquinaEstados:u_me|tgt_l[0]                          ; Merged with MaquinaEstados:u_me|tgt_l[2]                          ;
+; MaquinaEstados:u_me|tgt_l[7,15]                       ; Merged with MaquinaEstados:u_me|tgt_l[11]                         ;
+; MaquinaEstados:u_me|tgt_l[8]                          ; Merged with MaquinaEstados:u_me|tgt_l[13]                         ;
+; MaquinaEstados:u_me|tgt_l[5]                          ; Merged with MaquinaEstados:u_me|tgt_l[3]                          ;
+; MaquinaEstados:u_me|tgt_r[4]                          ; Merged with MaquinaEstados:u_me|tgt_l[4]                          ;
+; MaquinaEstados:u_me|tgt_r[7,15]                       ; Merged with MaquinaEstados:u_me|tgt_r[11]                         ;
+; MaquinaEstados:u_me|tgt_r[8]                          ; Merged with MaquinaEstados:u_me|tgt_r[13]                         ;
+; MaquinaEstados:u_me|tgt_r[5]                          ; Merged with MaquinaEstados:u_me|tgt_r[3]                          ;
+; LIDAR:u_lidar|phi_step[4..7]                          ; Merged with LIDAR:u_lidar|phi_step[2]                             ;
+; LIDAR:u_lidar|t1_step[2,4..7]                         ; Merged with LIDAR:u_lidar|phi_step[2]                             ;
+; LIDAR:u_lidar|t1_step[3]                              ; Merged with LIDAR:u_lidar|phi_step[3]                             ;
+; LIDAR:u_lidar|t1_step[0]                              ; Merged with LIDAR:u_lidar|phi_step[1]                             ;
+; LIDAR:u_lidar|t1_step[1]                              ; Merged with LIDAR:u_lidar|phi_step[0]                             ;
+; LIDAR:u_lidar|VL53L0X:u_VL53L0X|val_r2[5..7]          ; Merged with LIDAR:u_lidar|VL53L0X:u_VL53L0X|val_r2[3]             ;
+; MaquinaEstados:u_me|tgt_l[2]                          ; Stuck at GND due to stuck port data_in                            ;
+; LIDAR:u_lidar|phi_step[2]                             ; Stuck at GND due to stuck port data_in                            ;
+; LIDAR:u_lidar|phi_step[1]                             ; Stuck at VCC due to stuck port data_in                            ;
+; LIDAR:u_lidar|t1_hi[7]                                ; Stuck at GND due to stuck port data_in                            ;
+; LIDAR:u_lidar|phi_step[0]                             ; Merged with LIDAR:u_lidar|phi_step[3]                             ;
+; LIDAR:u_lidar|VL53L0X:u_VL53L0X|\app:cur.op.OP_WR     ; Lost fanout                                                       ;
+; LIDAR:u_lidar|VL53L0X:u_VL53L0X|\app:cur.op.OP_OR     ; Lost fanout                                                       ;
+; LIDAR:u_lidar|VL53L0X:u_VL53L0X|\app:cur.op.OP_AND    ; Lost fanout                                                       ;
+; LIDAR:u_lidar|VL53L0X:u_VL53L0X|\app:cur.op.OP_RD_SV  ; Lost fanout                                                       ;
+; LIDAR:u_lidar|VL53L0X:u_VL53L0X|\app:cur.op.OP_WR_SV  ; Lost fanout                                                       ;
+; LIDAR:u_lidar|VL53L0X:u_VL53L0X|\app:cur.op.OP_CHK_ID ; Lost fanout                                                       ;
+; LIDAR:u_lidar|VL53L0X:u_VL53L0X|\app:cur.op.OP_TUNING ; Lost fanout                                                       ;
+; LIDAR:u_lidar|VL53L0X:u_VL53L0X|\app:cur.op.OP_END    ; Lost fanout                                                       ;
+; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_CORDIC ; Merged with grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_ACOS_W ;
+; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_DONE   ; Merged with grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_ACOS_W ;
+; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_ELBOW  ; Merged with grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_ACOS_W ;
+; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_FK     ; Merged with grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_ACOS_W ;
+; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_FK_W   ; Merged with grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_ACOS_W ;
+; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_IK     ; Merged with grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_ACOS_W ;
+; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_IK_SET ; Merged with grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_ACOS_W ;
+; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_IK_W   ; Merged with grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_ACOS_W ;
+; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_LUT2_W ; Merged with grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_ACOS_W ;
+; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_THETA1 ; Merged with grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_ACOS_W ;
+; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_ACOS_W ; Stuck at GND due to stuck port data_in                            ;
+; MaquinaEstados:u_me|cnt_1s[0]                         ; Merged with MaquinaEstados:u_me|pwm16[0]                          ;
+; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_ERROR     ; Lost fanout                                                       ;
+; LIDAR:u_lidar|acc[19..23]                             ; Lost fanout                                                       ;
+; LIDAR:u_lidar|t1_dir[0]                               ; Stuck at VCC due to stuck port data_in                            ;
+; Total Number of Removed Registers = 69                ;                                                                   ;
++-------------------------------------------------------+-------------------------------------------------------------------+
+
+
++------------------------------------------------------------------------------------------------------------------------------+
+; Removed Registers Triggering Further Register Optimizations                                                                  ;
++---------------------------+---------------------------+----------------------------------------------------------------------+
+; Register name             ; Reason for Removal        ; Registers Removed due to This Register                               ;
++---------------------------+---------------------------+----------------------------------------------------------------------+
+; LIDAR:u_lidar|acc[23]     ; Lost Fanouts              ; LIDAR:u_lidar|acc[22], LIDAR:u_lidar|acc[21], LIDAR:u_lidar|acc[20], ;
+;                           ;                           ; LIDAR:u_lidar|acc[19]                                                ;
+; LIDAR:u_lidar|phi_step[2] ; Stuck at GND              ; LIDAR:u_lidar|phi_step[1], LIDAR:u_lidar|t1_hi[7]                    ;
+;                           ; due to stuck port data_in ;                                                                      ;
++---------------------------+---------------------------+----------------------------------------------------------------------+
+
+
++------------------------------------------------------+
+; General Register Statistics                          ;
++----------------------------------------------+-------+
+; Statistic                                    ; Value ;
++----------------------------------------------+-------+
+; Total registers                              ; 1069  ;
+; Number of registers using Synchronous Clear  ; 253   ;
+; Number of registers using Synchronous Load   ; 14    ;
+; Number of registers using Asynchronous Clear ; 747   ;
+; Number of registers using Asynchronous Load  ; 0     ;
+; Number of registers using Clock Enable       ; 704   ;
+; Number of registers using Preset             ; 0     ;
++----------------------------------------------+-------+
+
+
++------------------------------------------------------+
+; Inverted Register Statistics                         ;
++--------------------------------------------+---------+
+; Inverted Register                          ; Fan out ;
++--------------------------------------------+---------+
+; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_scl      ; 2       ;
+; polarPWM:u_pwm|cur_t1[6]                   ; 19      ;
+; polarPWM:u_pwm|cur_t1[4]                   ; 51      ;
+; polarPWM:u_pwm|cur_t1[1]                   ; 64      ;
+; polarPWM:u_pwm|cur_t1[3]                   ; 61      ;
+; polarPWM:u_pwm|cur_t3[4]                   ; 51      ;
+; polarPWM:u_pwm|cur_t3[5]                   ; 45      ;
+; polarPWM:u_pwm|cur_t3[2]                   ; 55      ;
+; polarPWM:u_pwm|cur_t3[7]                   ; 20      ;
+; polarPWM:u_pwm|cur_grip[6]                 ; 19      ;
+; polarPWM:u_pwm|cur_grip[5]                 ; 44      ;
+; polarPWM:u_pwm|cur_grip[0]                 ; 62      ;
+; polarPWM:u_pwm|cur_grip[1]                 ; 65      ;
+; polarPWM:u_pwm|tgt_t1[6]                   ; 2       ;
+; polarPWM:u_pwm|tgt_t1[4]                   ; 2       ;
+; polarPWM:u_pwm|tgt_t1[3]                   ; 2       ;
+; polarPWM:u_pwm|tgt_t1[1]                   ; 2       ;
+; polarPWM:u_pwm|tgt_grip[0]                 ; 2       ;
+; LIDAR:u_lidar|phi_hi[7]                    ; 1       ;
+; LIDAR:u_lidar|phi_cur[6]                   ; 6       ;
+; LIDAR:u_lidar|phi_cur[4]                   ; 4       ;
+; LIDAR:u_lidar|phi_step[3]                  ; 6       ;
+; LIDAR:u_lidar|phi_cur[3]                   ; 5       ;
+; LIDAR:u_lidar|phi_cur[1]                   ; 5       ;
+; LIDAR:u_lidar|phi_hi[2]                    ; 1       ;
+; LIDAR:u_lidar|phi_hi[1]                    ; 1       ;
+; LIDAR:u_lidar|phi_hi[0]                    ; 1       ;
+; LIDAR:u_lidar|t1_hi[6]                     ; 1       ;
+; LIDAR:u_lidar|t1_cur[6]                    ; 6       ;
+; LIDAR:u_lidar|t1_cur[4]                    ; 6       ;
+; LIDAR:u_lidar|t1_cur[3]                    ; 6       ;
+; LIDAR:u_lidar|t1_cur[1]                    ; 6       ;
+; LIDAR:u_lidar|t1_hi[4]                     ; 1       ;
+; LIDAR:u_lidar|t1_hi[3]                     ; 1       ;
+; LIDAR:u_lidar|t1_hi[1]                     ; 1       ;
+; LIDAR:u_lidar|t1_lo[5]                     ; 2       ;
+; LIDAR:u_lidar|t1_lo[3]                     ; 2       ;
+; LIDAR:u_lidar|t1_lo[2]                     ; 2       ;
+; LIDAR:u_lidar|t1_lo[0]                     ; 2       ;
+; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_sda      ; 2       ;
+; grab_ctrl:u_grab|grab_phi[7]               ; 2       ;
+; grab_ctrl:u_grab|grab_phi[2]               ; 1       ;
+; grab_ctrl:u_grab|grab_phi[4]               ; 1       ;
+; grab_ctrl:u_grab|grab_phi[5]               ; 1       ;
+; grab_ctrl:u_grab|grab_t1[6]                ; 1       ;
+; grab_ctrl:u_grab|grab_t1[4]                ; 1       ;
+; grab_ctrl:u_grab|grab_t1[3]                ; 1       ;
+; grab_ctrl:u_grab|grab_t1[1]                ; 1       ;
+; grab_ctrl:u_grab|kinematics:u_kin|reach_r  ; 5       ;
+; LIDAR:u_lidar|discard1                     ; 2       ;
+; LIDAR:u_lidar|best_d[15]                   ; 3       ;
+; LIDAR:u_lidar|best_d[14]                   ; 3       ;
+; LIDAR:u_lidar|best_d[13]                   ; 3       ;
+; LIDAR:u_lidar|best_d[12]                   ; 3       ;
+; LIDAR:u_lidar|best_d[11]                   ; 3       ;
+; LIDAR:u_lidar|best_d[10]                   ; 3       ;
+; LIDAR:u_lidar|best_d[9]                    ; 3       ;
+; LIDAR:u_lidar|best_d[8]                    ; 3       ;
+; LIDAR:u_lidar|best_d[7]                    ; 3       ;
+; LIDAR:u_lidar|best_d[6]                    ; 3       ;
+; LIDAR:u_lidar|best_d[5]                    ; 3       ;
+; LIDAR:u_lidar|best_d[4]                    ; 3       ;
+; LIDAR:u_lidar|best_d[3]                    ; 3       ;
+; LIDAR:u_lidar|best_d[2]                    ; 2       ;
+; LIDAR:u_lidar|best_d[1]                    ; 2       ;
+; LIDAR:u_lidar|best_d[0]                    ; 2       ;
+; LIDAR:u_lidar|best_phi[6]                  ; 3       ;
+; LIDAR:u_lidar|best_phi[4]                  ; 3       ;
+; LIDAR:u_lidar|best_phi[3]                  ; 3       ;
+; LIDAR:u_lidar|best_phi[1]                  ; 3       ;
+; LIDAR:u_lidar|best_t1[6]                   ; 3       ;
+; LIDAR:u_lidar|best_t1[4]                   ; 3       ;
+; LIDAR:u_lidar|best_t1[3]                   ; 3       ;
+; LIDAR:u_lidar|best_t1[1]                   ; 3       ;
+; LIDAR:u_lidar|VL53L0X:u_VL53L0X|eng_rd_ack ; 2       ;
+; LIDAR:u_lidar|VL53L0X:u_VL53L0X|eng_ack_in ; 2       ;
+; Total number of inverted registers = 76    ;         ;
++--------------------------------------------+---------+
+
+
++---------------------------------------------------------------------------------------------------------+
+; Registers Packed Into Inferred Megafunctions                                                            ;
++---------------------------------------------------+----------------------------------------------+------+
+; Register Name                                     ; Megafunction                                 ; Type ;
++---------------------------------------------------+----------------------------------------------+------+
+; grab_ctrl:u_grab|kinematics:u_kin|cosrom_q[10,11] ; grab_ctrl:u_grab|kinematics:u_kin|Mux2_rtl_0 ; ROM  ;
+; grab_ctrl:u_grab|kinematics:u_kin|sinrom_q[10,11] ; grab_ctrl:u_grab|kinematics:u_kin|Mux2_rtl_0 ; ROM  ;
++---------------------------------------------------+----------------------------------------------+------+
+
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                                                         ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+--------------------------------------------------------------------------+
+; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                                               ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+--------------------------------------------------------------------------+
+; 3:1                ; 7 bits    ; 14 LEs        ; 7 LEs                ; 7 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_q[3]              ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|acos_idx[1]       ;
+; 3:1                ; 20 bits   ; 40 LEs        ; 20 LEs               ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cuenta[4]                            ;
+; 3:1                ; 19 bits   ; 38 LEs        ; 19 LEs               ; 19 LEs                 ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|ramp_cnt[0]                          ;
+; 3:1                ; 24 bits   ; 48 LEs        ; 24 LEs               ; 24 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|zona_cnt[13]                    ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|tgt_phi[3]                           ;
+; 3:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|tgt_t1[0]                            ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|tgt_t2[0]                            ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|o_t1_r[0]         ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|o_t2_r[3]         ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[3]         ;
+; 3:1                ; 26 bits   ; 52 LEs        ; 26 LEs               ; 26 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|busqueda_cnt[5]                 ;
+; 3:1                ; 21 bits   ; 42 LEs        ; 21 LEs               ; 21 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|curva_cnt[11]                   ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|rmw_val[4]          ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|lsb_r[7]            ;
+; 4:1                ; 14 bits   ; 28 LEs        ; 14 LEs               ; 14 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|flt_izq[0]                      ;
+; 4:1                ; 14 bits   ; 28 LEs        ; 14 LEs               ; 14 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|flt_der[10]                     ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|tgt_t3[7]                            ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|best_t1[2]                            ;
+; 5:1                ; 8 bits    ; 24 LEs        ; 16 LEs               ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_phi[1]                           ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_t1[0]                            ;
+; 5:1                ; 8 bits    ; 24 LEs        ; 16 LEs               ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_t2[2]                            ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_t3[6]                            ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_grip[7]                          ;
+; 5:1                ; 2 bits    ; 6 LEs         ; 4 LEs                ; 2 LEs                  ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|tgt_r[11]                       ;
+; 5:1                ; 24 bits   ; 72 LEs        ; 24 LEs               ; 48 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|acomodo_cnt[22]                 ;
+; 6:1                ; 3 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_t1[7]                         ;
+; 6:1                ; 3 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_phi[1]                        ;
+; 6:1                ; 24 bits   ; 96 LEs        ; 24 LEs               ; 72 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|acc[10]                               ;
+; 6:1                ; 20 bits   ; 80 LEs        ; 60 LEs               ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|yi[19]            ;
+; 7:1                ; 8 bits    ; 32 LEs        ; 8 LEs                ; 24 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|navg[6]                               ;
+; 7:1                ; 7 bits    ; 28 LEs        ; 7 LEs                ; 21 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|tune_idx[4]         ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 12 LEs               ; 12 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_cur[0]                             ;
+; 9:1                ; 7 bits    ; 42 LEs        ; 14 LEs               ; 28 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|eng_wr_data[1]      ;
+; 7:1                ; 4 bits    ; 16 LEs        ; 4 LEs                ; 12 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[3]            ;
+; 8:1                ; 2 bits    ; 10 LEs        ; 2 LEs                ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_step[0]                           ;
+; 8:1                ; 4 bits    ; 20 LEs        ; 4 LEs                ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_lo[7]                              ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 4 LEs                ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_hi[6]                             ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 4 LEs                ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_hi[7]                              ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 8 LEs                ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_cur[7]                            ;
+; 9:1                ; 8 bits    ; 48 LEs        ; 8 LEs                ; 40 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|poll_cnt[0]         ;
+; 10:1               ; 9 bits    ; 54 LEs        ; 45 LEs               ; 9 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|trig_idx[0]       ;
+; 10:1               ; 3 bits    ; 18 LEs        ; 3 LEs                ; 15 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_step[0]         ;
+; 9:1                ; 2 bits    ; 12 LEs        ; 2 LEs                ; 10 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_phase[0]          ;
+; 11:1               ; 7 bits    ; 49 LEs        ; 7 LEs                ; 42 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_shift[2]          ;
+; 10:1               ; 27 bits   ; 162 LEs       ; 27 LEs               ; 135 LEs                ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|tmr[13]                            ;
+; 85:1               ; 3 bits    ; 168 LEs       ; 114 LEs              ; 54 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_reg[7]          ;
+; 86:1               ; 2 bits    ; 114 LEs       ; 66 LEs               ; 48 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[2]        ;
+; 87:1               ; 3 bits    ; 174 LEs       ; 108 LEs              ; 66 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[7]        ;
+; 19:1               ; 5 bits    ; 60 LEs        ; 5 LEs                ; 55 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|idx[2]              ;
+; 3:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|tgt_t1[6]                            ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|best_phi[3]                           ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_t1[1]                            ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_t3[4]                            ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_grip[0]                          ;
+; 5:1                ; 2 bits    ; 6 LEs         ; 2 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_phi[4]                        ;
+; 5:1                ; 16 bits   ; 48 LEs        ; 16 LEs               ; 32 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|best_d[13]                            ;
+; 6:1                ; 3 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_t1[3]                         ;
+; 6:1                ; 3 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_phi[7]                        ;
+; 6:1                ; 20 bits   ; 80 LEs        ; 60 LEs               ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|xi[11]            ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 12 LEs               ; 12 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_cur[6]                             ;
+; 8:1                ; 2 bits    ; 10 LEs        ; 2 LEs                ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_step[1]                           ;
+; 8:1                ; 4 bits    ; 20 LEs        ; 4 LEs                ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_lo[0]                              ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 4 LEs                ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_hi[2]                             ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 4 LEs                ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_hi[1]                              ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 8 LEs                ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_cur[1]                            ;
+; 3:1                ; 16 bits   ; 32 LEs        ; 16 LEs               ; 16 LEs                 ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|op_r.OP_WR          ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|tgt_r                           ;
+; 3:1                ; 18 bits   ; 36 LEs        ; 18 LEs               ; 18 LEs                 ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_t2                            ;
+; 3:1                ; 12 bits   ; 24 LEs        ; 12 LEs               ; 12 LEs                 ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_DONE ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|ShiftRight0       ;
+; 5:1                ; 8 bits    ; 24 LEs        ; 24 LEs               ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|tgt_r                           ;
+; 4:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|ShiftRight0       ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 12 LEs               ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|ShiftRight0       ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_state           ;
+; 10:1               ; 2 bits    ; 12 LEs        ; 12 LEs               ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|cur                 ;
+; 6:1                ; 2 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|Selector26          ;
+; 9:1                ; 2 bits    ; 12 LEs        ; 4 LEs                ; 8 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|Selector95                            ;
+; 10:1               ; 4 bits    ; 24 LEs        ; 16 LEs               ; 8 LEs                  ; No         ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|Selector38                      ;
+; 11:1               ; 2 bits    ; 14 LEs        ; 8 LEs                ; 6 LEs                  ; No         ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|Selector37                      ;
+; 10:1               ; 2 bits    ; 12 LEs        ; 4 LEs                ; 8 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|Selector19          ;
+; 10:1               ; 3 bits    ; 18 LEs        ; 6 LEs                ; 12 LEs                 ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|Selector17          ;
+; 13:1               ; 2 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|Selector97                            ;
+; 13:1               ; 3 bits    ; 24 LEs        ; 9 LEs                ; 15 LEs                 ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|Selector40                         ;
+; 15:1               ; 2 bits    ; 20 LEs        ; 4 LEs                ; 16 LEs                 ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|Selector41                         ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+--------------------------------------------------------------------------+
+
+
++---------------------------------------------------------------------------------------------------------------+
+; Source assignments for grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated ;
++---------------------------------+--------------------+------+-------------------------------------------------+
+; Assignment                      ; Value              ; From ; To                                              ;
++---------------------------------+--------------------+------+-------------------------------------------------+
+; OPTIMIZE_POWER_DURING_SYNTHESIS ; NORMAL_COMPILATION ; -    ; -                                               ;
++---------------------------------+--------------------+------+-------------------------------------------------+
+
+
++------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: LIDAR:u_lidar ;
++-----------------+----------+-------------------------------+
+; Parameter Name  ; Value    ; Type                          ;
++-----------------+----------+-------------------------------+
+; CLK_FREQ_HZ     ; 50000000 ; Signed Integer                ;
+; I2C_FREQ_HZ     ; 100000   ; Signed Integer                ;
+; PWRUP_CYCLES    ; 500000   ; Signed Integer                ;
+; SETTLE_CYCLES   ; 12500000 ; Signed Integer                ;
+; N_AVG           ; 8        ; Signed Integer                ;
+; COARSE_PHI_STEP ; 10       ; Signed Integer                ;
+; COARSE_T1_STEP  ; 9        ; Signed Integer                ;
+; FINE_PHI_STEP   ; 3        ; Signed Integer                ;
+; FINE_T1_STEP    ; 3        ; Signed Integer                ;
+; FOUND_TH        ; 200      ; Signed Integer                ;
++-----------------+----------+-------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: LIDAR:u_lidar|VL53L0X:u_VL53L0X ;
++----------------+----------+--------------------------------------------------+
+; Parameter Name ; Value    ; Type                                             ;
++----------------+----------+--------------------------------------------------+
+; clk_freq_hz    ; 50000000 ; Signed Integer                                   ;
+; i2c_freq_hz    ; 100000   ; Signed Integer                                   ;
+; pwrup_cycles   ; 500000   ; Signed Integer                                   ;
++----------------+----------+--------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: grab_ctrl:u_grab ;
++----------------+-----------+----------------------------------+
+; Parameter Name ; Value     ; Type                             ;
++----------------+-----------+----------------------------------+
+; move_cycles    ; 125000000 ; Signed Integer                   ;
+; grip_cycles    ; 40000000  ; Signed Integer                   ;
+; drop_phi       ; 90        ; Signed Integer                   ;
+; drop_t1        ; 90        ; Signed Integer                   ;
+; drop_t2        ; 0         ; Signed Integer                   ;
+; drop_t3        ; 0         ; Signed Integer                   ;
++----------------+-----------+----------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++--------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: grab_ctrl:u_grab|kinematics:u_kin ;
++----------------+-------+-------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                  ;
++----------------+-------+-------------------------------------------------------+
+; l1             ; 100   ; Signed Integer                                        ;
+; l2             ; 100   ; Signed Integer                                        ;
+; l3             ; 63    ; Signed Integer                                        ;
+; l_grip         ; 90    ; Signed Integer                                        ;
+; alfa3_tgt      ; -90   ; Signed Integer                                        ;
+; z_drop         ; 35    ; Signed Integer                                        ;
+; r_trim         ; 20    ; Signed Integer                                        ;
++----------------+-------+-------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: MaquinaEstados:u_me ;
++----------------+----------+--------------------------------------+
+; Parameter Name ; Value    ; Type                                 ;
++----------------+----------+--------------------------------------+
+; zona_cycles    ; 15000000 ; Signed Integer                       ;
+; salir_cycles   ; 10000000 ; Signed Integer                       ;
+; filtro_cycles  ; 15000    ; Signed Integer                       ;
+; line_lvl       ; '0'      ; Enumerated                           ;
++----------------+----------+--------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++----------------------------------------------------------------------------------------------------------+
+; Parameter Settings for Inferred Entity Instance: grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0 ;
++------------------------------------+--------------------------------------------------+------------------+
+; Parameter Name                     ; Value                                            ; Type             ;
++------------------------------------+--------------------------------------------------+------------------+
+; BYTE_SIZE_BLOCK                    ; 8                                                ; Untyped          ;
+; AUTO_CARRY_CHAINS                  ; ON                                               ; AUTO_CARRY       ;
+; IGNORE_CARRY_BUFFERS               ; OFF                                              ; IGNORE_CARRY     ;
+; AUTO_CASCADE_CHAINS                ; ON                                               ; AUTO_CASCADE     ;
+; IGNORE_CASCADE_BUFFERS             ; OFF                                              ; IGNORE_CASCADE   ;
+; WIDTH_BYTEENA                      ; 1                                                ; Untyped          ;
+; OPERATION_MODE                     ; ROM                                              ; Untyped          ;
+; WIDTH_A                            ; 4                                                ; Untyped          ;
+; WIDTHAD_A                          ; 8                                                ; Untyped          ;
+; NUMWORDS_A                         ; 256                                              ; Untyped          ;
+; OUTDATA_REG_A                      ; UNREGISTERED                                     ; Untyped          ;
+; ADDRESS_ACLR_A                     ; NONE                                             ; Untyped          ;
+; OUTDATA_ACLR_A                     ; NONE                                             ; Untyped          ;
+; WRCONTROL_ACLR_A                   ; NONE                                             ; Untyped          ;
+; INDATA_ACLR_A                      ; NONE                                             ; Untyped          ;
+; BYTEENA_ACLR_A                     ; NONE                                             ; Untyped          ;
+; WIDTH_B                            ; 1                                                ; Untyped          ;
+; WIDTHAD_B                          ; 1                                                ; Untyped          ;
+; NUMWORDS_B                         ; 1                                                ; Untyped          ;
+; INDATA_REG_B                       ; CLOCK1                                           ; Untyped          ;
+; WRCONTROL_WRADDRESS_REG_B          ; CLOCK1                                           ; Untyped          ;
+; RDCONTROL_REG_B                    ; CLOCK1                                           ; Untyped          ;
+; ADDRESS_REG_B                      ; CLOCK1                                           ; Untyped          ;
+; OUTDATA_REG_B                      ; UNREGISTERED                                     ; Untyped          ;
+; BYTEENA_REG_B                      ; CLOCK1                                           ; Untyped          ;
+; INDATA_ACLR_B                      ; NONE                                             ; Untyped          ;
+; WRCONTROL_ACLR_B                   ; NONE                                             ; Untyped          ;
+; ADDRESS_ACLR_B                     ; NONE                                             ; Untyped          ;
+; OUTDATA_ACLR_B                     ; NONE                                             ; Untyped          ;
+; RDCONTROL_ACLR_B                   ; NONE                                             ; Untyped          ;
+; BYTEENA_ACLR_B                     ; NONE                                             ; Untyped          ;
+; WIDTH_BYTEENA_A                    ; 1                                                ; Untyped          ;
+; WIDTH_BYTEENA_B                    ; 1                                                ; Untyped          ;
+; RAM_BLOCK_TYPE                     ; AUTO                                             ; Untyped          ;
+; BYTE_SIZE                          ; 8                                                ; Untyped          ;
+; READ_DURING_WRITE_MODE_MIXED_PORTS ; DONT_CARE                                        ; Untyped          ;
+; READ_DURING_WRITE_MODE_PORT_A      ; NEW_DATA_NO_NBE_READ                             ; Untyped          ;
+; READ_DURING_WRITE_MODE_PORT_B      ; NEW_DATA_NO_NBE_READ                             ; Untyped          ;
+; INIT_FILE                          ; SeguidorLinea_Brazo.SeguidorLinea_Brazo0.rtl.mif ; Untyped          ;
+; INIT_FILE_LAYOUT                   ; PORT_A                                           ; Untyped          ;
+; MAXIMUM_DEPTH                      ; 0                                                ; Untyped          ;
+; CLOCK_ENABLE_INPUT_A               ; NORMAL                                           ; Untyped          ;
+; CLOCK_ENABLE_INPUT_B               ; NORMAL                                           ; Untyped          ;
+; CLOCK_ENABLE_OUTPUT_A              ; NORMAL                                           ; Untyped          ;
+; CLOCK_ENABLE_OUTPUT_B              ; NORMAL                                           ; Untyped          ;
+; CLOCK_ENABLE_CORE_A                ; USE_INPUT_CLKEN                                  ; Untyped          ;
+; CLOCK_ENABLE_CORE_B                ; USE_INPUT_CLKEN                                  ; Untyped          ;
+; ENABLE_ECC                         ; FALSE                                            ; Untyped          ;
+; ECC_PIPELINE_STAGE_ENABLED         ; FALSE                                            ; Untyped          ;
+; WIDTH_ECCSTATUS                    ; 3                                                ; Untyped          ;
+; DEVICE_FAMILY                      ; Cyclone II                                       ; Untyped          ;
+; CBXI_PARAMETER                     ; altsyncram_hu11                                  ; Untyped          ;
++------------------------------------+--------------------------------------------------+------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------------------------------------------+
+; Parameter Settings for Inferred Entity Instance: grab_ctrl:u_grab|kinematics:u_kin|lpm_add_sub:Add34 ;
++------------------------+-------------+---------------------------------------------------------------+
+; Parameter Name         ; Value       ; Type                                                          ;
++------------------------+-------------+---------------------------------------------------------------+
+; LPM_WIDTH              ; 24          ; Untyped                                                       ;
+; LPM_REPRESENTATION     ; UNSIGNED    ; Untyped                                                       ;
+; LPM_DIRECTION          ; DEFAULT     ; Untyped                                                       ;
+; ONE_INPUT_IS_CONSTANT  ; NO          ; Untyped                                                       ;
+; LPM_PIPELINE           ; 0           ; Untyped                                                       ;
+; MAXIMIZE_SPEED         ; 5           ; Untyped                                                       ;
+; REGISTERED_AT_END      ; 0           ; Untyped                                                       ;
+; OPTIMIZE_FOR_SPEED     ; 5           ; Untyped                                                       ;
+; USE_CS_BUFFERS         ; 1           ; Untyped                                                       ;
+; CARRY_CHAIN            ; MANUAL      ; Untyped                                                       ;
+; CARRY_CHAIN_LENGTH     ; 48          ; CARRY_CHAIN_LENGTH                                            ;
+; DEVICE_FAMILY          ; Cyclone II  ; Untyped                                                       ;
+; USE_WYS                ; OFF         ; Untyped                                                       ;
+; STYLE                  ; FAST        ; Untyped                                                       ;
+; CBXI_PARAMETER         ; add_sub_8ri ; Untyped                                                       ;
+; AUTO_CARRY_CHAINS      ; ON          ; AUTO_CARRY                                                    ;
+; IGNORE_CARRY_BUFFERS   ; OFF         ; IGNORE_CARRY                                                  ;
+; AUTO_CASCADE_CHAINS    ; ON          ; AUTO_CASCADE                                                  ;
+; IGNORE_CASCADE_BUFFERS ; OFF         ; IGNORE_CASCADE                                                ;
++------------------------+-------------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------------------------------------------+
+; Parameter Settings for Inferred Entity Instance: grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult4 ;
++------------------------------------------------+------------+-------------------------------------+
+; Parameter Name                                 ; Value      ; Type                                ;
++------------------------------------------------+------------+-------------------------------------+
+; AUTO_CARRY_CHAINS                              ; ON         ; AUTO_CARRY                          ;
+; IGNORE_CARRY_BUFFERS                           ; OFF        ; IGNORE_CARRY                        ;
+; AUTO_CASCADE_CHAINS                            ; ON         ; AUTO_CASCADE                        ;
+; IGNORE_CASCADE_BUFFERS                         ; OFF        ; IGNORE_CASCADE                      ;
+; LPM_WIDTHA                                     ; 24         ; Untyped                             ;
+; LPM_WIDTHB                                     ; 13         ; Untyped                             ;
+; LPM_WIDTHP                                     ; 37         ; Untyped                             ;
+; LPM_WIDTHR                                     ; 37         ; Untyped                             ;
+; LPM_WIDTHS                                     ; 1          ; Untyped                             ;
+; LPM_REPRESENTATION                             ; SIGNED     ; Untyped                             ;
+; LPM_PIPELINE                                   ; 0          ; Untyped                             ;
+; LATENCY                                        ; 0          ; Untyped                             ;
+; INPUT_A_IS_CONSTANT                            ; NO         ; Untyped                             ;
+; INPUT_B_IS_CONSTANT                            ; YES        ; Untyped                             ;
+; USE_EAB                                        ; OFF        ; Untyped                             ;
+; MAXIMIZE_SPEED                                 ; 5          ; Untyped                             ;
+; DEVICE_FAMILY                                  ; Cyclone II ; Untyped                             ;
+; CARRY_CHAIN                                    ; MANUAL     ; Untyped                             ;
+; APEX20K_TECHNOLOGY_MAPPER                      ; LUT        ; TECH_MAPPER_APEX20K                 ;
+; DEDICATED_MULTIPLIER_CIRCUITRY                 ; AUTO       ; Untyped                             ;
+; DEDICATED_MULTIPLIER_MIN_INPUT_WIDTH_FOR_AUTO  ; 0          ; Untyped                             ;
+; DEDICATED_MULTIPLIER_MIN_OUTPUT_WIDTH_FOR_AUTO ; 0          ; Untyped                             ;
+; CBXI_PARAMETER                                 ; mult_imt   ; Untyped                             ;
+; INPUT_A_FIXED_VALUE                            ; Bx         ; Untyped                             ;
+; INPUT_B_FIXED_VALUE                            ; Bx         ; Untyped                             ;
+; USE_AHDL_IMPLEMENTATION                        ; OFF        ; Untyped                             ;
++------------------------------------------------+------------+-------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------------------------------------------+
+; Parameter Settings for Inferred Entity Instance: grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult2 ;
++------------------------------------------------+------------+-------------------------------------+
+; Parameter Name                                 ; Value      ; Type                                ;
++------------------------------------------------+------------+-------------------------------------+
+; AUTO_CARRY_CHAINS                              ; ON         ; AUTO_CARRY                          ;
+; IGNORE_CARRY_BUFFERS                           ; OFF        ; IGNORE_CARRY                        ;
+; AUTO_CASCADE_CHAINS                            ; ON         ; AUTO_CASCADE                        ;
+; IGNORE_CASCADE_BUFFERS                         ; OFF        ; IGNORE_CASCADE                      ;
+; LPM_WIDTHA                                     ; 13         ; Untyped                             ;
+; LPM_WIDTHB                                     ; 14         ; Untyped                             ;
+; LPM_WIDTHP                                     ; 27         ; Untyped                             ;
+; LPM_WIDTHR                                     ; 27         ; Untyped                             ;
+; LPM_WIDTHS                                     ; 1          ; Untyped                             ;
+; LPM_REPRESENTATION                             ; SIGNED     ; Untyped                             ;
+; LPM_PIPELINE                                   ; 0          ; Untyped                             ;
+; LATENCY                                        ; 0          ; Untyped                             ;
+; INPUT_A_IS_CONSTANT                            ; NO         ; Untyped                             ;
+; INPUT_B_IS_CONSTANT                            ; NO         ; Untyped                             ;
+; USE_EAB                                        ; OFF        ; Untyped                             ;
+; MAXIMIZE_SPEED                                 ; 6          ; Untyped                             ;
+; DEVICE_FAMILY                                  ; Cyclone II ; Untyped                             ;
+; CARRY_CHAIN                                    ; MANUAL     ; Untyped                             ;
+; APEX20K_TECHNOLOGY_MAPPER                      ; LUT        ; TECH_MAPPER_APEX20K                 ;
+; DEDICATED_MULTIPLIER_CIRCUITRY                 ; AUTO       ; Untyped                             ;
+; DEDICATED_MULTIPLIER_MIN_INPUT_WIDTH_FOR_AUTO  ; 0          ; Untyped                             ;
+; DEDICATED_MULTIPLIER_MIN_OUTPUT_WIDTH_FOR_AUTO ; 0          ; Untyped                             ;
+; CBXI_PARAMETER                                 ; mult_tit   ; Untyped                             ;
+; INPUT_A_FIXED_VALUE                            ; Bx         ; Untyped                             ;
+; INPUT_B_FIXED_VALUE                            ; Bx         ; Untyped                             ;
+; USE_AHDL_IMPLEMENTATION                        ; OFF        ; Untyped                             ;
++------------------------------------------------+------------+-------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------------------------------------------+
+; Parameter Settings for Inferred Entity Instance: grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult0 ;
++------------------------------------------------+------------+-------------------------------------+
+; Parameter Name                                 ; Value      ; Type                                ;
++------------------------------------------------+------------+-------------------------------------+
+; AUTO_CARRY_CHAINS                              ; ON         ; AUTO_CARRY                          ;
+; IGNORE_CARRY_BUFFERS                           ; OFF        ; IGNORE_CARRY                        ;
+; AUTO_CASCADE_CHAINS                            ; ON         ; AUTO_CASCADE                        ;
+; IGNORE_CASCADE_BUFFERS                         ; OFF        ; IGNORE_CASCADE                      ;
+; LPM_WIDTHA                                     ; 8          ; Untyped                             ;
+; LPM_WIDTHB                                     ; 14         ; Untyped                             ;
+; LPM_WIDTHP                                     ; 22         ; Untyped                             ;
+; LPM_WIDTHR                                     ; 22         ; Untyped                             ;
+; LPM_WIDTHS                                     ; 1          ; Untyped                             ;
+; LPM_REPRESENTATION                             ; SIGNED     ; Untyped                             ;
+; LPM_PIPELINE                                   ; 0          ; Untyped                             ;
+; LATENCY                                        ; 0          ; Untyped                             ;
+; INPUT_A_IS_CONSTANT                            ; YES        ; Untyped                             ;
+; INPUT_B_IS_CONSTANT                            ; NO         ; Untyped                             ;
+; USE_EAB                                        ; OFF        ; Untyped                             ;
+; MAXIMIZE_SPEED                                 ; 6          ; Untyped                             ;
+; DEVICE_FAMILY                                  ; Cyclone II ; Untyped                             ;
+; CARRY_CHAIN                                    ; MANUAL     ; Untyped                             ;
+; APEX20K_TECHNOLOGY_MAPPER                      ; LUT        ; TECH_MAPPER_APEX20K                 ;
+; DEDICATED_MULTIPLIER_CIRCUITRY                 ; AUTO       ; Untyped                             ;
+; DEDICATED_MULTIPLIER_MIN_INPUT_WIDTH_FOR_AUTO  ; 0          ; Untyped                             ;
+; DEDICATED_MULTIPLIER_MIN_OUTPUT_WIDTH_FOR_AUTO ; 0          ; Untyped                             ;
+; CBXI_PARAMETER                                 ; mult_0lt   ; Untyped                             ;
+; INPUT_A_FIXED_VALUE                            ; Bx         ; Untyped                             ;
+; INPUT_B_FIXED_VALUE                            ; Bx         ; Untyped                             ;
+; USE_AHDL_IMPLEMENTATION                        ; OFF        ; Untyped                             ;
++------------------------------------------------+------------+-------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------------------------------------------+
+; Parameter Settings for Inferred Entity Instance: grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult1 ;
++------------------------------------------------+------------+-------------------------------------+
+; Parameter Name                                 ; Value      ; Type                                ;
++------------------------------------------------+------------+-------------------------------------+
+; AUTO_CARRY_CHAINS                              ; ON         ; AUTO_CARRY                          ;
+; IGNORE_CARRY_BUFFERS                           ; OFF        ; IGNORE_CARRY                        ;
+; AUTO_CASCADE_CHAINS                            ; ON         ; AUTO_CASCADE                        ;
+; IGNORE_CASCADE_BUFFERS                         ; OFF        ; IGNORE_CASCADE                      ;
+; LPM_WIDTHA                                     ; 8          ; Untyped                             ;
+; LPM_WIDTHB                                     ; 14         ; Untyped                             ;
+; LPM_WIDTHP                                     ; 22         ; Untyped                             ;
+; LPM_WIDTHR                                     ; 22         ; Untyped                             ;
+; LPM_WIDTHS                                     ; 1          ; Untyped                             ;
+; LPM_REPRESENTATION                             ; SIGNED     ; Untyped                             ;
+; LPM_PIPELINE                                   ; 0          ; Untyped                             ;
+; LATENCY                                        ; 0          ; Untyped                             ;
+; INPUT_A_IS_CONSTANT                            ; YES        ; Untyped                             ;
+; INPUT_B_IS_CONSTANT                            ; NO         ; Untyped                             ;
+; USE_EAB                                        ; OFF        ; Untyped                             ;
+; MAXIMIZE_SPEED                                 ; 6          ; Untyped                             ;
+; DEVICE_FAMILY                                  ; Cyclone II ; Untyped                             ;
+; CARRY_CHAIN                                    ; MANUAL     ; Untyped                             ;
+; APEX20K_TECHNOLOGY_MAPPER                      ; LUT        ; TECH_MAPPER_APEX20K                 ;
+; DEDICATED_MULTIPLIER_CIRCUITRY                 ; AUTO       ; Untyped                             ;
+; DEDICATED_MULTIPLIER_MIN_INPUT_WIDTH_FOR_AUTO  ; 0          ; Untyped                             ;
+; DEDICATED_MULTIPLIER_MIN_OUTPUT_WIDTH_FOR_AUTO ; 0          ; Untyped                             ;
+; CBXI_PARAMETER                                 ; mult_0lt   ; Untyped                             ;
+; INPUT_A_FIXED_VALUE                            ; Bx         ; Untyped                             ;
+; INPUT_B_FIXED_VALUE                            ; Bx         ; Untyped                             ;
+; USE_AHDL_IMPLEMENTATION                        ; OFF        ; Untyped                             ;
++------------------------------------------------+------------+-------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------------------------------------------+
+; Parameter Settings for Inferred Entity Instance: grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult3 ;
++------------------------------------------------+------------+-------------------------------------+
+; Parameter Name                                 ; Value      ; Type                                ;
++------------------------------------------------+------------+-------------------------------------+
+; AUTO_CARRY_CHAINS                              ; ON         ; AUTO_CARRY                          ;
+; IGNORE_CARRY_BUFFERS                           ; OFF        ; IGNORE_CARRY                        ;
+; AUTO_CASCADE_CHAINS                            ; ON         ; AUTO_CASCADE                        ;
+; IGNORE_CASCADE_BUFFERS                         ; OFF        ; IGNORE_CASCADE                      ;
+; LPM_WIDTHA                                     ; 13         ; Untyped                             ;
+; LPM_WIDTHB                                     ; 14         ; Untyped                             ;
+; LPM_WIDTHP                                     ; 27         ; Untyped                             ;
+; LPM_WIDTHR                                     ; 27         ; Untyped                             ;
+; LPM_WIDTHS                                     ; 1          ; Untyped                             ;
+; LPM_REPRESENTATION                             ; SIGNED     ; Untyped                             ;
+; LPM_PIPELINE                                   ; 0          ; Untyped                             ;
+; LATENCY                                        ; 0          ; Untyped                             ;
+; INPUT_A_IS_CONSTANT                            ; NO         ; Untyped                             ;
+; INPUT_B_IS_CONSTANT                            ; NO         ; Untyped                             ;
+; USE_EAB                                        ; OFF        ; Untyped                             ;
+; MAXIMIZE_SPEED                                 ; 6          ; Untyped                             ;
+; DEVICE_FAMILY                                  ; Cyclone II ; Untyped                             ;
+; CARRY_CHAIN                                    ; MANUAL     ; Untyped                             ;
+; APEX20K_TECHNOLOGY_MAPPER                      ; LUT        ; TECH_MAPPER_APEX20K                 ;
+; DEDICATED_MULTIPLIER_CIRCUITRY                 ; AUTO       ; Untyped                             ;
+; DEDICATED_MULTIPLIER_MIN_INPUT_WIDTH_FOR_AUTO  ; 0          ; Untyped                             ;
+; DEDICATED_MULTIPLIER_MIN_OUTPUT_WIDTH_FOR_AUTO ; 0          ; Untyped                             ;
+; CBXI_PARAMETER                                 ; mult_tit   ; Untyped                             ;
+; INPUT_A_FIXED_VALUE                            ; Bx         ; Untyped                             ;
+; INPUT_B_FIXED_VALUE                            ; Bx         ; Untyped                             ;
+; USE_AHDL_IMPLEMENTATION                        ; OFF        ; Untyped                             ;
++------------------------------------------------+------------+-------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------------------+
+; altsyncram Parameter Settings by Entity Instance                                                    ;
++-------------------------------------------+---------------------------------------------------------+
+; Name                                      ; Value                                                   ;
++-------------------------------------------+---------------------------------------------------------+
+; Number of entity instances                ; 1                                                       ;
+; Entity Instance                           ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0 ;
+;     -- OPERATION_MODE                     ; ROM                                                     ;
+;     -- WIDTH_A                            ; 4                                                       ;
+;     -- NUMWORDS_A                         ; 256                                                     ;
+;     -- OUTDATA_REG_A                      ; UNREGISTERED                                            ;
+;     -- WIDTH_B                            ; 1                                                       ;
+;     -- NUMWORDS_B                         ; 1                                                       ;
+;     -- ADDRESS_REG_B                      ; CLOCK1                                                  ;
+;     -- OUTDATA_REG_B                      ; UNREGISTERED                                            ;
+;     -- RAM_BLOCK_TYPE                     ; AUTO                                                    ;
+;     -- READ_DURING_WRITE_MODE_MIXED_PORTS ; DONT_CARE                                               ;
++-------------------------------------------+---------------------------------------------------------+
+
+
++------------------------------------------------------------------------------------------+
+; lpm_mult Parameter Settings by Entity Instance                                           ;
++---------------------------------------+--------------------------------------------------+
+; Name                                  ; Value                                            ;
++---------------------------------------+--------------------------------------------------+
+; Number of entity instances            ; 5                                                ;
+; Entity Instance                       ; grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult4 ;
+;     -- LPM_WIDTHA                     ; 24                                               ;
+;     -- LPM_WIDTHB                     ; 13                                               ;
+;     -- LPM_WIDTHP                     ; 37                                               ;
+;     -- LPM_REPRESENTATION             ; SIGNED                                           ;
+;     -- INPUT_A_IS_CONSTANT            ; NO                                               ;
+;     -- INPUT_B_IS_CONSTANT            ; YES                                              ;
+;     -- USE_EAB                        ; OFF                                              ;
+;     -- DEDICATED_MULTIPLIER_CIRCUITRY ; AUTO                                             ;
+;     -- INPUT_A_FIXED_VALUE            ; Bx                                               ;
+;     -- INPUT_B_FIXED_VALUE            ; Bx                                               ;
+; Entity Instance                       ; grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult2 ;
+;     -- LPM_WIDTHA                     ; 13                                               ;
+;     -- LPM_WIDTHB                     ; 14                                               ;
+;     -- LPM_WIDTHP                     ; 27                                               ;
+;     -- LPM_REPRESENTATION             ; SIGNED                                           ;
+;     -- INPUT_A_IS_CONSTANT            ; NO                                               ;
+;     -- INPUT_B_IS_CONSTANT            ; NO                                               ;
+;     -- USE_EAB                        ; OFF                                              ;
+;     -- DEDICATED_MULTIPLIER_CIRCUITRY ; AUTO                                             ;
+;     -- INPUT_A_FIXED_VALUE            ; Bx                                               ;
+;     -- INPUT_B_FIXED_VALUE            ; Bx                                               ;
+; Entity Instance                       ; grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult0 ;
+;     -- LPM_WIDTHA                     ; 8                                                ;
+;     -- LPM_WIDTHB                     ; 14                                               ;
+;     -- LPM_WIDTHP                     ; 22                                               ;
+;     -- LPM_REPRESENTATION             ; SIGNED                                           ;
+;     -- INPUT_A_IS_CONSTANT            ; YES                                              ;
+;     -- INPUT_B_IS_CONSTANT            ; NO                                               ;
+;     -- USE_EAB                        ; OFF                                              ;
+;     -- DEDICATED_MULTIPLIER_CIRCUITRY ; AUTO                                             ;
+;     -- INPUT_A_FIXED_VALUE            ; Bx                                               ;
+;     -- INPUT_B_FIXED_VALUE            ; Bx                                               ;
+; Entity Instance                       ; grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult1 ;
+;     -- LPM_WIDTHA                     ; 8                                                ;
+;     -- LPM_WIDTHB                     ; 14                                               ;
+;     -- LPM_WIDTHP                     ; 22                                               ;
+;     -- LPM_REPRESENTATION             ; SIGNED                                           ;
+;     -- INPUT_A_IS_CONSTANT            ; YES                                              ;
+;     -- INPUT_B_IS_CONSTANT            ; NO                                               ;
+;     -- USE_EAB                        ; OFF                                              ;
+;     -- DEDICATED_MULTIPLIER_CIRCUITRY ; AUTO                                             ;
+;     -- INPUT_A_FIXED_VALUE            ; Bx                                               ;
+;     -- INPUT_B_FIXED_VALUE            ; Bx                                               ;
+; Entity Instance                       ; grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult3 ;
+;     -- LPM_WIDTHA                     ; 13                                               ;
+;     -- LPM_WIDTHB                     ; 14                                               ;
+;     -- LPM_WIDTHP                     ; 27                                               ;
+;     -- LPM_REPRESENTATION             ; SIGNED                                           ;
+;     -- INPUT_A_IS_CONSTANT            ; NO                                               ;
+;     -- INPUT_B_IS_CONSTANT            ; NO                                               ;
+;     -- USE_EAB                        ; OFF                                              ;
+;     -- DEDICATED_MULTIPLIER_CIRCUITRY ; AUTO                                             ;
+;     -- INPUT_A_FIXED_VALUE            ; Bx                                               ;
+;     -- INPUT_B_FIXED_VALUE            ; Bx                                               ;
++---------------------------------------+--------------------------------------------------+
+
+
++---------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "MaquinaEstados:u_me"                                                                     ;
++-----------+--------+----------+-------------------------------------------------------------------------------------+
+; Port      ; Type   ; Severity ; Details                                                                             ;
++-----------+--------+----------+-------------------------------------------------------------------------------------+
+; led_error ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++-----------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++---------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "grab_ctrl:u_grab"                                                                        ;
++-----------+--------+----------+-------------------------------------------------------------------------------------+
+; Port      ; Type   ; Severity ; Details                                                                             ;
++-----------+--------+----------+-------------------------------------------------------------------------------------+
+; reachable ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++-----------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "LIDAR:u_lidar|VL53L0X:u_VL53L0X"                                                          ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port       ; Type   ; Severity ; Details                                                                             ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; data_valid ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; sensor_ok  ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; err_code   ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "LIDAR:u_lidar"                                                                               ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port          ; Type   ; Severity ; Details                                                                             ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; dbg_meas_tick ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-------------------------------+
+; Elapsed Time Per Partition    ;
++----------------+--------------+
+; Partition Name ; Elapsed Time ;
++----------------+--------------+
+; Top            ; 00:00:22     ;
++----------------+--------------+
+
+
++-------------------------------+
+; Analysis & Synthesis Messages ;
++-------------------------------+
+Info: *******************************************************************
+Info: Running Quartus II 64-Bit Analysis & Synthesis
+    Info: Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+    Info: Processing started: Tue Jun 09 20:53:33 2026
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off SeguidorLinea_Brazo -c SeguidorLinea_Brazo
+Warning (20028): Parallel compilation is not licensed and has been disabled
+Info (12021): Found 1 design units, including 0 entities, in source file vl53l0x_pkg.vhd
+    Info (12022): Found design unit 1: vl53l0x_pkg
+Info (12021): Found 2 design units, including 1 entities, in source file vl53l0x.vhd
+    Info (12022): Found design unit 1: VL53L0X-rtl
+    Info (12023): Found entity 1: VL53L0X
+Info (12021): Found 2 design units, including 1 entities, in source file kinematics.vhd
+    Info (12022): Found design unit 1: kinematics-rtl
+    Info (12023): Found entity 1: kinematics
+Info (12021): Found 2 design units, including 1 entities, in source file lidar.vhd
+    Info (12022): Found design unit 1: LIDAR-rtl
+    Info (12023): Found entity 1: LIDAR
+Info (12021): Found 2 design units, including 1 entities, in source file grab_ctrl.vhd
+    Info (12022): Found design unit 1: grab_ctrl-rtl
+    Info (12023): Found entity 1: grab_ctrl
+Info (12021): Found 2 design units, including 1 entities, in source file maquinaestados.vhd
+    Info (12022): Found design unit 1: MaquinaEstados-rtl
+    Info (12023): Found entity 1: MaquinaEstados
+Info (12021): Found 2 design units, including 1 entities, in source file polarpwm.vhd
+    Info (12022): Found design unit 1: polarPWM-Behavioral
+    Info (12023): Found entity 1: polarPWM
+Info (12021): Found 2 design units, including 1 entities, in source file seguidorlinea_brazo.vhd
+    Info (12022): Found design unit 1: SeguidorLinea_Brazo-Behavioral
+    Info (12023): Found entity 1: SeguidorLinea_Brazo
+Info (12021): Found 2 design units, including 1 entities, in source file pruebas/motores/testmotores.vhd
+    Info (12022): Found design unit 1: TestMotores-rtl
+    Info (12023): Found entity 1: TestMotores
+Info (12127): Elaborating entity "SeguidorLinea_Brazo" for the top level hierarchy
+Warning (10036): Verilog HDL or VHDL warning at SeguidorLinea_Brazo.vhd(180): object "meas_tick" assigned a value but never read
+Warning (10036): Verilog HDL or VHDL warning at SeguidorLinea_Brazo.vhd(194): object "reachable" assigned a value but never read
+Info (12128): Elaborating entity "LIDAR" for hierarchy "LIDAR:u_lidar"
+Warning (10036): Verilog HDL or VHDL warning at LIDAR.vhd(102): object "phi_lo" assigned a value but never read
+Info (12128): Elaborating entity "VL53L0X" for hierarchy "LIDAR:u_lidar|VL53L0X:u_VL53L0X"
+Info (12128): Elaborating entity "grab_ctrl" for hierarchy "grab_ctrl:u_grab"
+Info (12128): Elaborating entity "kinematics" for hierarchy "grab_ctrl:u_grab|kinematics:u_kin"
+Warning (10542): VHDL Variable Declaration warning at math_real.vhd(3004): used initial value expression for variable "NEGATIVE" because variable was never assigned a value
+Warning (10542): VHDL Variable Declaration warning at math_real.vhd(3354): used initial value expression for variable "NEGATIVE" because variable was never assigned a value
+Warning (10542): VHDL Variable Declaration warning at math_real.vhd(3355): used initial value expression for variable "XLOCAL" because variable was never assigned a value
+Warning (10542): VHDL Variable Declaration warning at math_real.vhd(2373): used initial value expression for variable "RECIPROCAL" because variable was never assigned a value
+Warning (10542): VHDL Variable Declaration warning at math_real.vhd(3402): used initial value expression for variable "NEGATIVE" because variable was never assigned a value
+Info (12128): Elaborating entity "MaquinaEstados" for hierarchy "MaquinaEstados:u_me"
+Warning (10036): Verilog HDL or VHDL warning at MaquinaEstados.vhd(117): object "ambos_linea" assigned a value but never read
+Warning (10036): Verilog HDL or VHDL warning at MaquinaEstados.vhd(134): object "salir_cnt" assigned a value but never read
+Warning (10037): Verilog HDL or VHDL warning at MaquinaEstados.vhd(271): conditional expression evaluates to a constant
+Info (12128): Elaborating entity "polarPWM" for hierarchy "polarPWM:u_pwm"
+Info (19000): Inferred 1 megafunctions from design logic
+    Info (276031): Inferred altsyncram megafunction from the following design logic: "grab_ctrl:u_grab|kinematics:u_kin|Mux2_rtl_0"
+        Info (286033): Parameter OPERATION_MODE set to ROM
+        Info (286033): Parameter WIDTH_A set to 4
+        Info (286033): Parameter WIDTHAD_A set to 8
+        Info (286033): Parameter NUMWORDS_A set to 256
+        Info (286033): Parameter OUTDATA_REG_A set to UNREGISTERED
+        Info (286033): Parameter RAM_BLOCK_TYPE set to AUTO
+        Info (286033): Parameter INIT_FILE set to SeguidorLinea_Brazo.SeguidorLinea_Brazo0.rtl.mif
+Info (278001): Inferred 6 megafunctions from design logic
+    Info (278002): Inferred adder/subtractor megafunction ("lpm_add_sub") from the following logic: "grab_ctrl:u_grab|kinematics:u_kin|Add34"
+    Info (278003): Inferred multiplier megafunction ("lpm_mult") from the following logic: "grab_ctrl:u_grab|kinematics:u_kin|Mult4"
+    Info (278003): Inferred multiplier megafunction ("lpm_mult") from the following logic: "grab_ctrl:u_grab|kinematics:u_kin|Mult2"
+    Info (278003): Inferred multiplier megafunction ("lpm_mult") from the following logic: "grab_ctrl:u_grab|kinematics:u_kin|Mult0"
+    Info (278003): Inferred multiplier megafunction ("lpm_mult") from the following logic: "grab_ctrl:u_grab|kinematics:u_kin|Mult1"
+    Info (278003): Inferred multiplier megafunction ("lpm_mult") from the following logic: "grab_ctrl:u_grab|kinematics:u_kin|Mult3"
+Info (12130): Elaborated megafunction instantiation "grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0"
+Info (12133): Instantiated megafunction "grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0" with the following parameter:
+    Info (12134): Parameter "OPERATION_MODE" = "ROM"
+    Info (12134): Parameter "WIDTH_A" = "4"
+    Info (12134): Parameter "WIDTHAD_A" = "8"
+    Info (12134): Parameter "NUMWORDS_A" = "256"
+    Info (12134): Parameter "OUTDATA_REG_A" = "UNREGISTERED"
+    Info (12134): Parameter "RAM_BLOCK_TYPE" = "AUTO"
+    Info (12134): Parameter "INIT_FILE" = "SeguidorLinea_Brazo.SeguidorLinea_Brazo0.rtl.mif"
+Info (12021): Found 1 design units, including 1 entities, in source file db/altsyncram_hu11.tdf
+    Info (12023): Found entity 1: altsyncram_hu11
+Info (12130): Elaborated megafunction instantiation "grab_ctrl:u_grab|kinematics:u_kin|lpm_add_sub:Add34"
+Info (12133): Instantiated megafunction "grab_ctrl:u_grab|kinematics:u_kin|lpm_add_sub:Add34" with the following parameter:
+    Info (12134): Parameter "LPM_WIDTH" = "24"
+    Info (12134): Parameter "LPM_DIRECTION" = "DEFAULT"
+    Info (12134): Parameter "LPM_REPRESENTATION" = "UNSIGNED"
+    Info (12134): Parameter "ONE_INPUT_IS_CONSTANT" = "NO"
+Info (12021): Found 1 design units, including 1 entities, in source file db/add_sub_8ri.tdf
+    Info (12023): Found entity 1: add_sub_8ri
+Info (12130): Elaborated megafunction instantiation "grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult4"
+Info (12133): Instantiated megafunction "grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult4" with the following parameter:
+    Info (12134): Parameter "LPM_WIDTHA" = "24"
+    Info (12134): Parameter "LPM_WIDTHB" = "13"
+    Info (12134): Parameter "LPM_WIDTHP" = "37"
+    Info (12134): Parameter "LPM_WIDTHR" = "37"
+    Info (12134): Parameter "LPM_WIDTHS" = "1"
+    Info (12134): Parameter "LPM_REPRESENTATION" = "SIGNED"
+    Info (12134): Parameter "INPUT_A_IS_CONSTANT" = "NO"
+    Info (12134): Parameter "INPUT_B_IS_CONSTANT" = "YES"
+    Info (12134): Parameter "MAXIMIZE_SPEED" = "5"
+Info (12021): Found 1 design units, including 1 entities, in source file db/mult_imt.tdf
+    Info (12023): Found entity 1: mult_imt
+Info (12130): Elaborated megafunction instantiation "grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult2"
+Info (12133): Instantiated megafunction "grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult2" with the following parameter:
+    Info (12134): Parameter "LPM_WIDTHA" = "13"
+    Info (12134): Parameter "LPM_WIDTHB" = "14"
+    Info (12134): Parameter "LPM_WIDTHP" = "27"
+    Info (12134): Parameter "LPM_WIDTHR" = "27"
+    Info (12134): Parameter "LPM_WIDTHS" = "1"
+    Info (12134): Parameter "LPM_REPRESENTATION" = "SIGNED"
+    Info (12134): Parameter "INPUT_A_IS_CONSTANT" = "NO"
+    Info (12134): Parameter "INPUT_B_IS_CONSTANT" = "NO"
+    Info (12134): Parameter "MAXIMIZE_SPEED" = "6"
+Info (12021): Found 1 design units, including 1 entities, in source file db/mult_tit.tdf
+    Info (12023): Found entity 1: mult_tit
+Info (12130): Elaborated megafunction instantiation "grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult0"
+Info (12133): Instantiated megafunction "grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult0" with the following parameter:
+    Info (12134): Parameter "LPM_WIDTHA" = "8"
+    Info (12134): Parameter "LPM_WIDTHB" = "14"
+    Info (12134): Parameter "LPM_WIDTHP" = "22"
+    Info (12134): Parameter "LPM_WIDTHR" = "22"
+    Info (12134): Parameter "LPM_WIDTHS" = "1"
+    Info (12134): Parameter "LPM_REPRESENTATION" = "SIGNED"
+    Info (12134): Parameter "INPUT_A_IS_CONSTANT" = "YES"
+    Info (12134): Parameter "INPUT_B_IS_CONSTANT" = "NO"
+    Info (12134): Parameter "MAXIMIZE_SPEED" = "6"
+Info (12021): Found 1 design units, including 1 entities, in source file db/mult_0lt.tdf
+    Info (12023): Found entity 1: mult_0lt
+Info (13014): Ignored 65 buffer(s)
+    Info (13019): Ignored 65 SOFT buffer(s)
+Info (13000): Registers with preset signals will power-up high
+Info (13003): DEV_CLRn pin will set, and not reset, register with preset signal due to NOT Gate Push-Back
+Info (17049): 14 registers lost all their fanouts during netlist optimizations.
+Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
+    Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
+Info (21057): Implemented 4512 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 4 input pins
+    Info (21059): Implemented 13 output pins
+    Info (21060): Implemented 1 bidirectional pins
+    Info (21061): Implemented 4478 logic cells
+    Info (21064): Implemented 4 RAM segments
+    Info (21062): Implemented 12 DSP elements
+Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 12 warnings
+    Info: Peak virtual memory: 4699 megabytes
+    Info: Processing ended: Tue Jun 09 20:54:00 2026
+    Info: Elapsed time: 00:00:27
+    Info: Total CPU time (on all processors): 00:00:25
+
+

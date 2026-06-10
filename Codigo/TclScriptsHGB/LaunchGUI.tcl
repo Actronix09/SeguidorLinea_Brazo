@@ -1,0 +1,1 @@
+exec C:/altera/13.0sp1/quartus/bin64/quartus d:/SeguidorLinea_Brazo/Codigo/SeguidorLinea_Brazo

@@ -1,0 +1,14 @@
+Analysis & Synthesis Status : Successful - Tue Jun 09 20:53:59 2026
+Quartus II 64-Bit Version : 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition
+Revision Name : SeguidorLinea_Brazo
+Top-level Entity Name : SeguidorLinea_Brazo
+Family : Cyclone II
+Total logic elements : 4,388
+    Total combinational functions : 4,280
+    Dedicated logic registers : 1,069
+Total registers : 1069
+Total pins : 18
+Total virtual pins : 0
+Total memory bits : 1,024
+Embedded Multiplier 9-bit elements : 12
+Total PLLs : 0

@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<LOG_ROOT>
+	<PROJECT NAME="SeguidorLinea_Brazo">
+		<CBX_INST_ENTRY INSTANCE_NAME="|SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0" CBX_FILE_NAME="altsyncram_hu11.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_add_sub:Add34" CBX_FILE_NAME="add_sub_8ri.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult0" CBX_FILE_NAME="mult_0lt.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult2" CBX_FILE_NAME="mult_tit.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult4" CBX_FILE_NAME="mult_imt.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult1" CBX_FILE_NAME="mult_0lt.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|lpm_mult:Mult3" CBX_FILE_NAME="mult_tit.tdf"/>
+	</PROJECT>
+</LOG_ROOT>
