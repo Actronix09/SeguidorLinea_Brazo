@@ -6,13 +6,23 @@ ultimo_giro.G_IZQ 0 1 1
 ultimo_giro.G_DER 1 0 1 
 
 State Machine - |SeguidorLinea_Brazo|MaquinaEstados:u_me|est
-Name est.E_ACCION est.E_SCAN est.E_BUSCAR_LINEA est.E_ACOMODAR est.E_SEGUIR est.E_INICIO 
-est.E_INICIO 0 0 0 0 0 0 
-est.E_SEGUIR 0 0 0 0 1 1 
-est.E_ACOMODAR 0 0 0 1 0 1 
-est.E_BUSCAR_LINEA 0 0 1 0 0 1 
-est.E_SCAN 0 1 0 0 0 1 
-est.E_ACCION 1 0 0 0 0 1 
+Name est.E_REARME est.E_DROP_WAIT est.E_SCAN_FIN est.E_SCAN_INI est.E_Z_ACCION est.E_Z_RECENTRO est.E_Z_BUSCA_B est.E_Z_BUSCA_A est.E_Z_OFFSET est.E_Z_AVANZA est.E_Z_CENTRO est.E_Z_BORDE_B est.E_Z_BORDE_A est.E_SONDA est.E_SEGUIR est.E_INICIO 
+est.E_INICIO 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+est.E_SEGUIR 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+est.E_SONDA 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+est.E_Z_BORDE_A 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 
+est.E_Z_BORDE_B 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 
+est.E_Z_CENTRO 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+est.E_Z_AVANZA 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 
+est.E_Z_OFFSET 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 
+est.E_Z_BUSCA_A 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 
+est.E_Z_BUSCA_B 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 
+est.E_Z_RECENTRO 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 
+est.E_Z_ACCION 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 
+est.E_SCAN_INI 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+est.E_SCAN_FIN 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+est.E_DROP_WAIT 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+est.E_REARME 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
 
 State Machine - |SeguidorLinea_Brazo|grab_ctrl:u_grab|gst
 Name gst.G_RELEASE gst.G_DROP gst.G_HOLD gst.G_GRIP gst.G_MOVE gst.G_IK_WAIT gst.G_IK gst.G_SCANWAIT gst.G_REST 

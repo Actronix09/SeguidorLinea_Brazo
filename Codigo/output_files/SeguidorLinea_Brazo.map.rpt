@@ -1,5 +1,5 @@
 Analysis & Synthesis report for SeguidorLinea_Brazo
-Tue Jun 09 20:53:59 2026
+Thu Jun 11 15:37:39 2026
 Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
 
 
@@ -78,15 +78,15 @@ applicable agreement for further details.
 +--------------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                         ;
 +------------------------------------+-------------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Tue Jun 09 20:53:59 2026           ;
+; Analysis & Synthesis Status        ; Successful - Thu Jun 11 15:37:39 2026           ;
 ; Quartus II 64-Bit Version          ; 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition ;
 ; Revision Name                      ; SeguidorLinea_Brazo                             ;
 ; Top-level Entity Name              ; SeguidorLinea_Brazo                             ;
 ; Family                             ; Cyclone II                                      ;
-; Total logic elements               ; 4,388                                           ;
-;     Total combinational functions  ; 4,280                                           ;
-;     Dedicated logic registers      ; 1,069                                           ;
-; Total registers                    ; 1069                                            ;
+; Total logic elements               ; 4,566                                           ;
+;     Total combinational functions  ; 4,434                                           ;
+;     Dedicated logic registers      ; 1,104                                           ;
+; Total registers                    ; 1104                                            ;
 ; Total pins                         ; 18                                              ;
 ; Total virtual pins                 ; 0                                               ;
 ; Total memory bits                  ; 1,024                                           ;
@@ -235,29 +235,29 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +---------------------------------------------+-------+
 ; Resource                                    ; Usage ;
 +---------------------------------------------+-------+
-; Estimated Total logic elements              ; 4,388 ;
+; Estimated Total logic elements              ; 4,566 ;
 ;                                             ;       ;
-; Total combinational functions               ; 4280  ;
+; Total combinational functions               ; 4434  ;
 ; Logic element usage by number of LUT inputs ;       ;
-;     -- 4 input functions                    ; 2063  ;
-;     -- 3 input functions                    ; 1016  ;
-;     -- <=2 input functions                  ; 1201  ;
+;     -- 4 input functions                    ; 2171  ;
+;     -- 3 input functions                    ; 1049  ;
+;     -- <=2 input functions                  ; 1214  ;
 ;                                             ;       ;
 ; Logic elements by mode                      ;       ;
-;     -- normal mode                          ; 2963  ;
-;     -- arithmetic mode                      ; 1317  ;
+;     -- normal mode                          ; 3091  ;
+;     -- arithmetic mode                      ; 1343  ;
 ;                                             ;       ;
-; Total registers                             ; 1069  ;
-;     -- Dedicated logic registers            ; 1069  ;
+; Total registers                             ; 1104  ;
+;     -- Dedicated logic registers            ; 1104  ;
 ;     -- I/O registers                        ; 0     ;
 ;                                             ;       ;
 ; I/O pins                                    ; 18    ;
 ; Total memory bits                           ; 1024  ;
 ; Embedded Multiplier 9-bit elements          ; 12    ;
 ; Maximum fan-out node                        ; clk   ;
-; Maximum fan-out                             ; 1073  ;
-; Total fan-out                               ; 17604 ;
-; Average fan-out                             ; 3.27  ;
+; Maximum fan-out                             ; 1108  ;
+; Total fan-out                               ; 18305 ;
+; Average fan-out                             ; 3.29  ;
 +---------------------------------------------+-------+
 
 
@@ -266,11 +266,11 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +----------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+-------------------------------------------------------------------------------------------------------------+--------------+
 ; Compilation Hierarchy Node                   ; LC Combinationals ; LC Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name                                                                                         ; Library Name ;
 +----------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+-------------------------------------------------------------------------------------------------------------+--------------+
-; |SeguidorLinea_Brazo                         ; 4280 (9)          ; 1069 (0)     ; 1024        ; 12           ; 0       ; 6         ; 18   ; 0            ; |SeguidorLinea_Brazo                                                                                        ; work         ;
-;    |LIDAR:u_lidar|                           ; 910 (405)         ; 450 (183)    ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |SeguidorLinea_Brazo|LIDAR:u_lidar                                                                          ; work         ;
-;       |VL53L0X:u_VL53L0X|                    ; 505 (505)         ; 267 (267)    ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X                                                        ; work         ;
-;    |MaquinaEstados:u_me|                     ; 400 (400)         ; 196 (196)    ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |SeguidorLinea_Brazo|MaquinaEstados:u_me                                                                    ; work         ;
-;    |grab_ctrl:u_grab|                        ; 2031 (131)        ; 305 (71)     ; 1024        ; 12           ; 0       ; 6         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab                                                                       ; work         ;
+; |SeguidorLinea_Brazo                         ; 4434 (9)          ; 1104 (0)     ; 1024        ; 12           ; 0       ; 6         ; 18   ; 0            ; |SeguidorLinea_Brazo                                                                                        ; work         ;
+;    |LIDAR:u_lidar|                           ; 902 (398)         ; 450 (183)    ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |SeguidorLinea_Brazo|LIDAR:u_lidar                                                                          ; work         ;
+;       |VL53L0X:u_VL53L0X|                    ; 504 (504)         ; 267 (267)    ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X                                                        ; work         ;
+;    |MaquinaEstados:u_me|                     ; 560 (560)         ; 231 (231)    ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |SeguidorLinea_Brazo|MaquinaEstados:u_me                                                                    ; work         ;
+;    |grab_ctrl:u_grab|                        ; 2033 (133)        ; 305 (71)     ; 1024        ; 12           ; 0       ; 6         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab                                                                       ; work         ;
 ;       |kinematics:u_kin|                     ; 1900 (1835)       ; 234 (234)    ; 1024        ; 12           ; 0       ; 6         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin                                                      ; work         ;
 ;          |altsyncram:Mux2_rtl_0|             ; 0 (0)             ; 0 (0)        ; 1024        ; 0            ; 0       ; 0         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0                                ; work         ;
 ;             |altsyncram_hu11:auto_generated| ; 0 (0)             ; 0 (0)        ; 1024        ; 0            ; 0       ; 0         ; 0    ; 0            ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated ; work         ;
@@ -331,18 +331,28 @@ Encoding Type:  One-Hot
 
 
 Encoding Type:  One-Hot
-+--------------------------------------------------------------------------------------------------------------------+
-; State Machine - |SeguidorLinea_Brazo|MaquinaEstados:u_me|est                                                       ;
-+--------------------+--------------+------------+--------------------+----------------+--------------+--------------+
-; Name               ; est.E_ACCION ; est.E_SCAN ; est.E_BUSCAR_LINEA ; est.E_ACOMODAR ; est.E_SEGUIR ; est.E_INICIO ;
-+--------------------+--------------+------------+--------------------+----------------+--------------+--------------+
-; est.E_INICIO       ; 0            ; 0          ; 0                  ; 0              ; 0            ; 0            ;
-; est.E_SEGUIR       ; 0            ; 0          ; 0                  ; 0              ; 1            ; 1            ;
-; est.E_ACOMODAR     ; 0            ; 0          ; 0                  ; 1              ; 0            ; 1            ;
-; est.E_BUSCAR_LINEA ; 0            ; 0          ; 1                  ; 0              ; 0            ; 1            ;
-; est.E_SCAN         ; 0            ; 1          ; 0                  ; 0              ; 0            ; 1            ;
-; est.E_ACCION       ; 1            ; 0          ; 0                  ; 0              ; 0            ; 1            ;
-+--------------------+--------------+------------+--------------------+----------------+--------------+--------------+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; State Machine - |SeguidorLinea_Brazo|MaquinaEstados:u_me|est                                                                                                                                                                                                                                   ;
++------------------+--------------+-----------------+----------------+----------------+----------------+------------------+-----------------+-----------------+----------------+----------------+----------------+-----------------+-----------------+-------------+--------------+--------------+
+; Name             ; est.E_REARME ; est.E_DROP_WAIT ; est.E_SCAN_FIN ; est.E_SCAN_INI ; est.E_Z_ACCION ; est.E_Z_RECENTRO ; est.E_Z_BUSCA_B ; est.E_Z_BUSCA_A ; est.E_Z_OFFSET ; est.E_Z_AVANZA ; est.E_Z_CENTRO ; est.E_Z_BORDE_B ; est.E_Z_BORDE_A ; est.E_SONDA ; est.E_SEGUIR ; est.E_INICIO ;
++------------------+--------------+-----------------+----------------+----------------+----------------+------------------+-----------------+-----------------+----------------+----------------+----------------+-----------------+-----------------+-------------+--------------+--------------+
+; est.E_INICIO     ; 0            ; 0               ; 0              ; 0              ; 0              ; 0                ; 0               ; 0               ; 0              ; 0              ; 0              ; 0               ; 0               ; 0           ; 0            ; 0            ;
+; est.E_SEGUIR     ; 0            ; 0               ; 0              ; 0              ; 0              ; 0                ; 0               ; 0               ; 0              ; 0              ; 0              ; 0               ; 0               ; 0           ; 1            ; 1            ;
+; est.E_SONDA      ; 0            ; 0               ; 0              ; 0              ; 0              ; 0                ; 0               ; 0               ; 0              ; 0              ; 0              ; 0               ; 0               ; 1           ; 0            ; 1            ;
+; est.E_Z_BORDE_A  ; 0            ; 0               ; 0              ; 0              ; 0              ; 0                ; 0               ; 0               ; 0              ; 0              ; 0              ; 0               ; 1               ; 0           ; 0            ; 1            ;
+; est.E_Z_BORDE_B  ; 0            ; 0               ; 0              ; 0              ; 0              ; 0                ; 0               ; 0               ; 0              ; 0              ; 0              ; 1               ; 0               ; 0           ; 0            ; 1            ;
+; est.E_Z_CENTRO   ; 0            ; 0               ; 0              ; 0              ; 0              ; 0                ; 0               ; 0               ; 0              ; 0              ; 1              ; 0               ; 0               ; 0           ; 0            ; 1            ;
+; est.E_Z_AVANZA   ; 0            ; 0               ; 0              ; 0              ; 0              ; 0                ; 0               ; 0               ; 0              ; 1              ; 0              ; 0               ; 0               ; 0           ; 0            ; 1            ;
+; est.E_Z_OFFSET   ; 0            ; 0               ; 0              ; 0              ; 0              ; 0                ; 0               ; 0               ; 1              ; 0              ; 0              ; 0               ; 0               ; 0           ; 0            ; 1            ;
+; est.E_Z_BUSCA_A  ; 0            ; 0               ; 0              ; 0              ; 0              ; 0                ; 0               ; 1               ; 0              ; 0              ; 0              ; 0               ; 0               ; 0           ; 0            ; 1            ;
+; est.E_Z_BUSCA_B  ; 0            ; 0               ; 0              ; 0              ; 0              ; 0                ; 1               ; 0               ; 0              ; 0              ; 0              ; 0               ; 0               ; 0           ; 0            ; 1            ;
+; est.E_Z_RECENTRO ; 0            ; 0               ; 0              ; 0              ; 0              ; 1                ; 0               ; 0               ; 0              ; 0              ; 0              ; 0               ; 0               ; 0           ; 0            ; 1            ;
+; est.E_Z_ACCION   ; 0            ; 0               ; 0              ; 0              ; 1              ; 0                ; 0               ; 0               ; 0              ; 0              ; 0              ; 0               ; 0               ; 0           ; 0            ; 1            ;
+; est.E_SCAN_INI   ; 0            ; 0               ; 0              ; 1              ; 0              ; 0                ; 0               ; 0               ; 0              ; 0              ; 0              ; 0               ; 0               ; 0           ; 0            ; 1            ;
+; est.E_SCAN_FIN   ; 0            ; 0               ; 1              ; 0              ; 0              ; 0                ; 0               ; 0               ; 0              ; 0              ; 0              ; 0               ; 0               ; 0           ; 0            ; 1            ;
+; est.E_DROP_WAIT  ; 0            ; 1               ; 0              ; 0              ; 0              ; 0                ; 0               ; 0               ; 0              ; 0              ; 0              ; 0               ; 0               ; 0           ; 0            ; 1            ;
+; est.E_REARME     ; 1            ; 0               ; 0              ; 0              ; 0              ; 0                ; 0               ; 0               ; 0              ; 0              ; 0              ; 0               ; 0               ; 0           ; 0            ; 1            ;
++------------------+--------------+-----------------+----------------+----------------+----------------+------------------+-----------------+-----------------+----------------+----------------+----------------+-----------------+-----------------+-------------+--------------+--------------+
 
 
 Encoding Type:  One-Hot
@@ -531,25 +541,25 @@ Encoding Type:  One-Hot
 ; Register name                                         ; Reason for Removal                                                ;
 +-------------------------------------------------------+-------------------------------------------------------------------+
 ; polarPWM:u_pwm|tgt_grip[2..4,7]                       ; Stuck at GND due to stuck port data_in                            ;
+; MaquinaEstados:u_me|tgt_l[0..2]                       ; Stuck at GND due to stuck port data_in                            ;
+; MaquinaEstados:u_me|tgt_r[0..2]                       ; Stuck at GND due to stuck port data_in                            ;
 ; grab_ctrl:u_grab|kinematics:u_kin|acosrom_q[7]        ; Stuck at GND due to stuck port data_in                            ;
 ; polarPWM:u_pwm|tgt_grip[1,5,6]                        ; Merged with polarPWM:u_pwm|tgt_grip[0]                            ;
-; MaquinaEstados:u_me|tgt_l[1]                          ; Merged with MaquinaEstados:u_me|tgt_l[2]                          ;
-; MaquinaEstados:u_me|tgt_r[0..2]                       ; Merged with MaquinaEstados:u_me|tgt_l[2]                          ;
-; MaquinaEstados:u_me|tgt_l[0]                          ; Merged with MaquinaEstados:u_me|tgt_l[2]                          ;
-; MaquinaEstados:u_me|tgt_l[7,15]                       ; Merged with MaquinaEstados:u_me|tgt_l[11]                         ;
-; MaquinaEstados:u_me|tgt_l[8]                          ; Merged with MaquinaEstados:u_me|tgt_l[13]                         ;
-; MaquinaEstados:u_me|tgt_l[5]                          ; Merged with MaquinaEstados:u_me|tgt_l[3]                          ;
-; MaquinaEstados:u_me|tgt_r[4]                          ; Merged with MaquinaEstados:u_me|tgt_l[4]                          ;
-; MaquinaEstados:u_me|tgt_r[7,15]                       ; Merged with MaquinaEstados:u_me|tgt_r[11]                         ;
-; MaquinaEstados:u_me|tgt_r[8]                          ; Merged with MaquinaEstados:u_me|tgt_r[13]                         ;
-; MaquinaEstados:u_me|tgt_r[5]                          ; Merged with MaquinaEstados:u_me|tgt_r[3]                          ;
+; MaquinaEstados:u_me|tgt_l[14]                         ; Merged with MaquinaEstados:u_me|tgt_l[16]                         ;
+; MaquinaEstados:u_me|tgt_r[12]                         ; Merged with MaquinaEstados:u_me|tgt_l[16]                         ;
+; MaquinaEstados:u_me|tgt_l[11]                         ; Merged with MaquinaEstados:u_me|tgt_l[15]                         ;
+; MaquinaEstados:u_me|tgt_l[6,8..10]                    ; Merged with MaquinaEstados:u_me|tgt_l[13]                         ;
+; MaquinaEstados:u_me|tgt_r[14,16]                      ; Merged with MaquinaEstados:u_me|tgt_l[12]                         ;
+; MaquinaEstados:u_me|tgt_r[4]                          ; Merged with MaquinaEstados:u_me|tgt_l[5]                          ;
+; MaquinaEstados:u_me|tgt_r[5]                          ; Merged with MaquinaEstados:u_me|tgt_l[4]                          ;
+; MaquinaEstados:u_me|tgt_r[11]                         ; Merged with MaquinaEstados:u_me|tgt_r[15]                         ;
+; MaquinaEstados:u_me|tgt_r[6,8..10]                    ; Merged with MaquinaEstados:u_me|tgt_r[13]                         ;
 ; LIDAR:u_lidar|phi_step[4..7]                          ; Merged with LIDAR:u_lidar|phi_step[2]                             ;
 ; LIDAR:u_lidar|t1_step[2,4..7]                         ; Merged with LIDAR:u_lidar|phi_step[2]                             ;
 ; LIDAR:u_lidar|t1_step[3]                              ; Merged with LIDAR:u_lidar|phi_step[3]                             ;
 ; LIDAR:u_lidar|t1_step[0]                              ; Merged with LIDAR:u_lidar|phi_step[1]                             ;
 ; LIDAR:u_lidar|t1_step[1]                              ; Merged with LIDAR:u_lidar|phi_step[0]                             ;
 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|val_r2[5..7]          ; Merged with LIDAR:u_lidar|VL53L0X:u_VL53L0X|val_r2[3]             ;
-; MaquinaEstados:u_me|tgt_l[2]                          ; Stuck at GND due to stuck port data_in                            ;
 ; LIDAR:u_lidar|phi_step[2]                             ; Stuck at GND due to stuck port data_in                            ;
 ; LIDAR:u_lidar|phi_step[1]                             ; Stuck at VCC due to stuck port data_in                            ;
 ; LIDAR:u_lidar|t1_hi[7]                                ; Stuck at GND due to stuck port data_in                            ;
@@ -577,7 +587,7 @@ Encoding Type:  One-Hot
 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_ERROR     ; Lost fanout                                                       ;
 ; LIDAR:u_lidar|acc[19..23]                             ; Lost fanout                                                       ;
 ; LIDAR:u_lidar|t1_dir[0]                               ; Stuck at VCC due to stuck port data_in                            ;
-; Total Number of Removed Registers = 69                ;                                                                   ;
+; Total Number of Removed Registers = 76                ;                                                                   ;
 +-------------------------------------------------------+-------------------------------------------------------------------+
 
 
@@ -598,12 +608,12 @@ Encoding Type:  One-Hot
 +----------------------------------------------+-------+
 ; Statistic                                    ; Value ;
 +----------------------------------------------+-------+
-; Total registers                              ; 1069  ;
-; Number of registers using Synchronous Clear  ; 253   ;
-; Number of registers using Synchronous Load   ; 14    ;
-; Number of registers using Asynchronous Clear ; 747   ;
+; Total registers                              ; 1104  ;
+; Number of registers using Synchronous Clear  ; 227   ;
+; Number of registers using Synchronous Load   ; 10    ;
+; Number of registers using Asynchronous Clear ; 832   ;
 ; Number of registers using Asynchronous Load  ; 0     ;
-; Number of registers using Clock Enable       ; 704   ;
+; Number of registers using Clock Enable       ; 726   ;
 ; Number of registers using Preset             ; 0     ;
 +----------------------------------------------+-------+
 
@@ -626,6 +636,8 @@ Encoding Type:  One-Hot
 ; polarPWM:u_pwm|cur_grip[5]                 ; 44      ;
 ; polarPWM:u_pwm|cur_grip[0]                 ; 62      ;
 ; polarPWM:u_pwm|cur_grip[1]                 ; 65      ;
+; MaquinaEstados:u_me|probe_dir              ; 8       ;
+; MaquinaEstados:u_me|busca_dir              ; 3       ;
 ; polarPWM:u_pwm|tgt_t1[6]                   ; 2       ;
 ; polarPWM:u_pwm|tgt_t1[4]                   ; 2       ;
 ; polarPWM:u_pwm|tgt_t1[3]                   ; 2       ;
@@ -689,7 +701,7 @@ Encoding Type:  One-Hot
 ; LIDAR:u_lidar|best_t1[1]                   ; 3       ;
 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|eng_rd_ack ; 2       ;
 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|eng_ack_in ; 2       ;
-; Total number of inverted registers = 76    ;         ;
+; Total number of inverted registers = 78    ;         ;
 +--------------------------------------------+---------+
 
 
@@ -703,97 +715,97 @@ Encoding Type:  One-Hot
 +---------------------------------------------------+----------------------------------------------+------+
 
 
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                                                         ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+--------------------------------------------------------------------------+
-; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                                               ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+--------------------------------------------------------------------------+
-; 3:1                ; 7 bits    ; 14 LEs        ; 7 LEs                ; 7 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_q[3]              ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|acos_idx[1]       ;
-; 3:1                ; 20 bits   ; 40 LEs        ; 20 LEs               ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cuenta[4]                            ;
-; 3:1                ; 19 bits   ; 38 LEs        ; 19 LEs               ; 19 LEs                 ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|ramp_cnt[0]                          ;
-; 3:1                ; 24 bits   ; 48 LEs        ; 24 LEs               ; 24 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|zona_cnt[13]                    ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|tgt_phi[3]                           ;
-; 3:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|tgt_t1[0]                            ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|tgt_t2[0]                            ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|o_t1_r[0]         ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|o_t2_r[3]         ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[3]         ;
-; 3:1                ; 26 bits   ; 52 LEs        ; 26 LEs               ; 26 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|busqueda_cnt[5]                 ;
-; 3:1                ; 21 bits   ; 42 LEs        ; 21 LEs               ; 21 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|curva_cnt[11]                   ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|rmw_val[4]          ;
-; 4:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|lsb_r[7]            ;
-; 4:1                ; 14 bits   ; 28 LEs        ; 14 LEs               ; 14 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|flt_izq[0]                      ;
-; 4:1                ; 14 bits   ; 28 LEs        ; 14 LEs               ; 14 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|flt_der[10]                     ;
-; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|tgt_t3[7]                            ;
-; 4:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|best_t1[2]                            ;
-; 5:1                ; 8 bits    ; 24 LEs        ; 16 LEs               ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_phi[1]                           ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_t1[0]                            ;
-; 5:1                ; 8 bits    ; 24 LEs        ; 16 LEs               ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_t2[2]                            ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_t3[6]                            ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_grip[7]                          ;
-; 5:1                ; 2 bits    ; 6 LEs         ; 4 LEs                ; 2 LEs                  ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|tgt_r[11]                       ;
-; 5:1                ; 24 bits   ; 72 LEs        ; 24 LEs               ; 48 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|acomodo_cnt[22]                 ;
-; 6:1                ; 3 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_t1[7]                         ;
-; 6:1                ; 3 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_phi[1]                        ;
-; 6:1                ; 24 bits   ; 96 LEs        ; 24 LEs               ; 72 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|acc[10]                               ;
-; 6:1                ; 20 bits   ; 80 LEs        ; 60 LEs               ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|yi[19]            ;
-; 7:1                ; 8 bits    ; 32 LEs        ; 8 LEs                ; 24 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|navg[6]                               ;
-; 7:1                ; 7 bits    ; 28 LEs        ; 7 LEs                ; 21 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|tune_idx[4]         ;
-; 9:1                ; 4 bits    ; 24 LEs        ; 12 LEs               ; 12 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_cur[0]                             ;
-; 9:1                ; 7 bits    ; 42 LEs        ; 14 LEs               ; 28 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|eng_wr_data[1]      ;
-; 7:1                ; 4 bits    ; 16 LEs        ; 4 LEs                ; 12 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[3]            ;
-; 8:1                ; 2 bits    ; 10 LEs        ; 2 LEs                ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_step[0]                           ;
-; 8:1                ; 4 bits    ; 20 LEs        ; 4 LEs                ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_lo[7]                              ;
-; 9:1                ; 4 bits    ; 24 LEs        ; 4 LEs                ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_hi[6]                             ;
-; 9:1                ; 4 bits    ; 24 LEs        ; 4 LEs                ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_hi[7]                              ;
-; 9:1                ; 4 bits    ; 24 LEs        ; 8 LEs                ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_cur[7]                            ;
-; 9:1                ; 8 bits    ; 48 LEs        ; 8 LEs                ; 40 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|poll_cnt[0]         ;
-; 10:1               ; 9 bits    ; 54 LEs        ; 45 LEs               ; 9 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|trig_idx[0]       ;
-; 10:1               ; 3 bits    ; 18 LEs        ; 3 LEs                ; 15 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_step[0]         ;
-; 9:1                ; 2 bits    ; 12 LEs        ; 2 LEs                ; 10 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_phase[0]          ;
-; 11:1               ; 7 bits    ; 49 LEs        ; 7 LEs                ; 42 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_shift[2]          ;
-; 10:1               ; 27 bits   ; 162 LEs       ; 27 LEs               ; 135 LEs                ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|tmr[13]                            ;
-; 85:1               ; 3 bits    ; 168 LEs       ; 114 LEs              ; 54 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_reg[7]          ;
-; 86:1               ; 2 bits    ; 114 LEs       ; 66 LEs               ; 48 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[2]        ;
-; 87:1               ; 3 bits    ; 174 LEs       ; 108 LEs              ; 66 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[7]        ;
-; 19:1               ; 5 bits    ; 60 LEs        ; 5 LEs                ; 55 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|idx[2]              ;
-; 3:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|tgt_t1[6]                            ;
-; 4:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|best_phi[3]                           ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_t1[1]                            ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_t3[4]                            ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_grip[0]                          ;
-; 5:1                ; 2 bits    ; 6 LEs         ; 2 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_phi[4]                        ;
-; 5:1                ; 16 bits   ; 48 LEs        ; 16 LEs               ; 32 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|best_d[13]                            ;
-; 6:1                ; 3 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_t1[3]                         ;
-; 6:1                ; 3 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_phi[7]                        ;
-; 6:1                ; 20 bits   ; 80 LEs        ; 60 LEs               ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|xi[11]            ;
-; 9:1                ; 4 bits    ; 24 LEs        ; 12 LEs               ; 12 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_cur[6]                             ;
-; 8:1                ; 2 bits    ; 10 LEs        ; 2 LEs                ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_step[1]                           ;
-; 8:1                ; 4 bits    ; 20 LEs        ; 4 LEs                ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_lo[0]                              ;
-; 9:1                ; 4 bits    ; 24 LEs        ; 4 LEs                ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_hi[2]                             ;
-; 9:1                ; 4 bits    ; 24 LEs        ; 4 LEs                ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_hi[1]                              ;
-; 9:1                ; 4 bits    ; 24 LEs        ; 8 LEs                ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_cur[1]                            ;
-; 3:1                ; 16 bits   ; 32 LEs        ; 16 LEs               ; 16 LEs                 ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|op_r.OP_WR          ;
-; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|tgt_r                           ;
-; 3:1                ; 18 bits   ; 36 LEs        ; 18 LEs               ; 18 LEs                 ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_t2                            ;
-; 3:1                ; 12 bits   ; 24 LEs        ; 12 LEs               ; 12 LEs                 ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_DONE ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|ShiftRight0       ;
-; 5:1                ; 8 bits    ; 24 LEs        ; 24 LEs               ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|tgt_r                           ;
-; 4:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|ShiftRight0       ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 12 LEs               ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|ShiftRight0       ;
-; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_state           ;
-; 10:1               ; 2 bits    ; 12 LEs        ; 12 LEs               ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|cur                 ;
-; 6:1                ; 2 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|Selector26          ;
-; 9:1                ; 2 bits    ; 12 LEs        ; 4 LEs                ; 8 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|Selector95                            ;
-; 10:1               ; 4 bits    ; 24 LEs        ; 16 LEs               ; 8 LEs                  ; No         ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|Selector38                      ;
-; 11:1               ; 2 bits    ; 14 LEs        ; 8 LEs                ; 6 LEs                  ; No         ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|Selector37                      ;
-; 10:1               ; 2 bits    ; 12 LEs        ; 4 LEs                ; 8 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|Selector19          ;
-; 10:1               ; 3 bits    ; 18 LEs        ; 6 LEs                ; 12 LEs                 ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|Selector17          ;
-; 13:1               ; 2 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|Selector97                            ;
-; 13:1               ; 3 bits    ; 24 LEs        ; 9 LEs                ; 15 LEs                 ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|Selector40                         ;
-; 15:1               ; 2 bits    ; 20 LEs        ; 4 LEs                ; 16 LEs                 ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|Selector41                         ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+--------------------------------------------------------------------------+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                                                           ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------------------------------------------------------+
+; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                                                 ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------------------------------------------------------+
+; 3:1                ; 7 bits    ; 14 LEs        ; 7 LEs                ; 7 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_q[3]                ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|acos_idx[7]         ;
+; 3:1                ; 20 bits   ; 40 LEs        ; 20 LEs               ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cuenta[16]                             ;
+; 3:1                ; 19 bits   ; 38 LEs        ; 19 LEs               ; 19 LEs                 ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|ramp_cnt[6]                            ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|tgt_phi[7]                             ;
+; 3:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|tgt_t1[2]                              ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|tgt_t2[5]                              ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|o_t1_r[0]           ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|o_t2_r[4]           ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[3]           ;
+; 3:1                ; 21 bits   ; 42 LEs        ; 21 LEs               ; 21 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|curva_cnt[11]                     ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|rmw_val[7]            ;
+; 4:1                ; 23 bits   ; 46 LEs        ; 0 LEs                ; 46 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|centro_cnt[2]                     ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|lsb_r[2]              ;
+; 4:1                ; 16 bits   ; 32 LEs        ; 16 LEs               ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|flt_izq[4]                        ;
+; 4:1                ; 16 bits   ; 32 LEs        ; 16 LEs               ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|flt_der[4]                        ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|tgt_t3[4]                              ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|best_phi[2]                             ;
+; 5:1                ; 8 bits    ; 24 LEs        ; 16 LEs               ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_phi[2]                             ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_t1[7]                              ;
+; 5:1                ; 8 bits    ; 24 LEs        ; 16 LEs               ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_t2[1]                              ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_t3[0]                              ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_grip[2]                            ;
+; 6:1                ; 3 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_t1[0]                           ;
+; 6:1                ; 3 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_phi[6]                          ;
+; 6:1                ; 24 bits   ; 96 LEs        ; 24 LEs               ; 72 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|acc[23]                                 ;
+; 6:1                ; 20 bits   ; 80 LEs        ; 60 LEs               ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|yi[4]               ;
+; 7:1                ; 2 bits    ; 8 LEs         ; 2 LEs                ; 6 LEs                  ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|busca_tries[1]                    ;
+; 7:1                ; 8 bits    ; 32 LEs        ; 8 LEs                ; 24 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|navg[1]                                 ;
+; 7:1                ; 7 bits    ; 28 LEs        ; 7 LEs                ; 21 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|tune_idx[6]           ;
+; 7:1                ; 23 bits   ; 92 LEs        ; 23 LEs               ; 69 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|probe_cnt[21]                     ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 12 LEs               ; 12 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_cur[7]                               ;
+; 9:1                ; 7 bits    ; 42 LEs        ; 14 LEs               ; 28 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|eng_wr_data[3]        ;
+; 7:1                ; 4 bits    ; 16 LEs        ; 4 LEs                ; 12 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[1]              ;
+; 5:1                ; 26 bits   ; 78 LEs        ; 52 LEs               ; 26 LEs                 ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|lockout_cnt[14]                   ;
+; 8:1                ; 2 bits    ; 10 LEs        ; 2 LEs                ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_step[0]                             ;
+; 8:1                ; 4 bits    ; 20 LEs        ; 4 LEs                ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_lo[7]                                ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 4 LEs                ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_hi[3]                               ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 4 LEs                ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_hi[0]                                ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 8 LEs                ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_cur[0]                              ;
+; 9:1                ; 8 bits    ; 48 LEs        ; 8 LEs                ; 40 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|poll_cnt[7]           ;
+; 10:1               ; 9 bits    ; 54 LEs        ; 45 LEs               ; 9 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|trig_idx[6]         ;
+; 10:1               ; 3 bits    ; 18 LEs        ; 3 LEs                ; 15 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_step[0]           ;
+; 9:1                ; 2 bits    ; 12 LEs        ; 2 LEs                ; 10 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_phase[0]            ;
+; 11:1               ; 7 bits    ; 49 LEs        ; 7 LEs                ; 42 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_shift[2]            ;
+; 10:1               ; 27 bits   ; 162 LEs       ; 27 LEs               ; 135 LEs                ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|tmr[11]                              ;
+; 85:1               ; 3 bits    ; 168 LEs       ; 114 LEs              ; 54 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_reg[6]            ;
+; 86:1               ; 2 bits    ; 114 LEs       ; 66 LEs               ; 48 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[4]          ;
+; 87:1               ; 3 bits    ; 174 LEs       ; 108 LEs              ; 66 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[5]          ;
+; 19:1               ; 5 bits    ; 60 LEs        ; 5 LEs                ; 55 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|idx[4]                ;
+; 24:1               ; 25 bits   ; 400 LEs       ; 25 LEs               ; 375 LEs                ; Yes        ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|edge_cnt[16]                      ;
+; 3:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|tgt_t1[6]                              ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|best_t1[1]                              ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_t1[3]                              ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_t3[7]                              ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|polarPWM:u_pwm|cur_grip[5]                            ;
+; 5:1                ; 2 bits    ; 6 LEs         ; 2 LEs                ; 4 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_t1[1]                           ;
+; 5:1                ; 16 bits   ; 48 LEs        ; 16 LEs               ; 32 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|best_d[13]                              ;
+; 6:1                ; 3 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_t1[3]                           ;
+; 6:1                ; 3 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_phi[7]                          ;
+; 6:1                ; 20 bits   ; 80 LEs        ; 60 LEs               ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|xi[14]              ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 12 LEs               ; 12 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_cur[6]                               ;
+; 8:1                ; 2 bits    ; 10 LEs        ; 2 LEs                ; 8 LEs                  ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_step[1]                             ;
+; 8:1                ; 4 bits    ; 20 LEs        ; 4 LEs                ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_lo[5]                                ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 4 LEs                ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_hi[2]                               ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 4 LEs                ; 20 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|t1_hi[1]                                ;
+; 9:1                ; 4 bits    ; 24 LEs        ; 8 LEs                ; 16 LEs                 ; Yes        ; |SeguidorLinea_Brazo|LIDAR:u_lidar|phi_cur[1]                              ;
+; 3:1                ; 16 bits   ; 32 LEs        ; 16 LEs               ; 16 LEs                 ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|\app:cur.op.OP_TUNING ;
+; 3:1                ; 18 bits   ; 36 LEs        ; 18 LEs               ; 18 LEs                 ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|grab_t3                              ;
+; 3:1                ; 12 bits   ; 24 LEs        ; 12 LEs               ; 12 LEs                 ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_IK_SET ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|ShiftRight1         ;
+; 4:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|ShiftRight0         ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 12 LEs               ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|kinematics:u_kin|ShiftRight0         ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_state             ;
+; 10:1               ; 2 bits    ; 12 LEs        ; 12 LEs               ; 0 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|cur                   ;
+; 6:1                ; 2 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|Selector28            ;
+; 9:1                ; 2 bits    ; 12 LEs        ; 4 LEs                ; 8 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|Selector95                              ;
+; 10:1               ; 2 bits    ; 12 LEs        ; 4 LEs                ; 8 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|Selector19            ;
+; 10:1               ; 3 bits    ; 18 LEs        ; 6 LEs                ; 12 LEs                 ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|Selector18            ;
+; 13:1               ; 2 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; No         ; |SeguidorLinea_Brazo|LIDAR:u_lidar|Selector93                              ;
+; 13:1               ; 3 bits    ; 24 LEs        ; 9 LEs                ; 15 LEs                 ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|Selector36                           ;
+; 15:1               ; 2 bits    ; 20 LEs        ; 4 LEs                ; 16 LEs                 ; No         ; |SeguidorLinea_Brazo|grab_ctrl:u_grab|Selector38                           ;
+; 33:1               ; 10 bits   ; 220 LEs       ; 100 LEs              ; 120 LEs                ; No         ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|Selector27                        ;
+; 33:1               ; 2 bits    ; 44 LEs        ; 8 LEs                ; 36 LEs                 ; No         ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|Selector26                        ;
+; 34:1               ; 2 bits    ; 44 LEs        ; 4 LEs                ; 40 LEs                 ; No         ; |SeguidorLinea_Brazo|MaquinaEstados:u_me|Selector28                        ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------------------------------------------------------+
 
 
 +---------------------------------------------------------------------------------------------------------------+
@@ -869,14 +881,12 @@ Note: In order to hide this table in the UI and the text report file, please set
 
 +------------------------------------------------------------------+
 ; Parameter Settings for User Entity Instance: MaquinaEstados:u_me ;
-+----------------+----------+--------------------------------------+
-; Parameter Name ; Value    ; Type                                 ;
-+----------------+----------+--------------------------------------+
-; zona_cycles    ; 15000000 ; Signed Integer                       ;
-; salir_cycles   ; 10000000 ; Signed Integer                       ;
-; filtro_cycles  ; 15000    ; Signed Integer                       ;
-; line_lvl       ; '0'      ; Enumerated                           ;
-+----------------+----------+--------------------------------------+
++----------------+-------+-----------------------------------------+
+; Parameter Name ; Value ; Type                                    ;
++----------------+-------+-----------------------------------------+
+; filtro_cycles  ; 50000 ; Signed Integer                          ;
+; line_lvl       ; '0'   ; Enumerated                              ;
++----------------+-------+-----------------------------------------+
 Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
 
 
@@ -1281,7 +1291,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 Info: *******************************************************************
 Info: Running Quartus II 64-Bit Analysis & Synthesis
     Info: Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
-    Info: Processing started: Tue Jun 09 20:53:33 2026
+    Info: Processing started: Thu Jun 11 15:37:09 2026
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off SeguidorLinea_Brazo -c SeguidorLinea_Brazo
 Warning (20028): Parallel compilation is not licensed and has been disabled
 Info (12021): Found 1 design units, including 0 entities, in source file vl53l0x_pkg.vhd
@@ -1311,8 +1321,8 @@ Info (12021): Found 2 design units, including 1 entities, in source file pruebas
     Info (12022): Found design unit 1: TestMotores-rtl
     Info (12023): Found entity 1: TestMotores
 Info (12127): Elaborating entity "SeguidorLinea_Brazo" for the top level hierarchy
-Warning (10036): Verilog HDL or VHDL warning at SeguidorLinea_Brazo.vhd(180): object "meas_tick" assigned a value but never read
-Warning (10036): Verilog HDL or VHDL warning at SeguidorLinea_Brazo.vhd(194): object "reachable" assigned a value but never read
+Warning (10036): Verilog HDL or VHDL warning at SeguidorLinea_Brazo.vhd(179): object "meas_tick" assigned a value but never read
+Warning (10036): Verilog HDL or VHDL warning at SeguidorLinea_Brazo.vhd(193): object "reachable" assigned a value but never read
 Info (12128): Elaborating entity "LIDAR" for hierarchy "LIDAR:u_lidar"
 Warning (10036): Verilog HDL or VHDL warning at LIDAR.vhd(102): object "phi_lo" assigned a value but never read
 Info (12128): Elaborating entity "VL53L0X" for hierarchy "LIDAR:u_lidar|VL53L0X:u_VL53L0X"
@@ -1324,9 +1334,7 @@ Warning (10542): VHDL Variable Declaration warning at math_real.vhd(3355): used 
 Warning (10542): VHDL Variable Declaration warning at math_real.vhd(2373): used initial value expression for variable "RECIPROCAL" because variable was never assigned a value
 Warning (10542): VHDL Variable Declaration warning at math_real.vhd(3402): used initial value expression for variable "NEGATIVE" because variable was never assigned a value
 Info (12128): Elaborating entity "MaquinaEstados" for hierarchy "MaquinaEstados:u_me"
-Warning (10036): Verilog HDL or VHDL warning at MaquinaEstados.vhd(117): object "ambos_linea" assigned a value but never read
-Warning (10036): Verilog HDL or VHDL warning at MaquinaEstados.vhd(134): object "salir_cnt" assigned a value but never read
-Warning (10037): Verilog HDL or VHDL warning at MaquinaEstados.vhd(271): conditional expression evaluates to a constant
+Warning (10037): Verilog HDL or VHDL warning at MaquinaEstados.vhd(297): conditional expression evaluates to a constant
 Info (12128): Elaborating entity "polarPWM" for hierarchy "polarPWM:u_pwm"
 Info (19000): Inferred 1 megafunctions from design logic
     Info (276031): Inferred altsyncram megafunction from the following design logic: "grab_ctrl:u_grab|kinematics:u_kin|Mux2_rtl_0"
@@ -1409,17 +1417,17 @@ Info (13003): DEV_CLRn pin will set, and not reset, register with preset signal 
 Info (17049): 14 registers lost all their fanouts during netlist optimizations.
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
-Info (21057): Implemented 4512 device resources after synthesis - the final resource count might be different
+Info (21057): Implemented 4693 device resources after synthesis - the final resource count might be different
     Info (21058): Implemented 4 input pins
     Info (21059): Implemented 13 output pins
     Info (21060): Implemented 1 bidirectional pins
-    Info (21061): Implemented 4478 logic cells
+    Info (21061): Implemented 4659 logic cells
     Info (21064): Implemented 4 RAM segments
     Info (21062): Implemented 12 DSP elements
-Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 12 warnings
-    Info: Peak virtual memory: 4699 megabytes
-    Info: Processing ended: Tue Jun 09 20:54:00 2026
-    Info: Elapsed time: 00:00:27
-    Info: Total CPU time (on all processors): 00:00:25
+Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 10 warnings
+    Info: Peak virtual memory: 4689 megabytes
+    Info: Processing ended: Thu Jun 11 15:37:40 2026
+    Info: Elapsed time: 00:00:31
+    Info: Total CPU time (on all processors): 00:00:23
 
 

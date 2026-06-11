@@ -1,5 +1,5 @@
 Flow report for SeguidorLinea_Brazo
-Tue Jun 09 20:54:33 2026
+Thu Jun 11 15:38:14 2026
 Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
 
 
@@ -40,17 +40,17 @@ applicable agreement for further details.
 +--------------------------------------------------------------------------------------+
 ; Flow Summary                                                                         ;
 +------------------------------------+-------------------------------------------------+
-; Flow Status                        ; Successful - Tue Jun 09 20:54:30 2026           ;
+; Flow Status                        ; Successful - Thu Jun 11 15:38:09 2026           ;
 ; Quartus II 64-Bit Version          ; 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition ;
 ; Revision Name                      ; SeguidorLinea_Brazo                             ;
 ; Top-level Entity Name              ; SeguidorLinea_Brazo                             ;
 ; Family                             ; Cyclone II                                      ;
 ; Device                             ; EP2C5T144C7                                     ;
 ; Timing Models                      ; Final                                           ;
-; Total logic elements               ; 4,347 / 4,608 ( 94 % )                          ;
-;     Total combinational functions  ; 4,281 / 4,608 ( 93 % )                          ;
-;     Dedicated logic registers      ; 1,056 / 4,608 ( 23 % )                          ;
-; Total registers                    ; 1056                                            ;
+; Total logic elements               ; 4,494 / 4,608 ( 98 % )                          ;
+;     Total combinational functions  ; 4,435 / 4,608 ( 96 % )                          ;
+;     Dedicated logic registers      ; 1,091 / 4,608 ( 24 % )                          ;
+; Total registers                    ; 1091                                            ;
 ; Total pins                         ; 18 / 89 ( 20 % )                                ;
 ; Total virtual pins                 ; 0                                               ;
 ; Total memory bits                  ; 1,024 / 119,808 ( < 1 % )                       ;
@@ -64,7 +64,7 @@ applicable agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 06/09/2026 20:53:34 ;
+; Start date & time ; 06/11/2026 15:37:10 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; SeguidorLinea_Brazo ;
 +-------------------+---------------------+
@@ -75,7 +75,7 @@ applicable agreement for further details.
 +-------------------------------------+--------------------------------+---------------+-------------+------------+
 ; Assignment Name                     ; Value                          ; Default Value ; Entity Name ; Section Id ;
 +-------------------------------------+--------------------------------+---------------+-------------+------------+
-; COMPILER_SIGNATURE_ID               ; 62096878398661.178106001303912 ; --            ; --          ; --         ;
+; COMPILER_SIGNATURE_ID               ; 62096878398661.178121382910704 ; --            ; --          ; --         ;
 ; DSP_BLOCK_BALANCING                 ; DSP blocks                     ; Auto          ; --          ; --         ;
 ; MAX_CORE_JUNCTION_TEMP              ; 85                             ; --            ; --          ; --         ;
 ; MIN_CORE_JUNCTION_TEMP              ; 0                              ; --            ; --          ; --         ;
@@ -92,11 +92,11 @@ applicable agreement for further details.
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name               ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis      ; 00:00:25     ; 1.0                     ; 4699 MB             ; 00:00:24                           ;
-; Fitter                    ; 00:00:27     ; 1.0                     ; 4849 MB             ; 00:00:26                           ;
-; Assembler                 ; 00:00:01     ; 1.0                     ; 4561 MB             ; 00:00:01                           ;
-; TimeQuest Timing Analyzer ; 00:00:02     ; 1.0                     ; 4608 MB             ; 00:00:02                           ;
-; Total                     ; 00:00:55     ; --                      ; --                  ; 00:00:53                           ;
+; Analysis & Synthesis      ; 00:00:29     ; 1.0                     ; 4681 MB             ; 00:00:22                           ;
+; Fitter                    ; 00:00:25     ; 1.0                     ; 4844 MB             ; 00:00:19                           ;
+; Assembler                 ; 00:00:02     ; 1.0                     ; 4553 MB             ; 00:00:01                           ;
+; TimeQuest Timing Analyzer ; 00:00:04     ; 1.0                     ; 4593 MB             ; 00:00:02                           ;
+; Total                     ; 00:01:00     ; --                      ; --                  ; 00:00:44                           ;
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
