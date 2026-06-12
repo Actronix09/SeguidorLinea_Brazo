@@ -92,24 +92,8 @@ architecture rtl of LIDAR is
     signal distance_mm : std_logic_vector(15 downto 0);
     signal meas_tick   : std_logic;
 
-    -- Watchdog de barrido: si el driver I2C se cuelga (A_ERROR -> meas_tick
-    -- congelado), S_AVG esperaría para siempre. El watchdog soft-resetea el
-    -- VL53L0X y REINICIA el barrido manteniendo scan_active='1' (grab_ctrl y
-    -- MaquinaEstados no se enteran). Tras MAX_RECOVER fallos termina con found=0.
-    constant AVG_TIMEOUT    : integer := 12_500_000;  -- 250 ms sin flanco de meas_tick
-    constant REINIT_CYCLES  : integer := 12_500_000;  -- 250 ms respaldo (salida real = 1er meas_tick)
-    constant SOFTRST_CYCLES : integer := 1_000;       -- ~20 us de pulso de reset al driver
-    constant MAX_RECOVER    : integer := 3;           -- reintentos antes de rendirse
-    signal vl_soft_rst : std_logic := '0';
-    signal vl_rst      : std_logic;                   -- rst del driver = rst or vl_soft_rst
-    -- wd_cnt: contador del watchdog COMPARTIDO (S_AVG mide el hueco sin meas_tick;
-    -- S_REINIT mide el respaldo de re-init). Estados mutuamente exclusivos -> 1 solo
-    -- contador ancho en vez de dos (ahorro de LEs).
-    signal wd_cnt      : integer range 0 to REINIT_CYCLES  := 0;  -- watchdog Y soft-reset (exclusivos)
-    signal recover_cnt : integer range 0 to MAX_RECOVER    := 0;
-
     -- FSM del escáner
-    type st_t is (S_IDLE, S_MOVE, S_SETTLE, S_AVG, S_NEXT, S_DONE, S_RECOVER, S_REINIT);
+    type st_t is (S_IDLE, S_MOVE, S_SETTLE, S_AVG, S_NEXT, S_DONE);
     signal st : st_t := S_IDLE;
 
     -- Rejilla actual (límites/pasos cambian entre grueso y fino)
@@ -130,6 +114,7 @@ architecture rtl of LIDAR is
     signal best_t1  : integer range 0 to 180 := T1_MAX;
 
     -- Asentamiento y promediado
+    signal settle_cnt : integer range 0 to SETTLE_CYCLES := 0;
     signal acc        : unsigned(23 downto 0) := (others => '0');
     signal navg       : integer range 0 to 255 := 0;
     signal tick_prev  : std_logic := '0';
@@ -165,7 +150,7 @@ begin
         )
         port map (
             clk         => clk,
-            rst         => vl_rst,
+            rst         => rst,
             i2c_scl     => i2c_scl,
             i2c_sda     => i2c_sda,
             distance_mm => distance_mm,
@@ -191,7 +176,6 @@ begin
     found     <= found_r;
     scan_done <= scan_done_r;
     dbg_meas_tick <= meas_tick;
-    vl_rst    <= rst or vl_soft_rst;   -- soft-reset del driver desde el watchdog
 
     -- --------------------------------------------------------------------
     -- FSM del escáner
@@ -212,6 +196,7 @@ begin
             best_d      <= (others => '1');
             best_phi    <= 90;
             best_t1     <= T1_MAX;
+            settle_cnt  <= 0;
             acc         <= (others => '0');
             navg        <= 0;
             discard1    <= '1';
@@ -221,9 +206,6 @@ begin
             min_d_r     <= (others => '0');
             min_phi_r   <= (others => '0');
             found_r     <= '0';
-            vl_soft_rst <= '0';
-            wd_cnt      <= 0;
-            recover_cnt <= 0;
 
         elsif rising_edge(clk) then
 
@@ -233,7 +215,6 @@ begin
                 when S_IDLE =>
                     if start_scan = '1' then
                         scan_done_r <= '0';
-                        recover_cnt <= 0;
                         best_d   <= (others => '1');
                         best_phi <= 90;
                         best_t1  <= T1_MAX;
@@ -248,31 +229,26 @@ begin
                         st       <= S_MOVE;
                     end if;
 
-                -- Punto fijado: arranca temporizador de asentamiento (reusa wd_cnt:
-                -- S_SETTLE y S_AVG/recuperación nunca corren a la vez)
+                -- Punto fijado: arranca temporizador de asentamiento
                 when S_MOVE =>
-                    wd_cnt <= 0;
-                    st     <= S_SETTLE;
+                    settle_cnt <= 0;
+                    st         <= S_SETTLE;
 
                 -- Espera que el servo llegue y se estabilice
                 when S_SETTLE =>
-                    if wd_cnt >= SETTLE_CYCLES-1 then
+                    if settle_cnt >= SETTLE_CYCLES-1 then
                         acc       <= (others => '0');
                         navg      <= 0;
                         discard1  <= '1';
                         tick_prev <= meas_tick;
-                        wd_cnt    <= 0;            -- re-arma para el watchdog de S_AVG
                         st        <= S_AVG;
                     else
-                        wd_cnt <= wd_cnt + 1;
+                        settle_cnt <= settle_cnt + 1;
                     end if;
 
-                -- Promedia N_AVG mediciones (1 por flanco de meas_tick).
-                -- Watchdog: si meas_tick no conmuta en AVG_TIMEOUT (driver colgado
-                -- en A_ERROR), soft-resetea el VL53L0X y reinicia el barrido.
+                -- Promedia N_AVG mediciones (1 por flanco de meas_tick)
                 when S_AVG =>
                     if meas_tick /= tick_prev then
-                        wd_cnt <= 0;                     -- hubo medición: rearma watchdog
                         tick_prev <= meas_tick;
                         if discard1 = '1' then
                             discard1 <= '0';             -- descarta la 1ª (puede ser de transición)
@@ -286,16 +262,6 @@ begin
                                 navg <= navg + 1;
                             end if;
                         end if;
-                    elsif wd_cnt >= AVG_TIMEOUT-1 then    -- WATCHDOG: driver colgado
-                        if recover_cnt >= MAX_RECOVER then
-                            st <= S_DONE;                -- sensor muerto: termina (best_d=FFFF -> found=0)
-                        else
-                            recover_cnt <= recover_cnt + 1;
-                            vl_soft_rst <= '1'; wd_cnt <= 0; tick_prev <= '0';
-                            st <= S_RECOVER;
-                        end if;
-                    else
-                        wd_cnt <= wd_cnt + 1;
                     end if;
 
                 -- Actualiza mínimo y avanza la rejilla
@@ -363,42 +329,6 @@ begin
                     end if;
                     scan_done_r <= '1';
                     st          <= S_IDLE;
-
-                -- Recuperación: mantiene el soft-reset del driver SOFTRST_CYCLES ciclos
-                -- (reutiliza wd_cnt: en S_RECOVER no lo usan S_AVG ni S_REINIT)
-                when S_RECOVER =>
-                    if wd_cnt >= SOFTRST_CYCLES-1 then
-                        vl_soft_rst <= '0'; wd_cnt <= 0; st <= S_REINIT;
-                    else
-                        wd_cnt <= wd_cnt + 1;
-                    end if;
-
-                -- Espera el re-init del driver (1er flanco de meas_tick) y REINICIA el
-                -- barrido desde el principio SIN pasar por S_IDLE (scan_active sigue en
-                -- '1'). Respaldo REINIT_CYCLES cuenta como otra recuperación.
-                when S_REINIT =>
-                    if meas_tick /= tick_prev then
-                        tick_prev <= meas_tick; wd_cnt <= 0;
-                        best_d   <= (others => '1');
-                        best_phi <= 90;  best_t1 <= T1_MAX;
-                        phi_lo   <= PHI_MIN;  phi_hi <= PHI_MAX;
-                        t1_lo    <= T1_MIN;   t1_hi  <= T1_MAX;
-                        phi_step <= COARSE_PHI_STEP;
-                        t1_step  <= COARSE_T1_STEP;
-                        phi_cur  <= PHI_MIN;  t1_cur <= T1_MAX;
-                        t1_dir   <= -1;
-                        fine_ph  <= '0';
-                        st       <= S_MOVE;
-                    elsif wd_cnt >= REINIT_CYCLES-1 then     -- no volvió: otra recuperación
-                        if recover_cnt >= MAX_RECOVER then
-                            st <= S_DONE;
-                        else
-                            recover_cnt <= recover_cnt + 1;
-                            vl_soft_rst <= '1'; wd_cnt <= 0; st <= S_RECOVER;
-                        end if;
-                    else
-                        wd_cnt <= wd_cnt + 1;
-                    end if;
 
             end case;
         end if;

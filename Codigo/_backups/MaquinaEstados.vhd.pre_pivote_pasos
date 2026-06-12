@@ -1,106 +1,4 @@
 -- ============================================================================
--- pivote - Generador de PÍVOT PULSADO POR PASOS (módulo auxiliar de Sísifo).
---   Ejecuta el pívot de las maniobras de zona en PASOS discretos: cada paso =
---   un KICK corto (duty PIVOT_DUTY, duración PASO_CYCLES) + un SETTLE (motores
---   en freno, PIV_SETTLE_CYCLES) tras el cual pulsa 'paso_tick' (ahí el robot
---   está asentado y los sensores filtrados son válidos). Acota el rango: corre
---   hasta PASOS_ZONA (modo='0') o PASOS_LINEA (modo='1') pasos y levanta
---   'fin_pasos'. Pívot lento y repetible sin perder torque (el problema del
---   pívot continuo era que se pasaba de largo y no detectaba la línea fina).
--- ============================================================================
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
-
-entity pivote is
-    generic (
-        PASO_CYCLES       : integer := 60_000;   -- 1) duración del KICK de cada paso (~1.2 ms)
-        PIVOT_DUTY        : integer := 42_000;   -- 2) velocidad del pívot (>35000 torque)
-        PASOS_ZONA        : integer := 24;       -- 3) cap de pasos en fase ZONA
-        PASOS_LINEA       : integer := 40;       -- 4) cap de pasos en fase LÍNEA
-        PIV_SETTLE_CYCLES : integer := 60_000    -- settle tras kick (>= FILTRO_CYCLES)
-    );
-    port (
-        clk       : in  std_logic;
-        rst       : in  std_logic;                       -- activo alto
-        ena       : in  std_logic;                       -- '1' pivotea, '0' inactivo (tgt=0)
-        modo      : in  std_logic;                       -- '0'=ZONA, '1'=LÍNEA (selecciona cap)
-        dir       : in  std_logic;                       -- '0'=DER, '1'=IZQ
-        tgt_l     : out integer range -65535 to 65535;
-        tgt_r     : out integer range -65535 to 65535;
-        paso_tick : out std_logic;                       -- pulso 1 ciclo al COMPLETAR un paso
-        fin_pasos : out std_logic                        -- '1' al alcanzar el cap de pasos
-    );
-end pivote;
-
-architecture rtl of pivote is
-    function imax(a, b : integer) return integer is
-    begin
-        if a > b then return a; else return b; end if;
-    end function;
-    constant PASOS_MAX : integer := imax(PASOS_ZONA, PASOS_LINEA);
-    constant DUR_MAX   : integer := imax(PASO_CYCLES, PIV_SETTLE_CYCLES);
-
-    type pst_t is (P_IDLE, P_KICK, P_SETTLE, P_DONE);
-    signal pst      : pst_t := P_IDLE;
-    signal dur_cnt  : integer range 0 to DUR_MAX := 0;       -- kick Y settle (estados exclusivos)
-    signal step_cnt : integer range 0 to PASOS_MAX := 0;
-    signal tick_r, fin_r : std_logic := '0';
-begin
-    -- Duty COMBINACIONAL (sin registros): solo hay kick en P_KICK (ahorro de LEs).
-    tgt_l <=  PIVOT_DUTY when (pst = P_KICK and dir = '0') else
-             -PIVOT_DUTY when (pst = P_KICK and dir = '1') else 0;
-    tgt_r <= -PIVOT_DUTY when (pst = P_KICK and dir = '0') else
-              PIVOT_DUTY when (pst = P_KICK and dir = '1') else 0;
-    paso_tick <= tick_r; fin_pasos <= fin_r;
-
-    process(clk, rst)
-        variable cap : integer range 0 to PASOS_MAX;
-    begin
-        if rst = '1' then
-            pst <= P_IDLE; dur_cnt <= 0; step_cnt <= 0; tick_r <= '0'; fin_r <= '0';
-        elsif rising_edge(clk) then
-            tick_r <= '0';                                   -- pulso por defecto
-            if modo = '1' then cap := PASOS_LINEA; else cap := PASOS_ZONA; end if;
-            case pst is
-                when P_IDLE =>
-                    fin_r <= '0'; step_cnt <= 0;
-                    if ena = '1' then dur_cnt <= 0; pst <= P_KICK; end if;
-
-                when P_KICK =>
-                    if ena = '0' then
-                        pst <= P_IDLE;
-                    elsif dur_cnt >= PASO_CYCLES-1 then
-                        dur_cnt <= 0; pst <= P_SETTLE;
-                    else
-                        dur_cnt <= dur_cnt + 1;
-                    end if;
-
-                when P_SETTLE =>
-                    if ena = '0' then
-                        pst <= P_IDLE;
-                    elsif dur_cnt >= PIV_SETTLE_CYCLES-1 then
-                        tick_r <= '1';                       -- paso completado (sensores válidos)
-                        if step_cnt >= cap-1 then
-                            step_cnt <= step_cnt + 1;
-                            fin_r <= '1'; pst <= P_DONE;
-                        else
-                            step_cnt <= step_cnt + 1;
-                            dur_cnt <= 0; pst <= P_KICK;
-                        end if;
-                    else
-                        dur_cnt <= dur_cnt + 1;
-                    end if;
-
-                when P_DONE =>
-                    fin_r <= '1';
-                    if ena = '0' then pst <= P_IDLE; end if;
-            end case;
-        end if;
-    end process;
-end rtl;
-
--- ============================================================================
 -- MaquinaEstados - Cerebro de Sísifo (Etapa 2): seguidor de línea de DOS MODOS
 --                  + maniobra de ZONA con orquestación del brazo (LIDAR/agarre/
 --                  depósito). FPGA Cyclone II EP2C5T144C7 | QRD1114 x2 | L293 | 50 MHz
@@ -119,16 +17,13 @@ end rtl;
 --     - si la sonda termina y SIGUE el doble-negro (no hay orillas blancas) =>
 --       es ZONA => entra la maniobra.
 --
--- MANIOBRA DE ZONA: los PÍVOTS se ejecutan con el módulo 'pivote' (pulsado por
---   PASOS, asentando cada paso para leer sensores limpio; antes el pívot continuo
---   se pasaba de largo y no centraba ni detectaba la línea fina).
---   1) Centrar por BORDES (E_Z_BORDE_A/B, E_Z_CENTRO): pivota a un lado hasta
---      destapar blanco (borde A), al otro midiendo el ancho A..B en pasos y vuelve
---      la mitad. Cap = PASOS_ZONA.
+-- MANIOBRA DE ZONA (todo en lazo abierto, por tiempo/pulsos, sin encoders):
+--   1) Centrar por BORDES con rango limitado: pivota a un lado hasta salir del
+--      negro (borde A), luego al otro midiendo el ancho (borde B) y vuelve al
+--      punto medio. Topes de tiempo (MAX_BORDE_CYCLES) por si no halla un borde.
 --   2) AVANZA recto hasta que al menos un sensor deje el negro; +OFFSET_CYCLES.
---   3) BUSCA la línea de salida pivotando por pasos a un lado y al otro
---      (E_Z_BUSCA_A/B); RECENTRA (E_Z_RECENTRO) hasta que la línea quede ENTRE
---      ambos sensores. Cap = PASOS_LINEA.
+--   3) BUSCA la línea de salida pivotando un cap a cada lado; RECENTRA (línea
+--      entre ambos sensores).
 --   4) ACCIÓN al final: sin objeto -> start_scan (LIDAR+agarre); con objeto ->
 --      trigger_drop (depósito). Espera a que el brazo termine y reanuda.
 --
@@ -205,52 +100,28 @@ architecture rtl of MaquinaEstados is
     -- pívot SÍ destape blanco. ~120 ms de arranque. (50_000 ciclos = 1 ms.)
     constant CURVA_PROBE_CYCLES  : integer := 6_000_000;
     -- Tras confirmar CURVA, no re-sondear durante una curva sostenida (~0.8 s).
-    constant ZONA_LOCKOUT_CYCLES : integer := 25_000_000;
+    constant ZONA_LOCKOUT_CYCLES : integer := 40_000_000;
 
-    -- ===== MANIOBRA DE ZONA ===================================================
-    -- Avances rectos (>= 35000 piso de torque); van por TIEMPO.
+    -- ===== MANIOBRA DE ZONA (lazo abierto) ====================================
+    -- Duties >= 35000 (piso de torque). Reutiliza la perilla de curva para pivotar.
+    constant DUTY_Z_PIVOT  : integer := DUTY_CURVA_EXT;   -- pívot de maniobra (56000)
     constant DUTY_Z_AVANCE : integer := 45000;            -- avance recto en zona
-    constant MAX_AVANCE_CYCLES   : integer := 16_000_000; -- ~0.32 s watchdog de avance
+    constant MAX_BORDE_CYCLES    : integer := 8_000_000;  -- ~160 ms tope por borde
+    constant MAX_AVANCE_CYCLES   : integer := 30_000_000; -- ~0.6 s watchdog de avance
     constant OFFSET_CYCLES       : integer := 4_000_000;  -- ~80 ms avance extra
-    constant MAX_BUSCA_TRIES     : integer := 3;          -- reintentos del barrido de línea
+    constant BUSCA_CAP_CYCLES    : integer := 5_000_000;  -- ~100 ms por lado del barrido
+    constant RECENTRO_CAP_CYCLES : integer := 6_000_000;  -- ~120 ms tope recentrado
+    constant MAX_BUSCA_TRIES     : integer := 3;          -- reintentos del barrido
     constant REARME_CYCLES       : integer := 25_000_000; -- ~0.5 s recto despejando el cuadro
-
-    -- ===== 4 PERILLAS DEL PÍVOT POR PASOS (módulo 'pivote') ===================
-    constant PIV_PASO_CYCLES   : integer := 60_000;   -- 1) duración de cada paso (kick, ~1.2 ms)
-    constant PIV_DUTY          : integer := 42_000;   -- 2) velocidad del pívot
-    constant PIV_PASOS_ZONA    : integer := 24;       -- 3) nº de pasos en detección de ZONA
-    constant PIV_PASOS_LINEA   : integer := 40;       -- 4) nº de pasos en detección de LÍNEA
-    constant PIV_SETTLE_CYCLES : integer := 60_000;   -- asentamiento por paso (>= FILTRO_CYCLES)
 
     function imax(a, b : integer) return integer is
     begin
         if a > b then return a; else return b; end if;
     end function;
     constant LOCKOUT_MAX : integer := imax(ZONA_LOCKOUT_CYCLES, REARME_CYCLES);
-    constant EDGE_MAX    : integer := imax(MAX_AVANCE_CYCLES, OFFSET_CYCLES);
-    constant PASOS_MAX   : integer := imax(PIV_PASOS_ZONA, PIV_PASOS_LINEA);
-
-    -- Componente: pívot pulsado por pasos
-    component pivote
-        generic (
-            PASO_CYCLES       : integer;
-            PIVOT_DUTY        : integer;
-            PASOS_ZONA        : integer;
-            PASOS_LINEA       : integer;
-            PIV_SETTLE_CYCLES : integer
-        );
-        port (
-            clk       : in  std_logic;
-            rst       : in  std_logic;
-            ena       : in  std_logic;
-            modo      : in  std_logic;
-            dir       : in  std_logic;
-            tgt_l     : out integer range -65535 to 65535;
-            tgt_r     : out integer range -65535 to 65535;
-            paso_tick : out std_logic;
-            fin_pasos : out std_logic
-        );
-    end component;
+    constant EDGE_MAX    : integer := imax(imax(imax(2*MAX_BORDE_CYCLES, MAX_AVANCE_CYCLES),
+                                                imax(OFFSET_CYCLES, 2*BUSCA_CAP_CYCLES)),
+                                           RECENTRO_CAP_CYCLES);
 
     -- Sensores: filtro de histéresis -> '1' = sobre línea (NEGRO). REGISTRADOS
     -- (1 ciclo de retraso); usar s_izq/s_der en condiciones, no derivados.
@@ -266,7 +137,8 @@ architecture rtl of MaquinaEstados is
 
     -- Dirección CONCRETA de pívot durante la maniobra (nunca "recto").
     type dir_t is (D_IZQ, D_DER);
-    signal probe_dir : dir_t := D_DER;   -- "lado A" del centrado y del barrido de re-enganche
+    signal probe_dir : dir_t := D_DER;   -- "lado A" del centrado
+    signal busca_dir : dir_t := D_DER;   -- primer lado del barrido de re-enganche
 
     -- Fase del pívot pulsado de modo curva (corre mientras dure el doble-negro).
     signal curva_cnt : integer range 0 to CURVA_PERIODO := 0;
@@ -274,23 +146,13 @@ architecture rtl of MaquinaEstados is
     -- PWM 16 bits libre (~763 Hz).
     signal pwm16 : unsigned(15 downto 0) := (others => '0');
 
-    -- Contadores de discriminación / maniobra (por tiempo)
+    -- Contadores de discriminación / maniobra
+    signal probe_cnt   : integer range 0 to CURVA_PROBE_CYCLES := 0;
     signal lockout_cnt : integer range 0 to LOCKOUT_MAX := 0;  -- cuenta-abajo
-    -- tcnt: temporizador COMPARTIDO. La sonda (probe) y AVANZA/OFFSET (avance) nunca
-    -- corren a la vez -> un solo contador ancho en vez de dos (ahorro de LEs).
-    signal tcnt        : integer range 0 to EDGE_MAX := 0;
+    signal edge_cnt    : integer range 0 to EDGE_MAX := 0;     -- reusado en la maniobra
+    signal centro_cnt  : integer range 0 to MAX_BORDE_CYCLES := 0;
     signal busca_tries : integer range 0 to MAX_BUSCA_TRIES := 0;
     signal reentro     : std_logic := '0';   -- en BORDE_B: ya se re-vio el negro doble
-
-    -- Contadores de PASOS de la maniobra (pívot por pasos). paso_n se reusa para el
-    -- ancho A..B en BORDE_B (no se solapa con su uso en CENTRO/RECENTRO).
-    signal paso_n   : integer range 0 to PASOS_MAX := 0;
-    signal centro_n : integer range 0 to PASOS_MAX := 0;
-
-    -- Interfaz con el módulo 'pivote'
-    signal piv_ena, piv_modo, piv_dir : std_logic := '0';   -- driven SOLO por el proceso fsm
-    signal piv_tgt_l, piv_tgt_r       : integer range -65535 to 65535 := 0;
-    signal piv_paso_tick, piv_fin     : std_logic := '0';
 
     -- FSM
     type est_t is (E_INICIO, E_SEGUIR, E_SONDA,
@@ -305,26 +167,9 @@ architecture rtl of MaquinaEstados is
 
     -- 1 Hz
     signal clk_1s : std_logic := '0';
-    signal cnt_1s : integer range 0 to 16_666_665 := 0;   -- LED de vida ~1.5 Hz (24 bits, ahorro LEs)
+    signal cnt_1s : integer range 0 to 24_999_999 := 0;
 
 begin
-
-    -- =========================================================================
-    -- Módulo de pívot pulsado por pasos (las 4 perillas)
-    -- =========================================================================
-    u_piv : pivote
-        generic map (
-            PASO_CYCLES       => PIV_PASO_CYCLES,
-            PIVOT_DUTY        => PIV_DUTY,
-            PASOS_ZONA        => PIV_PASOS_ZONA,
-            PASOS_LINEA       => PIV_PASOS_LINEA,
-            PIV_SETTLE_CYCLES => PIV_SETTLE_CYCLES
-        )
-        port map (
-            clk => clk, rst => rst, ena => piv_ena, modo => piv_modo, dir => piv_dir,
-            tgt_l => piv_tgt_l, tgt_r => piv_tgt_r,
-            paso_tick => piv_paso_tick, fin_pasos => piv_fin
-        );
 
     -- =========================================================================
     -- Generador 1 Hz (LED de vida)
@@ -334,7 +179,7 @@ begin
         if rst = '1' then
             cnt_1s <= 0; clk_1s <= '0';
         elsif rising_edge(clk) then
-            if cnt_1s = 16_666_665 then
+            if cnt_1s = 24_999_999 then
                 cnt_1s <= 0; clk_1s <= not clk_1s;
             else
                 cnt_1s <= cnt_1s + 1;
@@ -372,18 +217,14 @@ begin
             curva_cnt <= 0;
             flt_izq <= 0; flt_der <= 0;
             s_izq <= '0'; s_der <= '0';
-            probe_dir <= D_DER;
-            tcnt <= 0; lockout_cnt <= 0;
-            busca_tries <= 0; reentro <= '0';
-            paso_n <= 0; paso_n <= 0; centro_n <= 0;
-            piv_ena <= '0'; piv_modo <= '0'; piv_dir <= '0';
+            probe_dir <= D_DER; busca_dir <= D_DER;
+            probe_cnt <= 0; lockout_cnt <= 0; edge_cnt <= 0;
+            centro_cnt <= 0; busca_tries <= 0; reentro <= '0';
             start_scan_r <= '0'; trigger_drop_r <= '0';
         elsif rising_edge(clk) then
             -- pulsos por defecto a '0' (solo E_Z_ACCION los pone en '1' por 1 ciclo)
             start_scan_r   <= '0';
             trigger_drop_r <= '0';
-            -- pívot APAGADO por defecto; los estados de pívot lo levantan a '1'
-            piv_ena        <= '0';
 
             -- -------- Filtro de histéresis de sensores (antirrebote) ----------
             if sensor_izq = LINE_LVL then
@@ -449,7 +290,7 @@ begin
                                 when others => probe_dir <= D_DER;       -- zona de frente
                                                tgt_l <= DUTY_CURVA_EXT;  tgt_r <= -DUTY_CURVA_INT;
                             end case;
-                            tcnt <= 0;
+                            probe_cnt <= 0;
                             est <= E_SONDA;
                         else
                             -- lockout activo (curva sostenida) o zona off: pívot keep-last
@@ -493,136 +334,133 @@ begin
                         else ultimo_giro <= G_IZQ; end if;
                         lockout_cnt <= ZONA_LOCKOUT_CYCLES;
                         est <= E_SEGUIR;
-                    elsif tcnt >= CURVA_PROBE_CYCLES then
+                    elsif probe_cnt >= CURVA_PROBE_CYCLES then
                         -- sigue doble-negro => es ZONA
-                        paso_n <= 0; reentro <= '0';
+                        edge_cnt <= 0; reentro <= '0';
                         est <= E_Z_BORDE_A;
                     else
-                        tcnt <= tcnt + 1;
+                        probe_cnt <= probe_cnt + 1;
                     end if;
 
                 -- ---- Centrado por bordes: borde A (lado del último giro) ----
                 when E_Z_BORDE_A =>
-                    piv_ena <= '1'; piv_modo <= '0';
-                    if probe_dir = D_DER then piv_dir <= '0'; else piv_dir <= '1'; end if;
-                    tgt_l <= piv_tgt_l; tgt_r <= piv_tgt_r;
-                    if piv_paso_tick = '1' then
-                        if (s_izq = '0' and s_der = '0') then           -- borde A
-                            piv_ena <= '0'; paso_n <= 0; paso_n <= 0; reentro <= '0';
-                            est <= E_Z_BORDE_B;
-                        elsif piv_fin = '1' then                        -- fallback: no halló borde
-                            piv_ena <= '0'; paso_n <= 0; paso_n <= 0; reentro <= '0';
-                            est <= E_Z_BORDE_B;
-                        end if;
+                    if probe_dir = D_DER then
+                        tgt_l <= DUTY_Z_PIVOT;  tgt_r <= -DUTY_Z_PIVOT;
+                    else
+                        tgt_l <= -DUTY_Z_PIVOT; tgt_r <= DUTY_Z_PIVOT;
+                    end if;
+                    if (s_izq = '0' and s_der = '0') or edge_cnt >= MAX_BORDE_CYCLES then
+                        edge_cnt <= 0; reentro <= '0'; est <= E_Z_BORDE_B;
+                    else
+                        edge_cnt <= edge_cnt + 1;
                     end if;
 
-                -- ---- Centrado por bordes: borde B (opuesto), mide el ancho en pasos ----
+                -- ---- Centrado por bordes: borde B (lado opuesto), mide el ancho ----
                 when E_Z_BORDE_B =>
-                    piv_ena <= '1'; piv_modo <= '0';
-                    if probe_dir = D_DER then piv_dir <= '1'; else piv_dir <= '0'; end if;
-                    tgt_l <= piv_tgt_l; tgt_r <= piv_tgt_r;
-                    if piv_paso_tick = '1' then
-                        if reentro = '0' then
-                            if (s_izq = '1' and s_der = '1') then       -- re-entró al doble-negro
-                                reentro <= '1'; paso_n <= 0;
-                            elsif piv_fin = '1' then                    -- nunca re-vio negro: fallback
-                                piv_ena <= '0'; centro_n <= paso_n / 2; paso_n <= 0;
-                                est <= E_Z_CENTRO;
-                            end if;
+                    if probe_dir = D_DER then               -- B = izquierda
+                        tgt_l <= -DUTY_Z_PIVOT; tgt_r <= DUTY_Z_PIVOT;
+                    else                                    -- B = derecha
+                        tgt_l <= DUTY_Z_PIVOT;  tgt_r <= -DUTY_Z_PIVOT;
+                    end if;
+                    if reentro = '0' then
+                        -- aún saliendo del borde A: espera re-entrar al negro doble
+                        if s_izq = '1' and s_der = '1' then reentro <= '1'; end if;
+                        if edge_cnt >= 2*MAX_BORDE_CYCLES then  -- nunca re-vio negro: fallback
+                            centro_cnt <= edge_cnt / 2; edge_cnt <= 0; est <= E_Z_CENTRO;
                         else
-                            if (s_izq = '0' and s_der = '0') then       -- borde B
-                                piv_ena <= '0'; centro_n <= paso_n / 2; paso_n <= 0;
-                                est <= E_Z_CENTRO;
-                            elsif piv_fin = '1' then
-                                piv_ena <= '0'; centro_n <= paso_n / 2; paso_n <= 0;
-                                est <= E_Z_CENTRO;
-                            else
-                                paso_n <= paso_n + 1;
-                            end if;
+                            edge_cnt <= edge_cnt + 1;
+                        end if;
+                    else
+                        -- ya cruzando el negro hacia el borde B
+                        if (s_izq = '0' and s_der = '0') or edge_cnt >= 2*MAX_BORDE_CYCLES then
+                            centro_cnt <= edge_cnt / 2;   -- punto medio borde A..B
+                            edge_cnt <= 0; est <= E_Z_CENTRO;
+                        else
+                            edge_cnt <= edge_cnt + 1;
                         end if;
                     end if;
 
                 -- ---- Volver al centro (de regreso hacia el lado A) ----
                 when E_Z_CENTRO =>
-                    piv_ena <= '1'; piv_modo <= '0';
-                    if probe_dir = D_DER then piv_dir <= '0'; else piv_dir <= '1'; end if;
-                    tgt_l <= piv_tgt_l; tgt_r <= piv_tgt_r;
-                    if piv_paso_tick = '1' then
-                        if paso_n >= centro_n then
-                            piv_ena <= '0'; paso_n <= 0; tcnt <= 0; est <= E_Z_AVANZA;
-                        elsif piv_fin = '1' then
-                            piv_ena <= '0'; paso_n <= 0; tcnt <= 0; est <= E_Z_AVANZA;
-                        else
-                            paso_n <= paso_n + 1;
-                        end if;
+                    if probe_dir = D_DER then
+                        tgt_l <= DUTY_Z_PIVOT;  tgt_r <= -DUTY_Z_PIVOT;
+                    else
+                        tgt_l <= -DUTY_Z_PIVOT; tgt_r <= DUTY_Z_PIVOT;
+                    end if;
+                    if edge_cnt >= centro_cnt then
+                        edge_cnt <= 0; est <= E_Z_AVANZA;
+                    else
+                        edge_cnt <= edge_cnt + 1;
                     end if;
 
                 -- ---- Avanzar recto hasta que al menos un sensor deje el negro ----
                 when E_Z_AVANZA =>
                     tgt_l <= DUTY_Z_AVANCE; tgt_r <= DUTY_Z_AVANCE;
-                    if (s_izq = '0' or s_der = '0') or tcnt >= MAX_AVANCE_CYCLES then
-                        tcnt <= 0; est <= E_Z_OFFSET;
+                    if (s_izq = '0' or s_der = '0') or edge_cnt >= MAX_AVANCE_CYCLES then
+                        edge_cnt <= 0; est <= E_Z_OFFSET;
                     else
-                        tcnt <= tcnt + 1;
+                        edge_cnt <= edge_cnt + 1;
                     end if;
 
                 -- ---- Avance extra (offset) ----
                 when E_Z_OFFSET =>
                     tgt_l <= DUTY_Z_AVANCE; tgt_r <= DUTY_Z_AVANCE;
-                    if tcnt >= OFFSET_CYCLES then
-                        tcnt <= 0; busca_tries <= 0; paso_n <= 0;
+                    if edge_cnt >= OFFSET_CYCLES then
+                        edge_cnt <= 0; busca_tries <= 0; busca_dir <= probe_dir;
                         est <= E_Z_BUSCA_A;
                     else
-                        tcnt <= tcnt + 1;
+                        edge_cnt <= edge_cnt + 1;
                     end if;
 
-                -- ---- Buscar la línea de salida: barrido lado A (pívot por pasos) ----
+                -- ---- Buscar la línea de salida: barrido lado A ----
                 when E_Z_BUSCA_A =>
-                    piv_ena <= '1'; piv_modo <= '1';
-                    if probe_dir = D_DER then piv_dir <= '0'; else piv_dir <= '1'; end if;
-                    tgt_l <= piv_tgt_l; tgt_r <= piv_tgt_r;
-                    if piv_paso_tick = '1' then
-                        if (s_izq = '1' or s_der = '1') then            -- vio la línea
-                            piv_ena <= '0'; paso_n <= 0; est <= E_Z_RECENTRO;
-                        elsif piv_fin = '1' then
-                            piv_ena <= '0'; paso_n <= 0; est <= E_Z_BUSCA_B;
-                        end if;
+                    if busca_dir = D_DER then
+                        tgt_l <= DUTY_Z_PIVOT;  tgt_r <= -DUTY_Z_PIVOT;
+                    else
+                        tgt_l <= -DUTY_Z_PIVOT; tgt_r <= DUTY_Z_PIVOT;
+                    end if;
+                    if s_izq = '1' or s_der = '1' then        -- vio la línea
+                        edge_cnt <= 0; est <= E_Z_RECENTRO;
+                    elsif edge_cnt >= BUSCA_CAP_CYCLES then
+                        edge_cnt <= 0; est <= E_Z_BUSCA_B;
+                    else
+                        edge_cnt <= edge_cnt + 1;
                     end if;
 
-                -- ---- Buscar la línea de salida: barrido lado B ----
+                -- ---- Buscar la línea de salida: barrido lado B (el doble) ----
                 when E_Z_BUSCA_B =>
-                    piv_ena <= '1'; piv_modo <= '1';
-                    if probe_dir = D_DER then piv_dir <= '1'; else piv_dir <= '0'; end if;
-                    tgt_l <= piv_tgt_l; tgt_r <= piv_tgt_r;
-                    if piv_paso_tick = '1' then
-                        if (s_izq = '1' or s_der = '1') then
-                            piv_ena <= '0'; paso_n <= 0; est <= E_Z_RECENTRO;
-                        elsif piv_fin = '1' then
-                            piv_ena <= '0'; paso_n <= 0;
-                            if busca_tries >= MAX_BUSCA_TRIES then
-                                est <= E_Z_RECENTRO;                   -- se rinde, asume centrado
-                            else
-                                busca_tries <= busca_tries + 1;
-                                est <= E_Z_BUSCA_A;
-                            end if;
+                    if busca_dir = D_DER then                 -- opuesto = izquierda
+                        tgt_l <= -DUTY_Z_PIVOT; tgt_r <= DUTY_Z_PIVOT;
+                    else
+                        tgt_l <= DUTY_Z_PIVOT;  tgt_r <= -DUTY_Z_PIVOT;
+                    end if;
+                    if s_izq = '1' or s_der = '1' then
+                        edge_cnt <= 0; est <= E_Z_RECENTRO;
+                    elsif edge_cnt >= 2*BUSCA_CAP_CYCLES then
+                        edge_cnt <= 0;
+                        if busca_tries >= MAX_BUSCA_TRIES then
+                            est <= E_Z_RECENTRO;              -- se rinde, asume centrado
+                        else
+                            busca_tries <= busca_tries + 1;
+                            est <= E_Z_BUSCA_A;
                         end if;
+                    else
+                        edge_cnt <= edge_cnt + 1;
                     end if;
 
                 -- ---- Recentrar: línea entre ambos sensores otra vez ----
                 when E_Z_RECENTRO =>
-                    piv_ena <= '1'; piv_modo <= '1';
-                    tgt_l <= piv_tgt_l; tgt_r <= piv_tgt_r;
-                    if piv_paso_tick = '1' then
-                        if (s_izq = '0' and s_der = '0') then           -- línea ENTRE ambos
-                            piv_ena <= '0'; paso_n <= 0; tcnt <= 0; est <= E_Z_ACCION;
-                        elsif paso_n >= PIV_PASOS_LINEA - 1 then         -- tope de pasos
-                            piv_ena <= '0'; paso_n <= 0; tcnt <= 0; est <= E_Z_ACCION;
-                        else
-                            paso_n <= paso_n + 1;
-                            if s_der = '1' and s_izq = '0' then piv_dir <= '0';      -- corrige der
-                            elsif s_izq = '1' and s_der = '0' then piv_dir <= '1';   -- corrige izq
-                            end if;
-                        end if;
+                    if s_der = '1' and s_izq = '0' then
+                        tgt_l <= DUTY_Z_PIVOT;  tgt_r <= -DUTY_Z_PIVOT;   -- corrige a der
+                    elsif s_izq = '1' and s_der = '0' then
+                        tgt_l <= -DUTY_Z_PIVOT; tgt_r <= DUTY_Z_PIVOT;    -- corrige a izq
+                    else
+                        tgt_l <= 0; tgt_r <= 0;                           -- centrado o (1,1): detente
+                    end if;
+                    if (s_izq = '0' and s_der = '0') or edge_cnt >= RECENTRO_CAP_CYCLES then
+                        edge_cnt <= 0; est <= E_Z_ACCION;
+                    else
+                        edge_cnt <= edge_cnt + 1;
                     end if;
 
                 -- ---- Acción del brazo (al final de la maniobra) ----

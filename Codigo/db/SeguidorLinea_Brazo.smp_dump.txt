@@ -24,6 +24,13 @@ est.E_SCAN_FIN 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1
 est.E_DROP_WAIT 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
 est.E_REARME 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
 
+State Machine - |SeguidorLinea_Brazo|MaquinaEstados:u_me|pivote:u_piv|pst
+Name pst.P_DONE pst.P_SETTLE pst.P_KICK pst.P_IDLE 
+pst.P_IDLE 0 0 0 0 
+pst.P_KICK 0 0 1 1 
+pst.P_SETTLE 0 1 0 1 
+pst.P_DONE 1 0 0 1 
+
 State Machine - |SeguidorLinea_Brazo|grab_ctrl:u_grab|gst
 Name gst.G_RELEASE gst.G_DROP gst.G_HOLD gst.G_GRIP gst.G_MOVE gst.G_IK_WAIT gst.G_IK gst.G_SCANWAIT gst.G_REST 
 gst.G_REST 0 0 0 0 0 0 0 0 0 
@@ -73,13 +80,15 @@ st.S_CORDIC 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1
 st.S_DONE 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
 
 State Machine - |SeguidorLinea_Brazo|LIDAR:u_lidar|st
-Name st.S_DONE st.S_NEXT st.S_AVG st.S_SETTLE st.S_MOVE st.S_IDLE 
-st.S_IDLE 0 0 0 0 0 0 
-st.S_MOVE 0 0 0 0 1 1 
-st.S_SETTLE 0 0 0 1 0 1 
-st.S_AVG 0 0 1 0 0 1 
-st.S_NEXT 0 1 0 0 0 1 
-st.S_DONE 1 0 0 0 0 1 
+Name st.S_REINIT st.S_RECOVER st.S_DONE st.S_NEXT st.S_AVG st.S_SETTLE st.S_MOVE st.S_IDLE 
+st.S_IDLE 0 0 0 0 0 0 0 0 
+st.S_MOVE 0 0 0 0 0 0 1 1 
+st.S_SETTLE 0 0 0 0 0 1 0 1 
+st.S_AVG 0 0 0 0 1 0 0 1 
+st.S_NEXT 0 0 0 1 0 0 0 1 
+st.S_DONE 0 0 1 0 0 0 0 1 
+st.S_RECOVER 0 1 0 0 0 0 0 1 
+st.S_REINIT 1 0 0 0 0 0 0 1 
 
 State Machine - |SeguidorLinea_Brazo|LIDAR:u_lidar|VL53L0X:u_VL53L0X|op_r
 Name op_r.OP_END op_r.OP_TUNING op_r.OP_CHK_ID op_r.OP_WR_SV op_r.OP_RD_SV op_r.OP_AND op_r.OP_OR op_r.OP_WR 

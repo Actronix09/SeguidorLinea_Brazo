@@ -1,20 +1,16 @@
-# vsim -do sim_chk/r.do -c tb_MaquinaEstados 
+# vsim -do {quit -f} -lib {C:\Users\Adrian\AppData\Local\Temp\sisifo_v6\work} -c SeguidorLinea_Brazo 
 # Loading std.standard
 # Loading std.textio(body)
 # Loading ieee.std_logic_1164(body)
 # Loading ieee.numeric_std(body)
-# Loading work.tb_maquinaestados(sim)
-# Loading work.maquinaestados(rtl)
-# do sim_chk/r.do 
-# ** Note: Fase A OK: motores activos al seguir recto
-#    Time: 3110 ns  Iteration: 0  Instance: /tb_maquinaestados
-# ** Note: Fase B OK: corrección/recuperación sin trabarse
-#    Time: 8110 ns  Iteration: 0  Instance: /tb_maquinaestados
-# ** Note: Fase C OK: zona sin objeto -> start_scan
-#    Time: 10110 ns  Iteration: 0  Instance: /tb_maquinaestados
-# ** Note: Fase D OK: zona con objeto -> trigger_drop
-#    Time: 18110 ns  Iteration: 0  Instance: /tb_maquinaestados
-# ** Note: Fase E OK: (1,1) desde giro NO dispara zona falsa (gate)
-#    Time: 27110 ns  Iteration: 0  Instance: /tb_maquinaestados
-# ** Note: OK: seguidor + orquestación (scan/drop por estado de acarreo) funcionan
-#    Time: 28110 ns  Iteration: 0  Instance: /tb_maquinaestados
+# Loading C:\Users\Adrian\AppData\Local\Temp\sisifo_v6\work.seguidorlinea_brazo(behavioral)
+# Loading C:\Users\Adrian\AppData\Local\Temp\sisifo_v6\work.lidar(rtl)
+# Loading C:\Users\Adrian\AppData\Local\Temp\sisifo_v6\work.vl53l0x_pkg
+# Loading C:\Users\Adrian\AppData\Local\Temp\sisifo_v6\work.vl53l0x(rtl)
+# Loading C:\Users\Adrian\AppData\Local\Temp\sisifo_v6\work.grab_ctrl(rtl)
+# Loading ieee.math_real(body)
+# Loading C:\Users\Adrian\AppData\Local\Temp\sisifo_v6\work.kinematics(rtl)
+# Loading C:\Users\Adrian\AppData\Local\Temp\sisifo_v6\work.maquinaestados(rtl)
+# Loading C:\Users\Adrian\AppData\Local\Temp\sisifo_v6\work.pivote(rtl)
+# Loading C:\Users\Adrian\AppData\Local\Temp\sisifo_v6\work.polarpwm(behavioral)
+# quit -f 
