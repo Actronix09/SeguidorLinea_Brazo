@@ -217,9 +217,9 @@ architecture rtl of MaquinaEstados is
 
     -- ===== 4 PERILLAS DEL PÍVOT POR PASOS (módulo 'pivote') ===================
     constant PIV_PASO_CYCLES   : integer := 60_000;   -- 1) duración de cada paso (kick, ~1.2 ms)
-    constant PIV_DUTY          : integer := 42_000;   -- 2) velocidad del pívot
-    constant PIV_PASOS_ZONA    : integer := 24;       -- 3) nº de pasos en detección de ZONA
-    constant PIV_PASOS_LINEA   : integer := 40;       -- 4) nº de pasos en detección de LÍNEA
+    constant PIV_DUTY          : integer := 20_000;   -- 2) velocidad del pívot
+    constant PIV_PASOS_ZONA    : integer := 16;       -- 3) nº de pasos en detección de ZONA
+    constant PIV_PASOS_LINEA   : integer := 20;       -- 4) nº de pasos en detección de LÍNEA
     constant PIV_SETTLE_CYCLES : integer := 60_000;   -- asentamiento por paso (>= FILTRO_CYCLES)
 
     function imax(a, b : integer) return integer is
