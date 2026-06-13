@@ -127,6 +127,9 @@ architecture Behavioral of SeguidorLinea_Brazo is
     -- -------------------------------------------------------------------------
     component MaquinaEstados
         generic (
+            USAR_ZONA     : boolean := false;
+            ZONA_CYCLES   : integer := 15_000_000;
+            SALIR_CYCLES  : integer := 10_000_000;
             FILTRO_CYCLES : integer := 50_000;
             LINE_LVL      : std_logic := '0'
         );
@@ -252,6 +255,7 @@ begin
         -- QRD físico: '1' en BLANCO, '0' en NEGRO -> "sobre la línea negra" = '0'.
         -- Velocidad/calibración: constantes DUTY_* dentro de MaquinaEstados.vhd.
         generic map (
+            USAR_ZONA     => false,         -- poner true para activar brazo/zona (LIDAR + depósito)
             LINE_LVL      => '0',
             FILTRO_CYCLES => 15_000
             )

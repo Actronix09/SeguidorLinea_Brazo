@@ -3,27 +3,29 @@
 --                  del brazo (buscar/agarrar/depositar) en pista cerrada en loop.
 -- FPGA: Cyclone II EP2C5T144C7 | Sensores: QRD1114 x2 (LM393) | Puente H: L293 | 50 MHz
 -- ----------------------------------------------------------------------------
--- Seguidor STRADDLE de DOS MODOS (la línea negra pasa ENTRE los 2 QRD;
---   s_*='1' = ese sensor ve NEGRO = está SOBRE la línea):
+-- Seguidor con AMBOS SENSORES DENTRO de la línea (la línea negra es ANCHA y los 2
+--   QRD van normalmente SOBRE el negro; s_*='1' = ese sensor ve NEGRO = sobre línea):
 --
---   MODO RECTA (UN solo sensor en negro): enciende la rueda EXTERIOR y APAGA la
---     interior (arco suave). Duties DUTY_RECTA_EXT / DUTY_RECTA_INT(=0 freno).
---   MODO CURVA (DOBLE negro 1,1): pívot con la rueda interior en REVERSA, en la dirección
---     del ÚLTIMO giro, en PULSOS cortos (kick CURVA_PULSO_CYCLES / descanso CURVA_PAUSA_CYCLES)
---     para no girar en el sitio y pasarse. Perilla USAR_MODO_CURVA. Duties DUTY_CURVA_EXT/INT.
+--   CENTRADO (ambos negro 1,1): va RECTO (DUTY_*_RECTO).
+--   CORRECCIÓN (un solo sensor sale a blanco): la rueda EXTERIOR empuja y la INTERIOR se
+--     corrige con UN solo estilo, elegido por la perilla MODO_PIVOTE:
+--       MODO_PIVOTE=false -> interior ADELANTE pero más lenta (arco suave).  [default]
+--       MODO_PIVOTE=true  -> interior en REVERSA (pívot, giro cerrado).
+--     Duties DUTY_GIRO_EXT (exterior) y DUTY_GIRO_INT (magnitud de la interior).
+--   PERDIDA (ambos blanco 0,0): perdió la línea -> recupera girando en la dir. del ÚLTIMO giro.
 --
---   ZONA (cuadro negro de entrega/recogida): negro-doble (1,1) SOSTENIDO ZONA_CYCLES. El
---     gate ZONA_DESDE_RECTO exige venir de RECTO (no de un giro) para NO disparar zona falsa
---     en curvas (que también dan (1,1)). En la zona se detiene y, según 'has_object': sin
+--   ZONA (cuadro negro de entrega/recogida) -- OPCIONAL, perilla USAR_ZONA (default false):
+--     OJO: con "ambos dentro", ir centrado YA es (1,1), la MISMA señal que un cuadro. Una ZONA
+--     se distingue solo por TIEMPO: (1,1) SOSTENIDO ZONA_CYCLES (mucho más que una recta, que se
+--     rompe al micro-corregir a (1,0)/(0,1)). En la zona se detiene y, según 'has_object': sin
 --     objeto dispara el LIDAR (start_scan); con objeto deposita (trigger_drop). Luego AVANZA
---     (escape) hasta dejar el cuadro y reanuda.
+--     (escape) y reanuda. Con USAR_ZONA=false, toda esta rama se elimina por síntesis.
 --
---   Mapa de estados de sensores:
---   - (0,0) ambos BLANCO -> centrados -> RECTO (DUTY_*_RECTO).
---   - (0,1) DER sobre línea -> derivó IZQ -> MODO RECTA girar DERECHA (arco).
---   - (1,0) IZQ sobre línea -> derivó DER -> MODO RECTA girar IZQUIERDA (arco).
---   - (1,1) ambos NEGRO -> MODO CURVA: PÍVOT pulsado en dir. del último giro (G_RECTO=recto).
---           A la vez, si venía de RECTO, cuenta zona_cnt; si dura ZONA_CYCLES -> ZONA.
+--   Mapa de estados de sensores (ambos dentro de la línea):
+--   - (1,1) ambos NEGRO -> CENTRADO -> RECTO (DUTY_*_RECTO).
+--   - (1,0) IZQ negro, DER blanco -> derivó DER -> corrige IZQUIERDA.
+--   - (0,1) IZQ blanco, DER negro -> derivó IZQ -> corrige DERECHA.
+--   - (0,0) ambos BLANCO -> PERDIÓ la línea -> recupera en dir. del último giro.
 --
 -- Motores (L293): tgt con signo -> + adelante (INx1=PWM), - reversa (INx2=PWM), 0 freno.
 --   PWM de 16 bits (periodo 65536 ~763 Hz). Duty de marcha = |tgt_*| / 65536.
@@ -41,6 +43,8 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity MaquinaEstados is
     generic (
+        USAR_ZONA     : boolean := false;       -- brazo/zona: false = seguidor puro (default)
+        ZONA_CYCLES   : integer := 15_000_000;  -- (1,1) sostenido p/ confirmar zona (~0.3 s)
         SALIR_CYCLES  : integer := 10_000_000;  -- margen tras DEJAR el cuadro negro (0.2 s)
         FILTRO_CYCLES : integer := 50_000;      -- antirrebote de sensores (~1 ms @50MHz)
         LINE_LVL      : std_logic := '0'        -- nivel del sensor SOBRE la línea
@@ -77,45 +81,27 @@ architecture rtl of MaquinaEstados is
     constant DUTY_IZQ_RECTO  : integer := 48000;
     constant DUTY_DER_RECTO  : integer := 48000;
 
-    -- ---- 4 PERILLAS DE GIRO --------------------------------------------------
-    -- MODO RECTA (un solo sensor en negro): exterior empuja, interior se APAGA (freno).
-    constant DUTY_RECTA_EXT  : integer := 65000;   -- rueda exterior (la que empuja)
-    constant DUTY_RECTA_INT  : integer := 0;       -- rueda interior (0 = freno; subir = arco)
-    -- MODO CURVA (doble negro): exterior adelante + interior en REVERSA (pívot).
-    constant DUTY_CURVA_EXT  : integer := 56000;   -- rueda exterior adelante
-    constant DUTY_CURVA_INT  : integer := 56000;   -- rueda interior en REVERSA (magnitud)
+    -- ---- PERILLAS DE CORRECCIÓN (un solo modo, elegido por MODO_PIVOTE) -------
+    -- Al salir un sensor a blanco: la rueda EXTERIOR empuja y la INTERIOR se corrige.
+    constant DUTY_GIRO_EXT   : integer := 60000;   -- rueda exterior (la que empuja)
+    constant DUTY_GIRO_INT   : integer := 20000;   -- rueda interior (magnitud)
+    -- false = interior ADELANTE pero más lenta (arco suave, default); true = interior en
+    -- REVERSA (pívot, giro cerrado). Sube DUTY_GIRO_INT para corregir más fuerte.
+    constant MODO_PIVOTE     : boolean := false;
     -- --------------------------------------------------------------------------
 
     -- escape: al salir de la zona (lento, controlado).
     constant DUTY_IZQ_ESCAPE : integer := 35000;
     constant DUTY_DER_ESCAPE : integer := 35000;
-
-    -- Tiempos del pívot PULSADO de MODO CURVA: el pívot va a PULSOS (no continuo) para no
-    -- girar en el sitio y pasarse -> pega CURVA_PULSO en reversa, descansa CURVA_PAUSA en
-    -- arco, y repite mientras dure el doble-negro. (a 50 MHz: 50_000 ciclos = 1 ms)
-    constant CURVA_PULSO_CYCLES : integer := 1_000_000;  -- KICK pívot reversa     (~20 ms)
-    constant CURVA_PAUSA_CYCLES : integer :=   500_000;  -- descanso arco entre kicks (~10 ms)
-    constant CURVA_PERIODO      : integer := CURVA_PULSO_CYCLES + CURVA_PAUSA_CYCLES;
     -- ==========================================================================
 
-    -- Habilita la detección de ZONA de entrega/recogida (cuadro negro ancho). 'true' = al
-    -- CONFIRMAR zona (negro-doble sostenido) entra a E_ZONA (brazo/LIDAR). 'false' = solo
-    -- sigue la línea y pasa sobre los cuadros (probar el seguidor aislado en toda la pista).
-    constant USAR_ZONA : boolean := true;
-
-    -- MODO CURVA (pívot en reversa) en doble-negro. true = en (1,1) pivota en reversa hacia
-    -- el último giro (toma curvas cerradas). false = en (1,1) mantiene el último giro en modo
-    -- recta (arco, sin reversa).
-    constant USAR_MODO_CURVA : boolean := true;
-
-    -- Discriminador curva-vs-zona. true = la ZONA solo cuenta si el negro-doble se entró
-    -- viniendo de RECTO (ultimo_giro=G_RECTO) => una curva (se entra girando) NO dispara zona
-    -- falsa (evita los espasmos). El pívot de curva SÍ actúa siempre en (1,1); esto solo
-    -- gatea el CONTADOR de zona. false = cualquier (1,1) sostenido cuenta (puede dar falsos).
-    constant ZONA_DESDE_RECTO : boolean := true;
-
-    -- Negro-doble sostenido necesario para confirmar zona (~0.3 s @50 MHz).
-    constant ZONA_CYCLES : integer := 15_000_000;
+    -- Rueda interior CON SIGNO según el modo de corrección (se pliega en elaboración):
+    -- adelante (arco) si MODO_PIVOTE=false, en reversa (pívot) si true.
+    function f_int(piv : boolean; mag : integer) return integer is
+    begin
+        if piv then return -mag; else return mag; end if;
+    end function;
+    constant TGT_GIRO_INT : integer := f_int(MODO_PIVOTE, DUTY_GIRO_INT);
 
     -- Sensores: filtro de histéresis (cuenta arriba/abajo) -> '1' = sobre línea (NEGRO)
     signal flt_izq, flt_der : integer range 0 to FILTRO_CYCLES := 0;
@@ -125,12 +111,9 @@ architecture rtl of MaquinaEstados is
     -- Duty objetivo por rueda CON SIGNO: + adelante, - reversa, 0 freno.
     signal tgt_l, tgt_r : integer range -65535 to 65535 := 0;
 
-    -- Último giro (single-sensor): da la dirección del pívot/keep-last en (1,1).
+    -- Último giro: da la dirección de recuperación cuando se PIERDE la línea (0,0).
     type giro_t is (G_RECTO, G_IZQ, G_DER);
     signal ultimo_giro : giro_t := G_RECTO;
-
-    -- Fase del pívot pulsado de MODO CURVA (corre solo mientras hay doble-negro).
-    signal curva_cnt : integer range 0 to CURVA_PERIODO := 0;
 
     -- PWM 16 bits libre (~763 Hz). El duty de cada rueda = |tgt_*| sobre 65536.
     signal pwm16 : unsigned(15 downto 0) := (others => '0');
@@ -196,7 +179,6 @@ begin
             est <= E_INICIO;
             tgt_l <= 0; tgt_r <= 0;
             ultimo_giro <= G_RECTO;
-            curva_cnt <= 0;
             flt_izq <= 0; flt_der <= 0;
             s_izq <= '0'; s_der <= '0'; ambos_linea <= '0';
             zona_cnt <= 0; salir_cnt <= 0;
@@ -227,19 +209,13 @@ begin
 
             ambos_linea <= s_izq and s_der;
 
-            -- contadores en doble-negro: el pívot pulsado (curva_cnt) corre SIEMPRE; el de ZONA
-            -- (zona_cnt) está gateado por ZONA_DESDE_RECTO para no disparar zona falsa en curvas.
+            -- Contador de ZONA (sólo relevante si USAR_ZONA). Con "ambos dentro", (1,1) es ir
+            -- centrado; una ZONA = (1,1) SOSTENIDO mucho más que una recta (que se rompe al
+            -- micro-corregir a (1,0)/(0,1)). Cualquier salida a blanco resetea el conteo.
             if s_izq = '1' and s_der = '1' then
-                if curva_cnt >= CURVA_PERIODO - 1 then curva_cnt <= 0;
-                else curva_cnt <= curva_cnt + 1; end if;
-                if (not ZONA_DESDE_RECTO) or ultimo_giro = G_RECTO then
-                    if zona_cnt < ZONA_CYCLES then zona_cnt <= zona_cnt + 1; end if;
-                else
-                    zona_cnt <= 0;
-                end if;
+                if zona_cnt < ZONA_CYCLES then zona_cnt <= zona_cnt + 1; end if;
             else
-                zona_cnt  <= 0;
-                curva_cnt <= 0;
+                zona_cnt <= 0;
             end if;
 
             case est is
@@ -248,54 +224,35 @@ begin
                     tgt_l <= 0; tgt_r <= 0;
                     est <= E_SEGUIR;
 
-                -- ---- Seguir la línea (modo recta + pívot de curva en doble-negro) ----
-                -- s_*='1' = ese sensor ve NEGRO (sobre la línea).
+                -- ---- Seguir la línea (ambos sensores DENTRO del negro) ----
+                -- s_*='1' = ese sensor ve NEGRO (sobre la línea). Centrado = (1,1).
                 when E_SEGUIR =>
                     if USAR_ZONA and zona_cnt >= ZONA_CYCLES then
                         est <= E_ZONA;
                     else
-                        if s_izq = '0' and s_der = '0' then        -- ambos blanco -> recto
+                        if s_izq = '1' and s_der = '1' then        -- CENTRADO -> recto
                             ultimo_giro <= G_RECTO;
                             tgt_l <= DUTY_IZQ_RECTO;
                             tgt_r <= DUTY_DER_RECTO;
 
-                        elsif s_izq = '0' and s_der = '1' then     -- DER único -> MODO RECTA der
-                            ultimo_giro <= G_DER;
-                            tgt_l <= DUTY_RECTA_EXT;               -- izq (exterior) empuja
-                            tgt_r <= DUTY_RECTA_INT;               -- der (interior) freno
-
-                        elsif s_izq = '1' and s_der = '0' then     -- IZQ único -> MODO RECTA izq
+                        elsif s_izq = '1' and s_der = '0' then     -- DER salió -> corrige IZQUIERDA
                             ultimo_giro <= G_IZQ;
-                            tgt_l <= DUTY_RECTA_INT;               -- izq (interior) freno
-                            tgt_r <= DUTY_RECTA_EXT;               -- der (exterior) empuja
+                            tgt_l <= TGT_GIRO_INT;                 -- izq (interior) lenta/reversa
+                            tgt_r <= DUTY_GIRO_EXT;                -- der (exterior) empuja
+
+                        elsif s_izq = '0' and s_der = '1' then     -- IZQ salió -> corrige DERECHA
+                            ultimo_giro <= G_DER;
+                            tgt_l <= DUTY_GIRO_EXT;                -- izq (exterior) empuja
+                            tgt_r <= TGT_GIRO_INT;                 -- der (interior) lenta/reversa
 
                         else
-                            -- (1,1) DOBLE NEGRO -> MODO CURVA: pívot PULSADO (kick reversa /
-                            -- descanso arco) en dir. del último giro. G_RECTO -> sigue recto.
-                            if USAR_MODO_CURVA then
-                                case ultimo_giro is
-                                    when G_RECTO =>
-                                        tgt_l <= DUTY_IZQ_RECTO; tgt_r <= DUTY_DER_RECTO;
-                                    when G_DER =>
-                                        if curva_cnt < CURVA_PULSO_CYCLES then   -- KICK pívot der
-                                            tgt_l <= DUTY_CURVA_EXT; tgt_r <= -DUTY_CURVA_INT;
-                                        else                                     -- descanso (arco)
-                                            tgt_l <= DUTY_RECTA_EXT; tgt_r <= DUTY_RECTA_INT;
-                                        end if;
-                                    when G_IZQ =>
-                                        if curva_cnt < CURVA_PULSO_CYCLES then   -- KICK pívot izq
-                                            tgt_l <= -DUTY_CURVA_INT; tgt_r <= DUTY_CURVA_EXT;
-                                        else                                     -- descanso (arco)
-                                            tgt_l <= DUTY_RECTA_INT; tgt_r <= DUTY_RECTA_EXT;
-                                        end if;
-                                end case;
-                            else
-                                case ultimo_giro is
-                                    when G_RECTO => tgt_l <= DUTY_IZQ_RECTO; tgt_r <= DUTY_DER_RECTO;
-                                    when G_DER   => tgt_l <= DUTY_RECTA_EXT; tgt_r <= DUTY_RECTA_INT;
-                                    when G_IZQ   => tgt_l <= DUTY_RECTA_INT; tgt_r <= DUTY_RECTA_EXT;
-                                end case;
-                            end if;
+                            -- (0,0) AMBOS BLANCO -> PERDIÓ la línea: recupera girando en la
+                            -- dirección del último giro (la línea quedó hacia ese lado).
+                            case ultimo_giro is
+                                when G_RECTO => tgt_l <= DUTY_IZQ_RECTO; tgt_r <= DUTY_DER_RECTO;
+                                when G_IZQ   => tgt_l <= TGT_GIRO_INT;   tgt_r <= DUTY_GIRO_EXT;
+                                when G_DER   => tgt_l <= DUTY_GIRO_EXT;  tgt_r <= TGT_GIRO_INT;
+                            end case;
                         end if;
                     end if;
 
@@ -333,6 +290,9 @@ begin
                 -- ---- Salir de la zona: avanza recto (escape) hasta DEJAR el cuadro negro ----
                 -- Una vez fuera del negro (ambos_linea='0') espera un margen y reanuda;
                 -- así no vuelve a disparar la MISMA zona.
+                -- TODO zonas (esquema ambos-dentro): el centro de la línea también es (1,1), así
+                --   que "ambos_linea=0" para detectar la salida del cuadro habrá que revisarlo al
+                --   reactivar USAR_ZONA (hoy esta rama está dormida por defecto).
                 when E_SALIR_ZONA =>
                     ultimo_giro <= G_RECTO;                 -- al reanudar arranca como recto
                     tgt_l <= DUTY_IZQ_ESCAPE; tgt_r <= DUTY_DER_ESCAPE;

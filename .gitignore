@@ -5,6 +5,7 @@ Codigo/output_files/
 Codigo/simulation/
 Codigo/TclScriptsHGB/
 Codigo/work/
+Codigo/output/
 
 # Archivos temporales / locales de Quartus
 *.qws
@@ -25,6 +26,7 @@ Codigo/work/
 *.flow.rpt
 transcript
 Codigo/output_files/
+*.ini
 
 # Backups de desarrollo propios
 _vcheck/
@@ -32,6 +34,8 @@ Codigo_backup_etapa1/
 Codigo/_backups/
 Codigo/Adafruit_VL53L0X-master/
 Codigo/db/
+_backups/
+Codigo/Brazo90Deg/
 
 # Otros
 *.toml
@@ -40,3 +44,5 @@ Codigo/.claude/
 db/
 incremental_db/
 ref_lib/
+*.json
+scripts/

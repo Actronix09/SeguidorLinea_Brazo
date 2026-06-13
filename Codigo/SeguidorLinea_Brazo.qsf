@@ -1,88 +1,89 @@
-# -------------------------------------------------------------------------- #
-# Quartus II 64-Bit  -  Version 13.0.1 SP1  (Cyclone II EP2C5T144C7)
-# Proyecto: Sísifo - Seguidor de línea + brazo (ETAPA 2, integración final)
-# -------------------------------------------------------------------------- #
+# ============================================================================
+# Proyecto
+# ============================================================================
 
 set_global_assignment -name FAMILY "Cyclone II"
 set_global_assignment -name DEVICE EP2C5T144C7
-set_global_assignment -name ORIGINAL_QUARTUS_VERSION "13.0 SP1"
-set_global_assignment -name PROJECT_CREATION_TIME_DATE "13:26:11  MAY 17, 2026"
-set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"
+set_global_assignment -name TOP_LEVEL_ENTITY TestMotores
 
 # ============================================================================
-# TOP de Etapa 2: integración final (seguidor + buscar/agarrar/depositar).
-#   Tops de prueba (Etapa 1) quedan en Codigo_backup_etapa1/ — sus fuentes
-#   (LIDAR_Grab_Top, LIDAR_Scan_Top, ...) usan la interfaz ANTERIOR de LIDAR/
-#   grab_ctrl y ya NO compilan contra los módulos reescritos.
+# Archivos Principales VHDL
 # ============================================================================
 
-# ---- Jerarquía de fuentes del top (orden de dependencia) ----
-set_global_assignment -name VHDL_FILE Codigo/vl53l0x_pkg.vhd
-set_global_assignment -name VHDL_FILE Codigo/VL53L0X.vhd
-set_global_assignment -name VHDL_FILE Codigo/encoder_servo.vhd
-set_global_assignment -name VHDL_FILE Codigo/kinematics.vhd
-set_global_assignment -name VHDL_FILE Codigo/polarPWM.vhd
-set_global_assignment -name VHDL_FILE Codigo/LIDAR.vhd
-set_global_assignment -name VHDL_FILE Codigo/grab_ctrl.vhd
+set_global_assignment -name VHDL_FILE vl53l0x_pkg.vhd
+set_global_assignment -name VHDL_FILE VL53L0X.vhd
+set_global_assignment -name VHDL_FILE encoder_servo.vhd
+set_global_assignment -name VHDL_FILE kinematics.vhd
+set_global_assignment -name VHDL_FILE polarPWM.vhd
+set_global_assignment -name VHDL_FILE LIDAR.vhd
+set_global_assignment -name VHDL_FILE grab_ctrl.vhd
+set_global_assignment -name VHDL_FILE MaquinaEstados.vhd
+set_global_assignment -name VHDL_FILE SeguidorLinea_Brazo.vhd
+
+# ============================================================================
+# Archivos Pruebas VHDL
+# ============================================================================
+
+# Brazo
+set_global_assignment -name VHDL_FILE Pruebas/Brazo/SeguidorLinea_BrazoTestBrazo.vhd
+set_global_assignment -name VHDL_FILE Pruebas/Brazo/tb_grab_ctrl.vhd
+set_global_assignment -name VHDL_FILE Pruebas/Brazo/tb_kinematics.vhd
+
+# Lidar
+set_global_assignment -name VHDL_FILE Pruebas/Lidar/LIDAR_Grab_Top.vhd
+set_global_assignment -name VHDL_FILE Pruebas/Lidar/LIDAR_Scan_Top.vhd
+
+# Motores
+set_global_assignment -name VHDL_FILE Pruebas/Motores/TestMotores.vhd
+
+# Seguidor
+set_global_assignment -name VHDL_FILE Pruebas/Seguidor/tb_MaquinaEstados.vhd
+
+# Sensor
+set_global_assignment -name VHDL_FILE Pruebas/Sensor/tb_VL53L0X.vhdd
+
+# ============================================================================
+# Directorio de salida
+# ============================================================================
+
+set_global_assignment -name VHDL_FILE Codigo/Pruebas/Motores/TestMotores.vhd
 set_global_assignment -name VHDL_FILE Codigo/MaquinaEstados.vhd
-set_global_assignment -name VHDL_FILE Codigo/SeguidorLinea_Brazo.vhd
-
-set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
-set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
-set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
-set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
-set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
-
-# Optimización por ÁREA: el pipeline escáner + cinemática (FK/IK) es grande para
-# el EP2C5 (4608 LEs). Priorizar compartir lógica; llevar mult. a DSP y ROM a M4K.
-set_global_assignment -name OPTIMIZATION_TECHNIQUE AREA
-set_global_assignment -name AUTO_RAM_RECOGNITION ON
-set_global_assignment -name AUTO_ROM_RECOGNITION ON
-set_global_assignment -name DSP_BLOCK_BALANCING "DSP BLOCKS"
-set_global_assignment -name AUTO_DSP_RECOGNITION ON
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output
 
 # ============================================================================
-# Asignación de pines (RZ-EasyFPGA A2.2).  EVITAR PIN_120 (dañado).
+# Pines
 # ============================================================================
-# -- Reloj y reset --
-set_location_assignment PIN_17 -to clk
+
+# Clock y reset
+set_location_assignment PIN_17  -to clk
 set_location_assignment PIN_144 -to reset
 
-# -- VL53L0X I2C --
+# VL53L0X
 set_location_assignment PIN_142 -to i2c_scl
 set_location_assignment PIN_136 -to i2c_sda
 
-# -- Servos (5 ejes) --
+# Servos
 set_location_assignment PIN_118 -to servo_phi
 set_location_assignment PIN_122 -to servo_theta1
 set_location_assignment PIN_126 -to servo_theta2
 set_location_assignment PIN_132 -to servo_theta3
 set_location_assignment PIN_134 -to servo_gripper
 
-# -- Motores DC (PWM directo en las 4 entradas del L293). Todos I/O libres banco 1. --
-# motor_a1=IZQ adelante, motor_a2=IZQ reversa, motor_b1=DER adelante, motor_b2=DER reversa.
+# Motores
 set_location_assignment PIN_4  -to motor_a1
-set_location_assignment PIN_8 -to motor_a2
-# motor_b reubicado a PIN_28/PIN_31: PIN_26 no maneja la reversa. Cablear las 2 entradas
-# del lado DER del L293 a los pines 28 (adelante) y 31 (reversa). PIN_24/PIN_26 quedan libres.
+set_location_assignment PIN_8  -to motor_a2
 set_location_assignment PIN_31 -to motor_b1
 set_location_assignment PIN_24 -to motor_b2
 
-# -- LEDs de placa (activo-bajo) --
+# LEDs
 set_location_assignment PIN_3 -to led_1
 set_location_assignment PIN_7 -to led_2
 set_location_assignment PIN_9 -to led_3
 
-# -- Sensores de línea QRD1114 (entradas) --
-# (lados intercambiables si tu cableado físico es al revés)
+# Sensores
 set_location_assignment PIN_92 -to sensor_izq
 set_location_assignment PIN_90 -to sensor_der
 
-
-
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+# Reset
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to reset
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
-set_global_assignment -name TOP_LEVEL_ENTITY SeguidorLinea_Brazo
+set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"
