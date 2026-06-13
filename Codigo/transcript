@@ -1,0 +1,20 @@
+# vsim -do sim_chk/r.do -c tb_MaquinaEstados 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.tb_maquinaestados(sim)
+# Loading work.maquinaestados(rtl)
+# do sim_chk/r.do 
+# ** Note: Fase A OK: motores activos al seguir recto
+#    Time: 3110 ns  Iteration: 0  Instance: /tb_maquinaestados
+# ** Note: Fase B OK: corrección/recuperación sin trabarse
+#    Time: 8110 ns  Iteration: 0  Instance: /tb_maquinaestados
+# ** Note: Fase C OK: zona sin objeto -> start_scan
+#    Time: 10110 ns  Iteration: 0  Instance: /tb_maquinaestados
+# ** Note: Fase D OK: zona con objeto -> trigger_drop
+#    Time: 18110 ns  Iteration: 0  Instance: /tb_maquinaestados
+# ** Note: Fase E OK: (1,1) desde giro NO dispara zona falsa (gate)
+#    Time: 27110 ns  Iteration: 0  Instance: /tb_maquinaestados
+# ** Note: OK: seguidor + orquestación (scan/drop por estado de acarreo) funcionan
+#    Time: 28110 ns  Iteration: 0  Instance: /tb_maquinaestados

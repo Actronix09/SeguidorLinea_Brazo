@@ -1,0 +1,280 @@
+-- ============================================================================
+-- MaquinaEstados - Cerebro de Sísifo (Etapa 2): seguidor de línea + orquestación
+--                  del brazo (buscar/agarrar/depositar) en pista cerrada en loop.
+-- FPGA: Cyclone II EP2C5T144C7 | Sensores: QRD1114 x2 (LM393) | Puente H: L293 | 50 MHz
+-- ----------------------------------------------------------------------------
+-- Control de motores PORTADO de un seguidor que YA funciona ("carrito"):
+--   - Giro por PIVOTE con REVERSA de la rueda interior (no se apaga; se invierte)
+--     => corrección fuerte, no se pasa de la línea.
+--   - Velocidad BAJA y CALIBRADA por rueda (izq != der) para ir derecho de verdad.
+--   - BOOST: la rueda que empuja en el giro va a más duty que en recto.
+--   PWM de 16 bits (periodo 65536 ~763 Hz). tgt con signo: + adelante, - reversa, 0 freno.
+--   Adelante: INx1=PWM, INx2=0.  Reversa: INx1=0, INx2=PWM.  Freno: ambas 0.
+--   Los DUTY_* son la CALIBRACIÓN (constantes abajo): si en recto se va torcido, subir
+--   el lado lento / bajar el rápido; para más velocidad subirlos manteniendo la relación.
+--
+-- Seguidor con SENSORES SEPARADOS (la línea negra pasa ENTRE los 2 QRD;
+--   s_*='1' = ese sensor ve NEGRO = está SOBRE la línea):
+--   - (0,0) ambos en BLANCO  -> centrados (línea entre medio) -> RECTO (duties recto).
+--   - (0,1) DER sobre la línea -> derivó a la IZQUIERDA -> girar DERECHA
+--           (izq adelante BOOST, der en REVERSA).
+--   - (1,0) IZQ sobre la línea -> derivó a la DERECHA -> girar IZQUIERDA
+--           (izq en REVERSA, der adelante BOOST).
+--   - (1,1) ambos sobre NEGRO -> frena; si se sostiene ZONA_CYCLES -> ZONA.
+--   - zona (cuadrado negro) -> se detiene y, según 'has_object': sin objeto dispara el
+--     LIDAR (start_scan); con objeto deposita (trigger_drop). Luego AVANZA (escape) hasta
+--     dejar el cuadro y sigue.
+--
+-- NOTA: el nivel del sensor sobre la línea se fija con LINE_LVL (en este robot='0').
+-- ============================================================================
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity MaquinaEstados is
+    generic (
+        ZONA_CYCLES  : integer := 2_000_000;    -- ambos negro sostenido => zona (40 ms)
+        SALIR_CYCLES : integer := 10_000_000;   -- margen tras DEJAR el cuadro negro (0.2 s)
+        LINE_LVL     : std_logic := '1'         -- nivel del sensor SOBRE la línea
+    );
+    port (
+        clk          : in  std_logic;
+        rst          : in  std_logic;          -- activo alto
+        sensor_izq   : in  std_logic;
+        sensor_der   : in  std_logic;
+        -- motores (PWM directo en las entradas del L293)
+        motor_a1     : out std_logic;          -- motor IZQ adelante
+        motor_a2     : out std_logic;          -- motor IZQ reversa
+        motor_b1     : out std_logic;          -- motor DER adelante
+        motor_b2     : out std_logic;          -- motor DER reversa
+        -- interfaz con el brazo/LIDAR
+        start_scan   : out std_logic;          -- pulso: dispara el barrido
+        trigger_drop : out std_logic;          -- pulso: deposita el objeto
+        scan_active  : in  std_logic;          -- '1' mientras el LIDAR barre
+        arm_ready    : in  std_logic;          -- '1' cuando el brazo está libre/HOLD
+        has_object   : in  std_logic;          -- '1' si lleva el cubo
+        -- LEDs
+        led_estado   : out std_logic;          -- parpadeo 1 Hz
+        led_error    : out std_logic
+    );
+end MaquinaEstados;
+
+architecture rtl of MaquinaEstados is
+
+    -- ===== CALIBRACIÓN (duty sobre 65536, portados del "carrito") =============
+    -- recto: SUBIDOS para Sísifo (el carrito iba ~36% y Sísifo NO arrancaba: solo chillaba).
+    -- izq/der iguales de arranque; si va torcido en recto, sube el lado lento.
+    -- Si chilla y no se mueve -> subir; si va muy rápido / se pasa -> bajar.
+    constant DUTY_IZQ_RECTO  : integer := 46000;   -- ~70 %
+    constant DUTY_DER_RECTO  : integer := 46000;   -- ~70 %
+    -- boost: la rueda que empuja durante el giro (más rápido que recto).
+    constant DUTY_IZQ_BOOST  : integer := 60000;   -- ~92 %
+    constant DUTY_DER_BOOST  : integer := 60000;   -- ~92 %
+    -- escape: al salir de la zona (más lento, controlado).
+    constant DUTY_IZQ_ESCAPE : integer := 40000;   -- ~61 %
+    constant DUTY_DER_ESCAPE : integer := 40000;   -- ~61 %
+    -- ==========================================================================
+
+    -- Habilita la detección de ZONA de entrega/recogida (cuadro negro ancho). 'true' = al
+    -- CONFIRMAR zona (negro-doble sostenido) entra a E_ZONA (brazo/LIDAR). 'false' = solo
+    -- sigue la línea y pasa por encima de los cuadros sin parar (probar seguidor aislado).
+    constant USAR_ZONA : boolean := true;
+
+    -- Sensores registrados (antirrebote 1 ciclo), normalizados a '1' = sobre línea
+    signal s_izq, s_der : std_logic := '0';
+    signal ambos_linea  : std_logic := '0';   -- ambos sobre línea (candidato a zona)
+
+    -- Duty objetivo por rueda CON SIGNO: + adelante, - reversa, 0 freno.
+    signal tgt_l, tgt_r : integer range -65535 to 65535 := 0;
+
+    -- Último giro aplicado: se MANTIENE en negro-doble (curva) para no frenar ni perder
+    -- la curva mientras zona_cnt confirma. Acotado: al confirmar zona se va a E_ZONA.
+    type giro_t is (G_RECTO, G_IZQ, G_DER);
+    signal ultimo_giro : giro_t := G_RECTO;
+
+    -- PWM 16 bits libre (~763 Hz). El duty de cada rueda = |tgt_*| sobre 65536.
+    signal pwm16 : unsigned(15 downto 0) := (others => '0');
+
+    -- Detección de zona / salida
+    signal zona_cnt  : integer range 0 to ZONA_CYCLES := 0;
+    signal salir_cnt : integer range 0 to SALIR_CYCLES := 0;
+
+    -- FSM
+    type est_t is (E_INICIO, E_SEGUIR, E_ZONA, E_SCAN_INI, E_SCAN_FIN,
+                   E_DROP_WAIT, E_SALIR_ZONA);
+    signal est : est_t := E_INICIO;
+
+    signal start_scan_r   : std_logic := '0';
+    signal trigger_drop_r : std_logic := '0';
+
+    -- 1 Hz
+    signal clk_1s : std_logic := '0';
+    signal cnt_1s : integer range 0 to 24_999_999 := 0;
+
+begin
+
+    -- =========================================================================
+    -- Generador 1 Hz (LED de vida)
+    -- =========================================================================
+    p_1hz : process(clk, rst)
+    begin
+        if rst = '1' then
+            cnt_1s <= 0; clk_1s <= '0';
+        elsif rising_edge(clk) then
+            if cnt_1s = 24_999_999 then
+                cnt_1s <= 0; clk_1s <= not clk_1s;
+            else
+                cnt_1s <= cnt_1s + 1;
+            end if;
+        end if;
+    end process;
+
+    -- =========================================================================
+    -- Generador PWM (16 bits, libre). Fija el duty de marcha = |tgt_*| / 65536.
+    -- =========================================================================
+    p_pwm : process(clk, rst)
+    begin
+        if rst = '1' then
+            pwm16 <= (others => '0');
+        elsif rising_edge(clk) then
+            pwm16 <= pwm16 + 1;
+        end if;
+    end process;
+
+    -- tgt > 0: adelante (INx1=PWM); tgt < 0: reversa (INx2=PWM); tgt = 0: freno (ambas 0)
+    motor_a1 <= '1' when (tgt_l > 0 and to_integer(pwm16) <  tgt_l) else '0';
+    motor_a2 <= '1' when (tgt_l < 0 and to_integer(pwm16) < -tgt_l) else '0';
+    motor_b1 <= '1' when (tgt_r > 0 and to_integer(pwm16) <  tgt_r) else '0';
+    motor_b2 <= '1' when (tgt_r < 0 and to_integer(pwm16) < -tgt_r) else '0';
+
+    -- =========================================================================
+    -- FSM principal: seguidor + zonas + orquestación del brazo
+    -- =========================================================================
+    fsm : process(clk, rst)
+    begin
+        if rst = '1' then
+            est <= E_INICIO;
+            tgt_l <= 0; tgt_r <= 0;
+            ultimo_giro <= G_RECTO;
+            s_izq <= '0'; s_der <= '0'; ambos_linea <= '0';
+            zona_cnt <= 0; salir_cnt <= 0;
+            start_scan_r <= '0'; trigger_drop_r <= '0';
+        elsif rising_edge(clk) then
+            -- pulsos por defecto a '0'
+            start_scan_r   <= '0';
+            trigger_drop_r <= '0';
+
+            -- registro/normalización de sensores ('1' = sobre la línea)
+            if sensor_izq = LINE_LVL then s_izq <= '1'; else s_izq <= '0'; end if;
+            if sensor_der = LINE_LVL then s_der <= '1'; else s_der <= '0'; end if;
+            if sensor_izq = LINE_LVL and sensor_der = LINE_LVL then
+                ambos_linea <= '1';
+            else
+                ambos_linea <= '0';
+            end if;
+
+            -- contador de zona (ambos sobre línea sostenido)
+            if ambos_linea = '1' then
+                if zona_cnt < ZONA_CYCLES then zona_cnt <= zona_cnt + 1; end if;
+            else
+                zona_cnt <= 0;
+            end if;
+
+            case est is
+
+                when E_INICIO =>
+                    tgt_l <= 0; tgt_r <= 0;
+                    est <= E_SEGUIR;
+
+                -- ---- Seguir la línea (estilo carrito): pivote con reversa + boost ----
+                -- s_*='1' = ese sensor ve NEGRO (sobre la línea).
+                when E_SEGUIR =>
+                    if USAR_ZONA and zona_cnt >= ZONA_CYCLES then
+                        est <= E_ZONA;
+                    else
+                        if s_izq = '0' and s_der = '0' then        -- ambos fuera -> recto
+                            ultimo_giro <= G_RECTO;
+                            tgt_l <= DUTY_IZQ_RECTO;
+                            tgt_r <= DUTY_DER_RECTO;
+
+                        elsif s_izq = '0' and s_der = '1' then     -- DER sobre línea -> girar DER
+                            ultimo_giro <= G_DER;
+                            tgt_l <=  DUTY_IZQ_BOOST;              -- izq adelante (boost)
+                            tgt_r <= -DUTY_DER_RECTO;              -- der en reversa (pivote)
+
+                        elsif s_izq = '1' and s_der = '0' then     -- IZQ sobre línea -> girar IZQ
+                            ultimo_giro <= G_IZQ;
+                            tgt_l <= -DUTY_IZQ_RECTO;              -- izq en reversa (pivote)
+                            tgt_r <=  DUTY_DER_BOOST;              -- der adelante (boost)
+
+                        else
+                            -- (1,1) ambos negro = curva cerrada O cuadro de zona. NO frenar:
+                            -- mantener el ÚLTIMO giro para seguir la curva mientras zona_cnt
+                            -- confirma. Si el negro-doble se sostiene ZONA_CYCLES -> es zona
+                            -- (arriba se va a E_ZONA); si es solo la curva, un sensor vuelve
+                            -- a blanco antes y se reanuda normal (zona_cnt se reinicia).
+                            case ultimo_giro is
+                                when G_RECTO => tgt_l <=  DUTY_IZQ_RECTO; tgt_r <=  DUTY_DER_RECTO;
+                                when G_IZQ   => tgt_l <= -DUTY_IZQ_RECTO; tgt_r <=  DUTY_DER_BOOST;
+                                when G_DER   => tgt_l <=  DUTY_IZQ_BOOST; tgt_r <= -DUTY_DER_RECTO;
+                            end case;
+                        end if;
+                    end if;
+
+                -- ---- En la zona: detener y decidir según acarreo ----
+                when E_ZONA =>
+                    tgt_l <= 0; tgt_r <= 0;
+                    if has_object = '0' then
+                        start_scan_r <= '1';            -- busca+agarra
+                        est <= E_SCAN_INI;
+                    else
+                        trigger_drop_r <= '1';          -- deposita
+                        est <= E_DROP_WAIT;
+                    end if;
+
+                when E_SCAN_INI =>                       -- espera que arranque el barrido
+                    tgt_l <= 0; tgt_r <= 0;
+                    if scan_active = '1' then
+                        est <= E_SCAN_FIN;
+                    end if;
+
+                when E_SCAN_FIN =>                       -- espera que el brazo termine
+                    tgt_l <= 0; tgt_r <= 0;
+                    if arm_ready = '1' then
+                        salir_cnt <= 0;
+                        est <= E_SALIR_ZONA;
+                    end if;
+
+                when E_DROP_WAIT =>                      -- espera a que suelte el cubo
+                    tgt_l <= 0; tgt_r <= 0;
+                    if has_object = '0' then
+                        salir_cnt <= 0;
+                        est <= E_SALIR_ZONA;
+                    end if;
+
+                -- ---- Salir de la zona: avanza recto (escape) hasta DEJAR el cuadro negro ----
+                -- Una vez fuera del negro (ambos_linea='0') espera un margen y reanuda;
+                -- así no vuelve a disparar la MISMA zona.
+                when E_SALIR_ZONA =>
+                    tgt_l <= DUTY_IZQ_ESCAPE; tgt_r <= DUTY_DER_ESCAPE;
+                    if ambos_linea = '0' then               -- ya salió del cuadro negro
+                        if salir_cnt >= SALIR_CYCLES-1 then
+                            est <= E_SEGUIR;
+                        else
+                            salir_cnt <= salir_cnt + 1;     -- margen tras salir
+                        end if;
+                    else
+                        salir_cnt <= 0;                     -- aún sobre el negro: sigue avanzando
+                    end if;
+
+            end case;
+        end if;
+    end process;
+
+    start_scan   <= start_scan_r;
+    trigger_drop <= trigger_drop_r;
+    led_estado   <= clk_1s;
+    led_error    <= '0';
+
+end rtl;

@@ -24,11 +24,11 @@
 Robot seguidor de línea autónomo con brazo robótico de 4 grados de libertad controlado por FPGA Cyclone IV. Integra sensores QRD1114 para seguimiento de línea, sensor VL6180X para detección de objetos (LIDAR), y control PWM para posicionamiento del brazo.
 
 **Características:**
-- Navegación autónoma por pista de línea negra
-- Detección y localización de objetos con LIDAR
-- Brazo de 4 ejes con control de posición preciso
-- Sistema de adquisición y depósito de objetos
-- Retroalimentación visual mediante LEDs
+- Navegación autónoma por pista de línea negra.
+- Detección y localización de objetos con LIDAR.
+- Brazo de 4 ejes con control de posición preciso.
+- Sistema de adquisición y depósito de objetos.
+- Retroalimentación visual mediante LEDs.
 
 ---
 
@@ -41,11 +41,11 @@ Robot seguidor de línea autónomo con brazo robótico de 4 grados de libertad c
 *Figura 1: Diagrama esquemático del sistema mostrando la interconexión de sensores QRD1114, controlador L293D, reguladores de voltaje y conexiones a la FPGA.*
 
 **Componentes principales:**
-- **Sensores QRD1114:** Detectan la línea negra mediante reflexión infrarroja
-- **LM393:** Comparadores para señal digital de sensores
-- **L293D:** Puente H para control de motores DC
-- **VL6180X:** Sensor de distancia por tiempo de vuelo (ToF)
-- **Reguladores:** LM317 para 5V y 3.3V estables
+- **Sensores QRD1114:** Detectan la línea negra mediante reflexión infrarroja.
+- **LM393:** Comparadores para señal digital de sensores.
+- **L293D:** Puente H para control de motores DC.
+- **VL6180X:** Sensor de distancia por tiempo de vuelo (ToF).
+- **Reguladores:** LM317 para 5V y 3.3V estables.
 
 ### PCB Diseñado
 
@@ -54,11 +54,11 @@ Robot seguidor de línea autónomo con brazo robótico de 4 grados de libertad c
 *Figura 2: Diseño de la PCB mostrando la distribución de componentes y ruteo de pistas. Dimensiones: 100mm x 84mm.*
 
 **Características del PCB:**
-- **Capas:** 2 capas (superior e inferior)
-- **Conectores:** Headers de 2.54mm para fácil conexión
-- **Alimentación:** Jack DC barrel + reguladores lineales
-- **Sensores:** 3 módulos QRD1114 configurables
-- **Motores:** Conectores para 2 motores DC con reductora
+- **Capas:** 2 capas (superior e inferior).
+- **Conectores:** Headers de 2.54mm para fácil conexión.
+- **Alimentación:** Jack DC barrel + reguladores lineales.
+- **Sensores:** 3 módulos QRD1114 configurables.
+- **Motores:** Conectores para 2 motores DC con reductora.
 
 ### Modelo 3D del Robot
 
@@ -70,10 +70,10 @@ Robot seguidor de línea autónomo con brazo robótico de 4 grados de libertad c
 *Figura 3: Modelo 3D del robot con multiples ángulos.*
 
 **Ejes del brazo:**
-- **Eje 1 (φ):** Base rotativa
-- **Eje 2 (θ₁):** Primer segmento
-- **Eje 3 (θ₂):** Segundo segmento 
-- **Eje 4 (θ₃):** Tercer segmento con pinza
+- **Eje 1 (φ):** Base rotativa.
+- **Eje 2 (θ₁):** Primer segmento.
+- **Eje 3 (θ₂):** Segundo segmento.
+- **Eje 4 (θ₃):** Tercer segmento con pinza.
 
 ---
 
@@ -123,19 +123,19 @@ Módulo superior que integra todos los subsistemas.
 **Archivo:** `polarPWM.vhd`
 
 Convierte coordenadas polares a PWM para 4 servomotores.
-- Frecuencia: 50Hz (20ms)
-- Rango: 0.5ms - 2.0ms duty cycle
-- Resolución: 8 bits (0-180°)
-- LUT: 181 valores precalculados
+- Frecuencia: 50Hz (20ms).
+- Rango: 0.5ms - 2.0ms duty cycle.
+- Resolución: 8 bits (0-180°).
+- LUT: 181 valores precalculados.
 
 ### 3. LIDAR
 **Archivo:** `LIDAR.vhd`
 
 Controla el VL6180X mediante I2C para escanear de -45° a +45°.
-- 19 puntos de escaneo
-- Resolución: 5° por paso
-- I2C a 100 kHz
-- Algoritmo: mínimo + promedio ponderado
+- 19 puntos de escaneo.
+- Resolución: 5° por paso.
+- I2C a 100 kHz.
+- Algoritmo: mínimo + promedio ponderado.
 
 **Estados:** IDLE → INIT → STARTING → WAIT_M → READ_M → NEXT_PT → REFINE → CALC → OUTPUT → COMPLETE
 
@@ -185,10 +185,10 @@ flowchart TD
 El módulo `polarPWM` convierte coordenadas polares a señales PWM para los 4 servomotores.
 
 **Especificaciones:**
-- Frecuencia: 50Hz (20ms)
-- Duty cycle: 0.5ms - 2.0ms
-- Resolución: 8 bits (0-180°)
-- LUT: 181 valores precalculados
+- Frecuencia: 50Hz (20ms).
+- Duty cycle: 0.5ms - 2.0ms.
+- Resolución: 8 bits (0-180°).
+- LUT: 181 valores precalculados.
 
 **Fórmula:**
 ```
@@ -247,35 +247,35 @@ donde: PWM_MIN=25000, PWM_MAX=100000
 
 ## Lista de Materiales
 
-- ALTERA FPGA Cyclone II EP2C5T144 Mini placa
-- PCB personalizada
-- Piezas de impresión 3D en PLA y TPU
-- Insertos de latón M2 y M3
-- Tornillos M2, M3 y M4
-- Tuercas M3 y M4
-- Motores reductores
-- Capacitor Electrolítico 16V (470 uF, 100 uF, 1000 uF)
-- Capacitor Cerámico 50V 100nF
-- Jack DC Hembra DC-005-2.1
-- Base Socket DIP-16 y DIP-8
-- LM393P Comparador Diferencial Dual
-- Tira Header Macho y Hembra 2.54mm
-- Plug DC 5.5mm x 2.1mm
-- STPS0560Z Diodo 60V 500mA SMD
-- LD1117AS33TR Regulador 3.3V 1A
-- LD1117S50CTR Regulador 5V 800mA
-- Resistor 470 Ohms 1/4W 1206 SMD
-- Resistor 10K Ohms 1/4W 1206 SMD
-- LED Rojo SMD 1206
-- Potenciómetro de Precisión 3362P 10k
-- Conector XT30 Par Macho Hembra
-- Batería 18650 7.4V 2S1P 2200mAh
-- Conectores Dupont Hembra 2.54mm (3P, 4P, 7P)
-- Servomotor SG90 RC 9g
-- Separador de Latón M3 (5mm, 10mm, 20mm)
-- CY-15A Rueda Loca Universal de Metal
-- VL6180X Sensor de Distancia Óptico
-- Alambre de Cobre 30 AWG
+- ALTERA FPGA Cyclone II EP2C5T144 Mini placa.
+- PCB personalizada.
+- Piezas de impresión 3D en PLA y TPU.
+- Insertos de latón M2 y M3.
+- Tornillos M2, M3 y M4.
+- Tuercas M3 y M4.
+- Motores reductores.
+- Capacitor Electrolítico 16V (470 uF, 100 uF, 1000 uF).
+- Capacitor Cerámico 50V 100nF.
+- Jack DC Hembra DC-005-2.1.
+- Base Socket DIP-16 y DIP-8.
+- LM393P Comparador Diferencial Dual.
+- Tira Header Macho y Hembra 2.54mm.
+- Plug DC 5.5mm x 2.1mm.
+- STPS0560Z Diodo 60V 500mA SMD.
+- LD1117AS33TR Regulador 3.3V 1A.
+- LD1117S50CTR Regulador 5V 800mA.
+- Resistor 470 Ohms 1/4W 1206 SMD.
+- Resistor 10K Ohms 1/4W 1206 SMD.
+- LED Rojo SMD 1206.
+- Potenciómetro de Precisión 3362P 10k.
+- Conector XT30 Par Macho Hembra.
+- Batería 18650 7.4V 2S1P 2200mAh.
+- Conectores Dupont Hembra 2.54mm (3P, 4P, 7P).
+- Servomotor SG90 RC 9g.
+- Separador de Latón M3 (5mm, 10mm, 20mm).
+- CY-15A Rueda Loca Universal de Metal.
+- VL6180X Sensor de Distancia Óptico.
+- Alambre de Cobre 30 AWG.
 
 ---
 
@@ -314,14 +314,11 @@ SeguidorLinea_Brazo/
 
 ## Licencia
 Este proyecto está bajo la [Licencia MIT](LICENSE). Eres libre de:
-- ✅ Usar el proyecto con fines personales o comerciales
-- ✅ Modificar el código, PCB y diseños
-- ✅ Distribuir copias
-- ✅ Vender productos basados en este proyecto
+- Usar el proyecto con fines personales o comerciales.
+- Modificar el código, PCB y diseños.
+- Distribuir copias.
+- Vender productos basados en este proyecto.
 **Único requisito:** Incluir el aviso de licencia original.
-## GitHub
-**Repositorio:** [github.com/Actronix09/SeguidorLinea_Brazo](https://github.com/Actronix09/SeguidorLinea_Brazo)
-**Créditos:** Adrian Damas Garnica (Actronix09) - 2026
 
 ---
 
