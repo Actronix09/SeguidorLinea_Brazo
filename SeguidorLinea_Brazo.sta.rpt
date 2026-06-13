@@ -1,0 +1,1159 @@
+TimeQuest Timing Analyzer report for SeguidorLinea_Brazo
+Sat Jun 13 01:54:20 2026
+Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. TimeQuest Timing Analyzer Summary
+  3. Parallel Compilation
+  4. Clocks
+  5. Slow Model Fmax Summary
+  6. Slow Model Setup Summary
+  7. Slow Model Hold Summary
+  8. Slow Model Recovery Summary
+  9. Slow Model Removal Summary
+ 10. Slow Model Minimum Pulse Width Summary
+ 11. Slow Model Setup: 'clk'
+ 12. Slow Model Hold: 'clk'
+ 13. Slow Model Minimum Pulse Width: 'clk'
+ 14. Setup Times
+ 15. Hold Times
+ 16. Clock to Output Times
+ 17. Minimum Clock to Output Times
+ 18. Fast Model Setup Summary
+ 19. Fast Model Hold Summary
+ 20. Fast Model Recovery Summary
+ 21. Fast Model Removal Summary
+ 22. Fast Model Minimum Pulse Width Summary
+ 23. Fast Model Setup: 'clk'
+ 24. Fast Model Hold: 'clk'
+ 25. Fast Model Minimum Pulse Width: 'clk'
+ 26. Setup Times
+ 27. Hold Times
+ 28. Clock to Output Times
+ 29. Minimum Clock to Output Times
+ 30. Multicorner Timing Analysis Summary
+ 31. Setup Times
+ 32. Hold Times
+ 33. Clock to Output Times
+ 34. Minimum Clock to Output Times
+ 35. Setup Transfers
+ 36. Hold Transfers
+ 37. Report TCCS
+ 38. Report RSKM
+ 39. Unconstrained Paths
+ 40. TimeQuest Timing Analyzer Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 1991-2013 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+
+
+
++----------------------------------------------------------------------------------------+
+; TimeQuest Timing Analyzer Summary                                                      ;
++--------------------+-------------------------------------------------------------------+
+; Quartus II Version ; Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition ;
+; Revision Name      ; SeguidorLinea_Brazo                                               ;
+; Device Family      ; Cyclone II                                                        ;
+; Device Name        ; EP2C5T144C7                                                       ;
+; Timing Models      ; Final                                                             ;
+; Delay Model        ; Combined                                                          ;
+; Rise/Fall Delays   ; Unavailable                                                       ;
++--------------------+-------------------------------------------------------------------+
+
+
+Parallel compilation was disabled, but you have multiple processors available. Enable parallel compilation to reduce compilation time.
++-------------------------------------+
+; Parallel Compilation                ;
++----------------------------+--------+
+; Processors                 ; Number ;
++----------------------------+--------+
+; Number detected on machine ; 12     ;
+; Maximum allowed            ; 1      ;
++----------------------------+--------+
+
+
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Clocks                                                                                                                                                                          ;
++------------+------+--------+------------+-------+-------+------------+-----------+-------------+-------+--------+-----------+------------+----------+--------+--------+---------+
+; Clock Name ; Type ; Period ; Frequency  ; Rise  ; Fall  ; Duty Cycle ; Divide by ; Multiply by ; Phase ; Offset ; Edge List ; Edge Shift ; Inverted ; Master ; Source ; Targets ;
++------------+------+--------+------------+-------+-------+------------+-----------+-------------+-------+--------+-----------+------------+----------+--------+--------+---------+
+; clk        ; Base ; 1.000  ; 1000.0 MHz ; 0.000 ; 0.500 ;            ;           ;             ;       ;        ;           ;            ;          ;        ;        ; { clk } ;
++------------+------+--------+------------+-------+-------+------------+-----------+-------------+-------+--------+-----------+------------+----------+--------+--------+---------+
+
+
++-------------------------------------------------+
+; Slow Model Fmax Summary                         ;
++-----------+-----------------+------------+------+
+; Fmax      ; Restricted Fmax ; Clock Name ; Note ;
++-----------+-----------------+------------+------+
+; 52.52 MHz ; 52.52 MHz       ; clk        ;      ;
++-----------+-----------------+------------+------+
+This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
+
+
++---------------------------------+
+; Slow Model Setup Summary        ;
++-------+---------+---------------+
+; Clock ; Slack   ; End Point TNS ;
++-------+---------+---------------+
+; clk   ; -18.040 ; -6314.016     ;
++-------+---------+---------------+
+
+
++-------------------------------+
+; Slow Model Hold Summary       ;
++-------+-------+---------------+
+; Clock ; Slack ; End Point TNS ;
++-------+-------+---------------+
+; clk   ; 0.445 ; 0.000         ;
++-------+-------+---------------+
+
+
+-------------------------------
+; Slow Model Recovery Summary ;
+-------------------------------
+No paths to report.
+
+
+------------------------------
+; Slow Model Removal Summary ;
+------------------------------
+No paths to report.
+
+
++----------------------------------------+
+; Slow Model Minimum Pulse Width Summary ;
++-------+--------+-----------------------+
+; Clock ; Slack  ; End Point TNS         ;
++-------+--------+-----------------------+
+; clk   ; -1.814 ; -1403.741             ;
++-------+--------+-----------------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Slow Model Setup: 'clk'                                                                                                                                                                                                                                ;
++---------+------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack   ; From Node                                                                                                              ; To Node                                       ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++---------+------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------+--------------+-------------+--------------+------------+------------+
+; -18.040 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|yi[22]      ; clk          ; clk         ; 1.000        ; -0.086     ; 18.992     ;
+; -18.040 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|yi[22]      ; clk          ; clk         ; 1.000        ; -0.086     ; 18.992     ;
+; -18.040 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|yi[22]      ; clk          ; clk         ; 1.000        ; -0.086     ; 18.992     ;
+; -18.040 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|yi[22]      ; clk          ; clk         ; 1.000        ; -0.086     ; 18.992     ;
+; -18.040 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|yi[22]      ; clk          ; clk         ; 1.000        ; -0.086     ; 18.992     ;
+; -18.040 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|yi[22]      ; clk          ; clk         ; 1.000        ; -0.086     ; 18.992     ;
+; -18.040 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|yi[22]      ; clk          ; clk         ; 1.000        ; -0.086     ; 18.992     ;
+; -18.040 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|yi[22]      ; clk          ; clk         ; 1.000        ; -0.086     ; 18.992     ;
+; -17.887 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|yi[23]      ; clk          ; clk         ; 1.000        ; -0.086     ; 18.839     ;
+; -17.887 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|yi[23]      ; clk          ; clk         ; 1.000        ; -0.086     ; 18.839     ;
+; -17.887 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|yi[23]      ; clk          ; clk         ; 1.000        ; -0.086     ; 18.839     ;
+; -17.887 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|yi[23]      ; clk          ; clk         ; 1.000        ; -0.086     ; 18.839     ;
+; -17.887 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|yi[23]      ; clk          ; clk         ; 1.000        ; -0.086     ; 18.839     ;
+; -17.887 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|yi[23]      ; clk          ; clk         ; 1.000        ; -0.086     ; 18.839     ;
+; -17.887 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|yi[23]      ; clk          ; clk         ; 1.000        ; -0.086     ; 18.839     ;
+; -17.887 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|yi[23]      ; clk          ; clk         ; 1.000        ; -0.086     ; 18.839     ;
+; -17.885 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.988     ;
+; -17.885 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.988     ;
+; -17.885 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.988     ;
+; -17.885 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.988     ;
+; -17.885 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.988     ;
+; -17.885 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.988     ;
+; -17.885 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.988     ;
+; -17.885 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.988     ;
+; -17.859 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.962     ;
+; -17.859 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.962     ;
+; -17.859 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.962     ;
+; -17.859 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.962     ;
+; -17.859 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.962     ;
+; -17.859 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.962     ;
+; -17.859 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.962     ;
+; -17.859 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.962     ;
+; -17.680 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.783     ;
+; -17.680 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.783     ;
+; -17.680 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.783     ;
+; -17.680 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.783     ;
+; -17.680 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.783     ;
+; -17.680 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.783     ;
+; -17.680 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.783     ;
+; -17.680 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.783     ;
+; -17.573 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[4]   ; clk          ; clk         ; 1.000        ; -0.003     ; 18.608     ;
+; -17.573 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[5]   ; clk          ; clk         ; 1.000        ; -0.003     ; 18.608     ;
+; -17.572 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[2]   ; clk          ; clk         ; 1.000        ; -0.003     ; 18.607     ;
+; -17.546 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[0]   ; clk          ; clk         ; 1.000        ; -0.003     ; 18.581     ;
+; -17.546 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[1]   ; clk          ; clk         ; 1.000        ; -0.003     ; 18.581     ;
+; -17.546 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[7]   ; clk          ; clk         ; 1.000        ; -0.003     ; 18.581     ;
+; -17.544 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[6]   ; clk          ; clk         ; 1.000        ; -0.003     ; 18.579     ;
+; -17.542 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[3]   ; clk          ; clk         ; 1.000        ; -0.003     ; 18.577     ;
+; -17.485 ; grab_ctrl:u_grab|kinematics:u_kin|acosrom_q[0]                                                                         ; grab_ctrl:u_grab|kinematics:u_kin|trig_idx[5] ; clk          ; clk         ; 1.000        ; -0.001     ; 18.522     ;
+; -17.452 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[4]   ; clk          ; clk         ; 1.000        ; -0.003     ; 18.487     ;
+; -17.452 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[5]   ; clk          ; clk         ; 1.000        ; -0.003     ; 18.487     ;
+; -17.451 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[2]   ; clk          ; clk         ; 1.000        ; -0.003     ; 18.486     ;
+; -17.425 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[0]   ; clk          ; clk         ; 1.000        ; -0.003     ; 18.460     ;
+; -17.425 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[1]   ; clk          ; clk         ; 1.000        ; -0.003     ; 18.460     ;
+; -17.425 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[7]   ; clk          ; clk         ; 1.000        ; -0.003     ; 18.460     ;
+; -17.423 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[6]   ; clk          ; clk         ; 1.000        ; -0.003     ; 18.458     ;
+; -17.421 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[3]   ; clk          ; clk         ; 1.000        ; -0.003     ; 18.456     ;
+; -17.401 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.504     ;
+; -17.401 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.504     ;
+; -17.401 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.504     ;
+; -17.401 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.504     ;
+; -17.401 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.504     ;
+; -17.401 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.504     ;
+; -17.401 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.504     ;
+; -17.401 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.504     ;
+; -17.397 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.500     ;
+; -17.397 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.500     ;
+; -17.397 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.500     ;
+; -17.397 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.500     ;
+; -17.397 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.500     ;
+; -17.397 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.500     ;
+; -17.397 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.500     ;
+; -17.397 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.500     ;
+; -17.346 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|yi[21]      ; clk          ; clk         ; 1.000        ; -0.075     ; 18.309     ;
+; -17.346 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|yi[21]      ; clk          ; clk         ; 1.000        ; -0.075     ; 18.309     ;
+; -17.346 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|yi[21]      ; clk          ; clk         ; 1.000        ; -0.075     ; 18.309     ;
+; -17.346 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|yi[21]      ; clk          ; clk         ; 1.000        ; -0.075     ; 18.309     ;
+; -17.346 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|yi[21]      ; clk          ; clk         ; 1.000        ; -0.075     ; 18.309     ;
+; -17.346 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|yi[21]      ; clk          ; clk         ; 1.000        ; -0.075     ; 18.309     ;
+; -17.346 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|yi[21]      ; clk          ; clk         ; 1.000        ; -0.075     ; 18.309     ;
+; -17.346 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|yi[21]      ; clk          ; clk         ; 1.000        ; -0.075     ; 18.309     ;
+; -17.334 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.437     ;
+; -17.334 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.437     ;
+; -17.334 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.437     ;
+; -17.334 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.437     ;
+; -17.334 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.437     ;
+; -17.334 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.437     ;
+; -17.334 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.437     ;
+; -17.334 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]      ; clk          ; clk         ; 1.000        ; 0.157      ; 18.437     ;
+; -17.318 ; grab_ctrl:u_grab|kinematics:u_kin|zi[12]                                                                               ; grab_ctrl:u_grab|kinematics:u_kin|trig_idx[5] ; clk          ; clk         ; 1.000        ; -0.002     ; 18.354     ;
+; -17.288 ; grab_ctrl:u_grab|kinematics:u_kin|acosrom_q[0]                                                                         ; grab_ctrl:u_grab|kinematics:u_kin|trig_idx[7] ; clk          ; clk         ; 1.000        ; -0.013     ; 18.313     ;
+; -17.281 ; grab_ctrl:u_grab|kinematics:u_kin|zi[13]                                                                               ; grab_ctrl:u_grab|kinematics:u_kin|trig_idx[5] ; clk          ; clk         ; 1.000        ; 0.013      ; 18.332     ;
+; -17.279 ; grab_ctrl:u_grab|kinematics:u_kin|zi[14]                                                                               ; grab_ctrl:u_grab|kinematics:u_kin|trig_idx[5] ; clk          ; clk         ; 1.000        ; 0.013      ; 18.330     ;
+; -17.273 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|yi[20]      ; clk          ; clk         ; 1.000        ; -0.074     ; 18.237     ;
+; -17.273 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|yi[20]      ; clk          ; clk         ; 1.000        ; -0.074     ; 18.237     ;
+; -17.273 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|yi[20]      ; clk          ; clk         ; 1.000        ; -0.074     ; 18.237     ;
+; -17.273 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|yi[20]      ; clk          ; clk         ; 1.000        ; -0.074     ; 18.237     ;
+; -17.273 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|yi[20]      ; clk          ; clk         ; 1.000        ; -0.074     ; 18.237     ;
+; -17.273 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|yi[20]      ; clk          ; clk         ; 1.000        ; -0.074     ; 18.237     ;
+; -17.273 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|yi[20]      ; clk          ; clk         ; 1.000        ; -0.074     ; 18.237     ;
++---------+------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Slow Model Hold: 'clk'                                                                                                                                                                              ;
++-------+-----------------------------------------------------------+-----------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack ; From Node                                                 ; To Node                                                   ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++-------+-----------------------------------------------------------+-----------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; 0.445 ; MaquinaEstados:u_me|s_izq                                 ; MaquinaEstados:u_me|s_izq                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; MaquinaEstados:u_me|s_der                                 ; MaquinaEstados:u_me|s_der                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_state.T_WAIT          ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_state.T_WAIT          ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_step[1]               ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_step[1]               ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_step[2]               ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_step[2]               ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_POLL_W    ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_POLL_W    ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|pwr_cnt[0]                ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|pwr_cnt[0]                ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_PWRUP         ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_PWRUP         ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|rom_sel                   ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|rom_sel                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_kind[0]               ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_kind[0]               ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_st.ES_START             ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_st.ES_START             ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_phase[0]                ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_phase[0]                ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[1]                  ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[1]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[0]                  ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[0]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[2]                  ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[2]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[3]                  ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[3]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_BEGIN_W   ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_BEGIN_W   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_RANGE_WAIT    ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_RANGE_WAIT    ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[6]              ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[6]              ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_reg[2]                ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_reg[2]                ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[0]              ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[0]              ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[1]              ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[1]              ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_reg[1]                ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_reg[1]                ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_reg[3]                ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_reg[3]                ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|eng_rd_ack                ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|eng_rd_ack                ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|eng_ack_in                ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|eng_ack_in                ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_nack                  ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_nack                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_POLL_WAIT     ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_POLL_WAIT     ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_GO_W      ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_GO_W      ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_kind[1]               ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_kind[1]               ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_step[0]               ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_step[0]               ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_CLR_W     ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_CLR_W     ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_STOP_W    ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_STOP_W    ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|cal_phase                 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|cal_phase                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_RESTORE_W ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_RESTORE_W ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_RMW_WAIT      ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_RMW_WAIT      ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_TUNE_WAIT     ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_TUNE_WAIT     ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_WAIT          ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_WAIT          ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_phase[1]                ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_phase[1]                ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_st.ES_FIN               ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_st.ES_FIN               ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CLEAR_WAIT    ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CLEAR_WAIT    ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|tick_r                    ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|tick_r                    ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|tick_prev                                   ; LIDAR:u_lidar|tick_prev                                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|discard1                                    ; LIDAR:u_lidar|discard1                                    ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|best_phi[0]                                 ; LIDAR:u_lidar|best_phi[0]                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|best_phi[3]                                 ; LIDAR:u_lidar|best_phi[3]                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|best_phi[4]                                 ; LIDAR:u_lidar|best_phi[4]                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|best_phi[5]                                 ; LIDAR:u_lidar|best_phi[5]                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|best_phi[7]                                 ; LIDAR:u_lidar|best_phi[7]                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|best_phi[6]                                 ; LIDAR:u_lidar|best_phi[6]                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|best_phi[2]                                 ; LIDAR:u_lidar|best_phi[2]                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|best_phi[1]                                 ; LIDAR:u_lidar|best_phi[1]                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|settle_cnt[22]                              ; LIDAR:u_lidar|settle_cnt[22]                              ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|settle_cnt[23]                              ; LIDAR:u_lidar|settle_cnt[23]                              ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|best_t1[0]                                  ; LIDAR:u_lidar|best_t1[0]                                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|best_t1[1]                                  ; LIDAR:u_lidar|best_t1[1]                                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|best_t1[7]                                  ; LIDAR:u_lidar|best_t1[7]                                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|best_t1[6]                                  ; LIDAR:u_lidar|best_t1[6]                                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|best_t1[5]                                  ; LIDAR:u_lidar|best_t1[5]                                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|best_t1[4]                                  ; LIDAR:u_lidar|best_t1[4]                                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|best_t1[3]                                  ; LIDAR:u_lidar|best_t1[3]                                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|best_t1[2]                                  ; LIDAR:u_lidar|best_t1[2]                                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|t1_dir[1]                                   ; LIDAR:u_lidar|t1_dir[1]                                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|fine_ph                                     ; LIDAR:u_lidar|fine_ph                                     ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; LIDAR:u_lidar|scan_done_r                                 ; LIDAR:u_lidar|scan_done_r                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_ACOS_SET   ; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_ACOS_SET   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_FK_POST    ; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_FK_POST    ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|st.S_CORDIC             ; grab_ctrl:u_grab|kinematics:u_kin|st.S_CORDIC             ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|it[0]                   ; grab_ctrl:u_grab|kinematics:u_kin|it[0]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|it[1]                   ; grab_ctrl:u_grab|kinematics:u_kin|it[1]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|it[2]                   ; grab_ctrl:u_grab|kinematics:u_kin|it[2]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|it[3]                   ; grab_ctrl:u_grab|kinematics:u_kin|it[3]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_IDLE       ; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_IDLE       ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_POST2      ; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_POST2      ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|st.S_IDLE               ; grab_ctrl:u_grab|kinematics:u_kin|st.S_IDLE               ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                   ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                   ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[6]                   ; grab_ctrl:u_grab|kinematics:u_kin|zi[6]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[7]                   ; grab_ctrl:u_grab|kinematics:u_kin|zi[7]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[8]                   ; grab_ctrl:u_grab|kinematics:u_kin|zi[8]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[9]                   ; grab_ctrl:u_grab|kinematics:u_kin|zi[9]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[10]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[10]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[13]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[13]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[14]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[14]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[15]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[15]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[16]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[16]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[17]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[17]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[18]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[18]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[19]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[19]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[20]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[20]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[21]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[21]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[22]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[22]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|zi[23]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[23]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|yi[0]                   ; grab_ctrl:u_grab|kinematics:u_kin|yi[0]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|xi[0]                   ; grab_ctrl:u_grab|kinematics:u_kin|xi[0]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|yi[3]                   ; grab_ctrl:u_grab|kinematics:u_kin|yi[3]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|xi[2]                   ; grab_ctrl:u_grab|kinematics:u_kin|xi[2]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|yi[2]                   ; grab_ctrl:u_grab|kinematics:u_kin|yi[2]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|xi[1]                   ; grab_ctrl:u_grab|kinematics:u_kin|xi[1]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
+; 0.445 ; grab_ctrl:u_grab|kinematics:u_kin|xi[3]                   ; grab_ctrl:u_grab|kinematics:u_kin|xi[3]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.731      ;
++-------+-----------------------------------------------------------+-----------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Slow Model Minimum Pulse Width: 'clk'                                                                                                                                                                   ;
++--------+--------------+----------------+------------------+-------+------------+------------------------------------------------------------------------------------------------------------------------+
+; Slack  ; Actual Width ; Required Width ; Type             ; Clock ; Clock Edge ; Target                                                                                                                 ;
++--------+--------------+----------------+------------------+-------+------------+------------------------------------------------------------------------------------------------------------------------+
+; -1.814 ; 0.500        ; 2.314          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ;
+; -1.814 ; 0.500        ; 2.314          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ;
+; -1.814 ; 0.500        ; 2.314          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ;
+; -1.814 ; 0.500        ; 2.314          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ;
+; -1.814 ; 0.500        ; 2.314          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ;
+; -1.814 ; 0.500        ; 2.314          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ;
+; -1.814 ; 0.500        ; 2.314          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ;
+; -1.814 ; 0.500        ; 2.314          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ;
+; -1.814 ; 0.500        ; 2.314          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ;
+; -1.814 ; 0.500        ; 2.314          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ;
+; -1.814 ; 0.500        ; 2.314          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ;
+; -1.814 ; 0.500        ; 2.314          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ;
+; -1.814 ; 0.500        ; 2.314          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ;
+; -1.814 ; 0.500        ; 2.314          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ;
+; -1.814 ; 0.500        ; 2.314          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ;
+; -1.814 ; 0.500        ; 2.314          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[0]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[0]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[0]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[0]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[10]                                                                             ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[10]                                                                             ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[10]~_Duplicate_1                                                                ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[10]~_Duplicate_1                                                                ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[11]                                                                             ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[11]                                                                             ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[11]~_Duplicate_1                                                                ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[11]~_Duplicate_1                                                                ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[12]                                                                             ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[12]                                                                             ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[12]~_Duplicate_1                                                                ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[12]~_Duplicate_1                                                                ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[1]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[1]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[1]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[1]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[2]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[2]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[2]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[2]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[3]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[3]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[3]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[3]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[4]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[4]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[4]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[4]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[5]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[5]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[5]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[5]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[6]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[6]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[6]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[6]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[7]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[7]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[7]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[7]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[8]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[8]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[8]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[8]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[9]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[9]                                                                              ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[9]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[9]~_Duplicate_1                                                                 ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]                                                                               ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]                                                                               ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]                                                                               ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]                                                                               ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]                                                                               ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]                                                                               ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]                                                                               ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]                                                                               ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]                                                                               ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]                                                                               ;
+; -1.807 ; 0.500        ; 2.307          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]                                                                               ;
+; -1.807 ; 0.500        ; 2.307          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]                                                                               ;
+; -1.631 ; 1.000        ; 2.631          ; Port Rate        ; clk   ; Rise       ; clk                                                                                                                    ;
+; -0.611 ; 0.500        ; 1.111          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_AFTER_INIT                                                                 ;
+; -0.611 ; 0.500        ; 1.111          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_AFTER_INIT                                                                 ;
+; -0.611 ; 0.500        ; 1.111          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_BEGIN                                                                  ;
+; -0.611 ; 0.500        ; 1.111          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_BEGIN                                                                  ;
+; -0.611 ; 0.500        ; 1.111          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_BEGIN_W                                                                ;
+; -0.611 ; 0.500        ; 1.111          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_BEGIN_W                                                                ;
+; -0.611 ; 0.500        ; 1.111          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_CLR                                                                    ;
+; -0.611 ; 0.500        ; 1.111          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_CLR                                                                    ;
+; -0.611 ; 0.500        ; 1.111          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_CLR_W                                                                  ;
+; -0.611 ; 0.500        ; 1.111          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_CLR_W                                                                  ;
+; -0.611 ; 0.500        ; 1.111          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_GO                                                                     ;
+; -0.611 ; 0.500        ; 1.111          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_GO                                                                     ;
+; -0.611 ; 0.500        ; 1.111          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_GO_W                                                                   ;
+; -0.611 ; 0.500        ; 1.111          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_GO_W                                                                   ;
+; -0.611 ; 0.500        ; 1.111          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_POLL                                                                   ;
+; -0.611 ; 0.500        ; 1.111          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_POLL                                                                   ;
+; -0.611 ; 0.500        ; 1.111          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_POLL_W                                                                 ;
+; -0.611 ; 0.500        ; 1.111          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_POLL_W                                                                 ;
+; -0.611 ; 0.500        ; 1.111          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_RESTORE                                                                ;
++--------+--------------+----------------+------------------+-------+------------+------------------------------------------------------------------------------------------------------------------------+
+
+
++------------------------------------------------------------------------+
+; Setup Times                                                            ;
++------------+------------+-------+-------+------------+-----------------+
+; Data Port  ; Clock Port ; Rise  ; Fall  ; Clock Edge ; Clock Reference ;
++------------+------------+-------+-------+------------+-----------------+
+; i2c_sda    ; clk        ; 4.464 ; 4.464 ; Rise       ; clk             ;
+; reset      ; clk        ; 3.268 ; 3.268 ; Rise       ; clk             ;
+; sensor_der ; clk        ; 5.579 ; 5.579 ; Rise       ; clk             ;
+; sensor_izq ; clk        ; 5.259 ; 5.259 ; Rise       ; clk             ;
++------------+------------+-------+-------+------------+-----------------+
+
+
++--------------------------------------------------------------------------+
+; Hold Times                                                               ;
++------------+------------+--------+--------+------------+-----------------+
+; Data Port  ; Clock Port ; Rise   ; Fall   ; Clock Edge ; Clock Reference ;
++------------+------------+--------+--------+------------+-----------------+
+; i2c_sda    ; clk        ; -3.473 ; -3.473 ; Rise       ; clk             ;
+; reset      ; clk        ; 0.148  ; 0.148  ; Rise       ; clk             ;
+; sensor_der ; clk        ; -3.918 ; -3.918 ; Rise       ; clk             ;
+; sensor_izq ; clk        ; -3.593 ; -3.593 ; Rise       ; clk             ;
++------------+------------+--------+--------+------------+-----------------+
+
+
++-----------------------------------------------------------------------------+
+; Clock to Output Times                                                       ;
++---------------+------------+--------+--------+------------+-----------------+
+; Data Port     ; Clock Port ; Rise   ; Fall   ; Clock Edge ; Clock Reference ;
++---------------+------------+--------+--------+------------+-----------------+
+; i2c_scl       ; clk        ; 6.251  ; 6.251  ; Rise       ; clk             ;
+; i2c_sda       ; clk        ; 6.212  ; 6.212  ; Rise       ; clk             ;
+; led_1         ; clk        ; 6.560  ; 6.560  ; Rise       ; clk             ;
+; led_2         ; clk        ; 7.140  ; 7.140  ; Rise       ; clk             ;
+; led_3         ; clk        ; 6.690  ; 6.690  ; Rise       ; clk             ;
+; motor_a1      ; clk        ; 17.984 ; 17.984 ; Rise       ; clk             ;
+; motor_a2      ; clk        ; 12.110 ; 12.110 ; Rise       ; clk             ;
+; motor_b1      ; clk        ; 20.100 ; 20.100 ; Rise       ; clk             ;
+; motor_b2      ; clk        ; 12.459 ; 12.459 ; Rise       ; clk             ;
+; servo_gripper ; clk        ; 6.609  ; 6.609  ; Rise       ; clk             ;
+; servo_phi     ; clk        ; 6.606  ; 6.606  ; Rise       ; clk             ;
+; servo_theta1  ; clk        ; 6.889  ; 6.889  ; Rise       ; clk             ;
+; servo_theta2  ; clk        ; 6.604  ; 6.604  ; Rise       ; clk             ;
+; servo_theta3  ; clk        ; 6.906  ; 6.906  ; Rise       ; clk             ;
++---------------+------------+--------+--------+------------+-----------------+
+
+
++---------------------------------------------------------------------------+
+; Minimum Clock to Output Times                                             ;
++---------------+------------+-------+-------+------------+-----------------+
+; Data Port     ; Clock Port ; Rise  ; Fall  ; Clock Edge ; Clock Reference ;
++---------------+------------+-------+-------+------------+-----------------+
+; i2c_scl       ; clk        ; 6.251 ; 6.251 ; Rise       ; clk             ;
+; i2c_sda       ; clk        ; 6.212 ; 6.212 ; Rise       ; clk             ;
+; led_1         ; clk        ; 6.560 ; 6.560 ; Rise       ; clk             ;
+; led_2         ; clk        ; 7.140 ; 7.140 ; Rise       ; clk             ;
+; led_3         ; clk        ; 6.690 ; 6.690 ; Rise       ; clk             ;
+; motor_a1      ; clk        ; 7.472 ; 7.472 ; Rise       ; clk             ;
+; motor_a2      ; clk        ; 7.965 ; 7.965 ; Rise       ; clk             ;
+; motor_b1      ; clk        ; 7.113 ; 7.113 ; Rise       ; clk             ;
+; motor_b2      ; clk        ; 7.968 ; 7.968 ; Rise       ; clk             ;
+; servo_gripper ; clk        ; 6.609 ; 6.609 ; Rise       ; clk             ;
+; servo_phi     ; clk        ; 6.606 ; 6.606 ; Rise       ; clk             ;
+; servo_theta1  ; clk        ; 6.889 ; 6.889 ; Rise       ; clk             ;
+; servo_theta2  ; clk        ; 6.604 ; 6.604 ; Rise       ; clk             ;
+; servo_theta3  ; clk        ; 6.906 ; 6.906 ; Rise       ; clk             ;
++---------------+------------+-------+-------+------------+-----------------+
+
+
++--------------------------------+
+; Fast Model Setup Summary       ;
++-------+--------+---------------+
+; Clock ; Slack  ; End Point TNS ;
++-------+--------+---------------+
+; clk   ; -6.198 ; -1751.412     ;
++-------+--------+---------------+
+
+
++-------------------------------+
+; Fast Model Hold Summary       ;
++-------+-------+---------------+
+; Clock ; Slack ; End Point TNS ;
++-------+-------+---------------+
+; clk   ; 0.215 ; 0.000         ;
++-------+-------+---------------+
+
+
+-------------------------------
+; Fast Model Recovery Summary ;
+-------------------------------
+No paths to report.
+
+
+------------------------------
+; Fast Model Removal Summary ;
+------------------------------
+No paths to report.
+
+
++----------------------------------------+
+; Fast Model Minimum Pulse Width Summary ;
++-------+--------+-----------------------+
+; Clock ; Slack  ; End Point TNS         ;
++-------+--------+-----------------------+
+; clk   ; -1.519 ; -1150.364             ;
++-------+--------+-----------------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Fast Model Setup: 'clk'                                                                                                                                                                                                                               ;
++--------+------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack  ; From Node                                                                                                              ; To Node                                       ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++--------+------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------+--------------+-------------+--------------+------------+------------+
+; -6.198 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.181      ;
+; -6.198 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.181      ;
+; -6.198 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.181      ;
+; -6.198 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.181      ;
+; -6.198 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.181      ;
+; -6.198 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.181      ;
+; -6.198 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.181      ;
+; -6.198 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.181      ;
+; -6.127 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.110      ;
+; -6.127 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.110      ;
+; -6.127 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.110      ;
+; -6.127 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.110      ;
+; -6.127 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.110      ;
+; -6.127 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.110      ;
+; -6.127 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.110      ;
+; -6.127 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.110      ;
+; -6.103 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.086      ;
+; -6.103 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.086      ;
+; -6.103 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.086      ;
+; -6.103 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.086      ;
+; -6.103 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.086      ;
+; -6.103 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.086      ;
+; -6.103 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.086      ;
+; -6.103 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.086      ;
+; -6.086 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.069      ;
+; -6.086 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.069      ;
+; -6.086 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.069      ;
+; -6.086 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.069      ;
+; -6.086 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.069      ;
+; -6.086 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.069      ;
+; -6.086 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.069      ;
+; -6.086 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.069      ;
+; -6.031 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.014      ;
+; -6.031 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.014      ;
+; -6.031 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.014      ;
+; -6.031 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.014      ;
+; -6.031 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.014      ;
+; -6.031 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.014      ;
+; -6.031 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.014      ;
+; -6.031 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.014      ;
+; -6.027 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.010      ;
+; -6.027 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.010      ;
+; -6.027 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.010      ;
+; -6.027 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.010      ;
+; -6.027 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.010      ;
+; -6.027 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.010      ;
+; -6.027 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.010      ;
+; -6.027 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]      ; clk          ; clk         ; 1.000        ; 0.008      ; 7.010      ;
+; -5.996 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[0]   ; clk          ; clk         ; 1.000        ; -0.004     ; 7.024      ;
+; -5.996 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[1]   ; clk          ; clk         ; 1.000        ; -0.004     ; 7.024      ;
+; -5.996 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[7]   ; clk          ; clk         ; 1.000        ; -0.004     ; 7.024      ;
+; -5.994 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[6]   ; clk          ; clk         ; 1.000        ; -0.004     ; 7.022      ;
+; -5.993 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[3]   ; clk          ; clk         ; 1.000        ; -0.004     ; 7.021      ;
+; -5.978 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[4]   ; clk          ; clk         ; 1.000        ; -0.004     ; 7.006      ;
+; -5.978 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[5]   ; clk          ; clk         ; 1.000        ; -0.004     ; 7.006      ;
+; -5.977 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[2]   ; clk          ; clk         ; 1.000        ; -0.004     ; 7.005      ;
+; -5.947 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[0]   ; clk          ; clk         ; 1.000        ; -0.004     ; 6.975      ;
+; -5.947 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[1]   ; clk          ; clk         ; 1.000        ; -0.004     ; 6.975      ;
+; -5.947 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[7]   ; clk          ; clk         ; 1.000        ; -0.004     ; 6.975      ;
+; -5.945 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[6]   ; clk          ; clk         ; 1.000        ; -0.004     ; 6.973      ;
+; -5.944 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[3]   ; clk          ; clk         ; 1.000        ; -0.004     ; 6.972      ;
+; -5.929 ; grab_ctrl:u_grab|kinematics:u_kin|acosrom_q[0]                                                                         ; grab_ctrl:u_grab|kinematics:u_kin|trig_idx[5] ; clk          ; clk         ; 1.000        ; -0.003     ; 6.958      ;
+; -5.929 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[4]   ; clk          ; clk         ; 1.000        ; -0.004     ; 6.957      ;
+; -5.929 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[5]   ; clk          ; clk         ; 1.000        ; -0.004     ; 6.957      ;
+; -5.928 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[2]   ; clk          ; clk         ; 1.000        ; -0.004     ; 6.956      ;
+; -5.892 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|yi[22]      ; clk          ; clk         ; 1.000        ; -0.067     ; 6.857      ;
+; -5.892 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|yi[22]      ; clk          ; clk         ; 1.000        ; -0.067     ; 6.857      ;
+; -5.892 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|yi[22]      ; clk          ; clk         ; 1.000        ; -0.067     ; 6.857      ;
+; -5.892 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|yi[22]      ; clk          ; clk         ; 1.000        ; -0.067     ; 6.857      ;
+; -5.892 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|yi[22]      ; clk          ; clk         ; 1.000        ; -0.067     ; 6.857      ;
+; -5.892 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|yi[22]      ; clk          ; clk         ; 1.000        ; -0.067     ; 6.857      ;
+; -5.892 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|yi[22]      ; clk          ; clk         ; 1.000        ; -0.067     ; 6.857      ;
+; -5.892 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|yi[22]      ; clk          ; clk         ; 1.000        ; -0.067     ; 6.857      ;
+; -5.890 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|yi[21]      ; clk          ; clk         ; 1.000        ; -0.057     ; 6.865      ;
+; -5.890 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|yi[21]      ; clk          ; clk         ; 1.000        ; -0.057     ; 6.865      ;
+; -5.890 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|yi[21]      ; clk          ; clk         ; 1.000        ; -0.057     ; 6.865      ;
+; -5.890 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|yi[21]      ; clk          ; clk         ; 1.000        ; -0.057     ; 6.865      ;
+; -5.890 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|yi[21]      ; clk          ; clk         ; 1.000        ; -0.057     ; 6.865      ;
+; -5.890 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|yi[21]      ; clk          ; clk         ; 1.000        ; -0.057     ; 6.865      ;
+; -5.890 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|yi[21]      ; clk          ; clk         ; 1.000        ; -0.057     ; 6.865      ;
+; -5.890 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|yi[21]      ; clk          ; clk         ; 1.000        ; -0.057     ; 6.865      ;
+; -5.888 ; grab_ctrl:u_grab|kinematics:u_kin|zi[1]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[0]   ; clk          ; clk         ; 1.000        ; -0.005     ; 6.915      ;
+; -5.888 ; grab_ctrl:u_grab|kinematics:u_kin|zi[1]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[1]   ; clk          ; clk         ; 1.000        ; -0.005     ; 6.915      ;
+; -5.888 ; grab_ctrl:u_grab|kinematics:u_kin|zi[1]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[7]   ; clk          ; clk         ; 1.000        ; -0.005     ; 6.915      ;
+; -5.886 ; grab_ctrl:u_grab|kinematics:u_kin|zi[1]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[6]   ; clk          ; clk         ; 1.000        ; -0.005     ; 6.913      ;
+; -5.885 ; grab_ctrl:u_grab|kinematics:u_kin|zi[1]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[3]   ; clk          ; clk         ; 1.000        ; -0.005     ; 6.912      ;
+; -5.876 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|xi[12]      ; clk          ; clk         ; 1.000        ; -0.031     ; 6.877      ;
+; -5.876 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ; grab_ctrl:u_grab|kinematics:u_kin|xi[12]      ; clk          ; clk         ; 1.000        ; -0.031     ; 6.877      ;
+; -5.876 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ; grab_ctrl:u_grab|kinematics:u_kin|xi[12]      ; clk          ; clk         ; 1.000        ; -0.031     ; 6.877      ;
+; -5.876 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ; grab_ctrl:u_grab|kinematics:u_kin|xi[12]      ; clk          ; clk         ; 1.000        ; -0.031     ; 6.877      ;
+; -5.876 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ; grab_ctrl:u_grab|kinematics:u_kin|xi[12]      ; clk          ; clk         ; 1.000        ; -0.031     ; 6.877      ;
+; -5.876 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ; grab_ctrl:u_grab|kinematics:u_kin|xi[12]      ; clk          ; clk         ; 1.000        ; -0.031     ; 6.877      ;
+; -5.876 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ; grab_ctrl:u_grab|kinematics:u_kin|xi[12]      ; clk          ; clk         ; 1.000        ; -0.031     ; 6.877      ;
+; -5.876 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ; grab_ctrl:u_grab|kinematics:u_kin|xi[12]      ; clk          ; clk         ; 1.000        ; -0.031     ; 6.877      ;
+; -5.870 ; grab_ctrl:u_grab|kinematics:u_kin|acosrom_q[0]                                                                         ; grab_ctrl:u_grab|kinematics:u_kin|trig_idx[7] ; clk          ; clk         ; 1.000        ; -0.014     ; 6.888      ;
+; -5.870 ; grab_ctrl:u_grab|kinematics:u_kin|zi[1]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[4]   ; clk          ; clk         ; 1.000        ; -0.005     ; 6.897      ;
+; -5.870 ; grab_ctrl:u_grab|kinematics:u_kin|zi[1]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[5]   ; clk          ; clk         ; 1.000        ; -0.005     ; 6.897      ;
+; -5.869 ; grab_ctrl:u_grab|kinematics:u_kin|zi[1]                                                                                ; grab_ctrl:u_grab|kinematics:u_kin|o_t3_r[2]   ; clk          ; clk         ; 1.000        ; -0.005     ; 6.896      ;
+; -5.839 ; grab_ctrl:u_grab|kinematics:u_kin|acosrom_q[0]                                                                         ; grab_ctrl:u_grab|kinematics:u_kin|trig_idx[6] ; clk          ; clk         ; 1.000        ; -0.003     ; 6.868      ;
+; -5.837 ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ; grab_ctrl:u_grab|kinematics:u_kin|yi[23]      ; clk          ; clk         ; 1.000        ; -0.067     ; 6.802      ;
++--------+------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Fast Model Hold: 'clk'                                                                                                                                                                              ;
++-------+-----------------------------------------------------------+-----------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack ; From Node                                                 ; To Node                                                   ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++-------+-----------------------------------------------------------+-----------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; 0.215 ; MaquinaEstados:u_me|s_izq                                 ; MaquinaEstados:u_me|s_izq                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; MaquinaEstados:u_me|s_der                                 ; MaquinaEstados:u_me|s_der                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_state.T_WAIT          ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_state.T_WAIT          ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_step[1]               ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_step[1]               ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_step[2]               ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_step[2]               ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_POLL_W    ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_POLL_W    ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|pwr_cnt[0]                ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|pwr_cnt[0]                ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_PWRUP         ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_PWRUP         ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|rom_sel                   ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|rom_sel                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_kind[0]               ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_kind[0]               ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_st.ES_START             ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_st.ES_START             ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_phase[0]                ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_phase[0]                ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[1]                  ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[1]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[0]                  ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[0]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[2]                  ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[2]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[3]                  ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_bit[3]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_BEGIN_W   ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_BEGIN_W   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_RANGE_WAIT    ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_RANGE_WAIT    ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[6]              ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[6]              ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_reg[2]                ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_reg[2]                ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[0]              ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[0]              ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[1]              ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_wdata[1]              ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_reg[1]                ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_reg[1]                ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_reg[3]                ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_reg[3]                ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|eng_rd_ack                ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|eng_rd_ack                ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|eng_ack_in                ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|eng_ack_in                ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_nack                  ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_nack                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_POLL_WAIT     ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_POLL_WAIT     ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_GO_W      ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_GO_W      ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_kind[1]               ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_kind[1]               ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_step[0]               ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|txn_step[0]               ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_CLR_W     ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_CLR_W     ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_STOP_W    ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_STOP_W    ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|cal_phase                 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|cal_phase                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_RESTORE_W ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_RESTORE_W ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_RMW_WAIT      ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_RMW_WAIT      ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_TUNE_WAIT     ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_TUNE_WAIT     ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_WAIT          ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_WAIT          ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_phase[1]                ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_phase[1]                ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_st.ES_FIN               ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|e_st.ES_FIN               ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CLEAR_WAIT    ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CLEAR_WAIT    ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|tick_r                    ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|tick_r                    ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|tick_prev                                   ; LIDAR:u_lidar|tick_prev                                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|discard1                                    ; LIDAR:u_lidar|discard1                                    ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|best_phi[0]                                 ; LIDAR:u_lidar|best_phi[0]                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|best_phi[3]                                 ; LIDAR:u_lidar|best_phi[3]                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|best_phi[4]                                 ; LIDAR:u_lidar|best_phi[4]                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|best_phi[5]                                 ; LIDAR:u_lidar|best_phi[5]                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|best_phi[7]                                 ; LIDAR:u_lidar|best_phi[7]                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|best_phi[6]                                 ; LIDAR:u_lidar|best_phi[6]                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|best_phi[2]                                 ; LIDAR:u_lidar|best_phi[2]                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|best_phi[1]                                 ; LIDAR:u_lidar|best_phi[1]                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|settle_cnt[22]                              ; LIDAR:u_lidar|settle_cnt[22]                              ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|settle_cnt[23]                              ; LIDAR:u_lidar|settle_cnt[23]                              ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|best_t1[0]                                  ; LIDAR:u_lidar|best_t1[0]                                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|best_t1[1]                                  ; LIDAR:u_lidar|best_t1[1]                                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|best_t1[7]                                  ; LIDAR:u_lidar|best_t1[7]                                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|best_t1[6]                                  ; LIDAR:u_lidar|best_t1[6]                                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|best_t1[5]                                  ; LIDAR:u_lidar|best_t1[5]                                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|best_t1[4]                                  ; LIDAR:u_lidar|best_t1[4]                                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|best_t1[3]                                  ; LIDAR:u_lidar|best_t1[3]                                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|best_t1[2]                                  ; LIDAR:u_lidar|best_t1[2]                                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|t1_dir[1]                                   ; LIDAR:u_lidar|t1_dir[1]                                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|fine_ph                                     ; LIDAR:u_lidar|fine_ph                                     ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; LIDAR:u_lidar|scan_done_r                                 ; LIDAR:u_lidar|scan_done_r                                 ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_ACOS_SET   ; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_ACOS_SET   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_FK_POST    ; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_FK_POST    ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|st.S_CORDIC             ; grab_ctrl:u_grab|kinematics:u_kin|st.S_CORDIC             ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|it[0]                   ; grab_ctrl:u_grab|kinematics:u_kin|it[0]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|it[1]                   ; grab_ctrl:u_grab|kinematics:u_kin|it[1]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|it[2]                   ; grab_ctrl:u_grab|kinematics:u_kin|it[2]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|it[3]                   ; grab_ctrl:u_grab|kinematics:u_kin|it[3]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_IDLE       ; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_IDLE       ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_POST2      ; grab_ctrl:u_grab|kinematics:u_kin|cordic_ret.S_POST2      ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|st.S_IDLE               ; grab_ctrl:u_grab|kinematics:u_kin|st.S_IDLE               ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                   ; grab_ctrl:u_grab|kinematics:u_kin|zi[2]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                   ; grab_ctrl:u_grab|kinematics:u_kin|zi[0]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[6]                   ; grab_ctrl:u_grab|kinematics:u_kin|zi[6]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[7]                   ; grab_ctrl:u_grab|kinematics:u_kin|zi[7]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[8]                   ; grab_ctrl:u_grab|kinematics:u_kin|zi[8]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[9]                   ; grab_ctrl:u_grab|kinematics:u_kin|zi[9]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[10]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[10]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[13]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[13]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[14]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[14]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[15]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[15]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[16]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[16]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[17]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[17]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[18]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[18]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[19]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[19]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[20]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[20]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[21]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[21]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[22]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[22]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|zi[23]                  ; grab_ctrl:u_grab|kinematics:u_kin|zi[23]                  ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|yi[0]                   ; grab_ctrl:u_grab|kinematics:u_kin|yi[0]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|xi[0]                   ; grab_ctrl:u_grab|kinematics:u_kin|xi[0]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|yi[3]                   ; grab_ctrl:u_grab|kinematics:u_kin|yi[3]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|xi[2]                   ; grab_ctrl:u_grab|kinematics:u_kin|xi[2]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|yi[2]                   ; grab_ctrl:u_grab|kinematics:u_kin|yi[2]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|xi[1]                   ; grab_ctrl:u_grab|kinematics:u_kin|xi[1]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
+; 0.215 ; grab_ctrl:u_grab|kinematics:u_kin|xi[3]                   ; grab_ctrl:u_grab|kinematics:u_kin|xi[3]                   ; clk          ; clk         ; 0.000        ; 0.000      ; 0.367      ;
++-------+-----------------------------------------------------------+-----------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Fast Model Minimum Pulse Width: 'clk'                                                                                                                                                                   ;
++--------+--------------+----------------+------------------+-------+------------+------------------------------------------------------------------------------------------------------------------------+
+; Slack  ; Actual Width ; Required Width ; Type             ; Clock ; Clock Edge ; Target                                                                                                                 ;
++--------+--------------+----------------+------------------+-------+------------+------------------------------------------------------------------------------------------------------------------------+
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[0]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[0]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[0]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[0]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[10]                                                                             ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[10]                                                                             ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[10]~_Duplicate_1                                                                ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[10]~_Duplicate_1                                                                ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[11]                                                                             ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[11]                                                                             ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[11]~_Duplicate_1                                                                ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[11]~_Duplicate_1                                                                ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[12]                                                                             ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[12]                                                                             ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[12]~_Duplicate_1                                                                ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[12]~_Duplicate_1                                                                ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[1]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[1]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[1]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[1]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[2]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[2]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[2]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[2]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[3]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[3]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[3]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[3]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[4]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[4]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[4]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[4]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[5]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[5]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[5]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[5]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[6]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[6]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[6]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[6]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[7]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[7]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[7]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[7]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[8]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[8]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[8]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[8]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[9]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[9]                                                                              ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[9]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|r_fk[9]~_Duplicate_1                                                                 ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]                                                                               ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[18]                                                                               ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]                                                                               ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[19]                                                                               ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]                                                                               ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[20]                                                                               ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]                                                                               ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[21]                                                                               ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]                                                                               ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[22]                                                                               ;
+; -1.519 ; 0.500        ; 2.019          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]                                                                               ;
+; -1.519 ; 0.500        ; 2.019          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|xi[23]                                                                               ;
+; -1.423 ; 0.500        ; 1.923          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ;
+; -1.423 ; 0.500        ; 1.923          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg0 ;
+; -1.423 ; 0.500        ; 1.923          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ;
+; -1.423 ; 0.500        ; 1.923          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg1 ;
+; -1.423 ; 0.500        ; 1.923          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ;
+; -1.423 ; 0.500        ; 1.923          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg2 ;
+; -1.423 ; 0.500        ; 1.923          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ;
+; -1.423 ; 0.500        ; 1.923          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg3 ;
+; -1.423 ; 0.500        ; 1.923          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ;
+; -1.423 ; 0.500        ; 1.923          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg4 ;
+; -1.423 ; 0.500        ; 1.923          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ;
+; -1.423 ; 0.500        ; 1.923          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg5 ;
+; -1.423 ; 0.500        ; 1.923          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ;
+; -1.423 ; 0.500        ; 1.923          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg6 ;
+; -1.423 ; 0.500        ; 1.923          ; High Pulse Width ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ;
+; -1.423 ; 0.500        ; 1.923          ; Low Pulse Width  ; clk   ; Rise       ; grab_ctrl:u_grab|kinematics:u_kin|altsyncram:Mux2_rtl_0|altsyncram_hu11:auto_generated|ram_block1a0~porta_address_reg7 ;
+; -1.380 ; 1.000        ; 2.380          ; Port Rate        ; clk   ; Rise       ; clk                                                                                                                    ;
+; -0.500 ; 0.500        ; 1.000          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_AFTER_INIT                                                                 ;
+; -0.500 ; 0.500        ; 1.000          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_AFTER_INIT                                                                 ;
+; -0.500 ; 0.500        ; 1.000          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_BEGIN                                                                  ;
+; -0.500 ; 0.500        ; 1.000          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_BEGIN                                                                  ;
+; -0.500 ; 0.500        ; 1.000          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_BEGIN_W                                                                ;
+; -0.500 ; 0.500        ; 1.000          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_BEGIN_W                                                                ;
+; -0.500 ; 0.500        ; 1.000          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_CLR                                                                    ;
+; -0.500 ; 0.500        ; 1.000          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_CLR                                                                    ;
+; -0.500 ; 0.500        ; 1.000          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_CLR_W                                                                  ;
+; -0.500 ; 0.500        ; 1.000          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_CLR_W                                                                  ;
+; -0.500 ; 0.500        ; 1.000          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_GO                                                                     ;
+; -0.500 ; 0.500        ; 1.000          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_GO                                                                     ;
+; -0.500 ; 0.500        ; 1.000          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_GO_W                                                                   ;
+; -0.500 ; 0.500        ; 1.000          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_GO_W                                                                   ;
+; -0.500 ; 0.500        ; 1.000          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_POLL                                                                   ;
+; -0.500 ; 0.500        ; 1.000          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_POLL                                                                   ;
+; -0.500 ; 0.500        ; 1.000          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_POLL_W                                                                 ;
+; -0.500 ; 0.500        ; 1.000          ; Low Pulse Width  ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_POLL_W                                                                 ;
+; -0.500 ; 0.500        ; 1.000          ; High Pulse Width ; clk   ; Rise       ; LIDAR:u_lidar|VL53L0X:u_VL53L0X|app_state.A_CAL_RESTORE                                                                ;
++--------+--------------+----------------+------------------+-------+------------+------------------------------------------------------------------------------------------------------------------------+
+
+
++------------------------------------------------------------------------+
+; Setup Times                                                            ;
++------------+------------+-------+-------+------------+-----------------+
+; Data Port  ; Clock Port ; Rise  ; Fall  ; Clock Edge ; Clock Reference ;
++------------+------------+-------+-------+------------+-----------------+
+; i2c_sda    ; clk        ; 2.216 ; 2.216 ; Rise       ; clk             ;
+; reset      ; clk        ; 1.073 ; 1.073 ; Rise       ; clk             ;
+; sensor_der ; clk        ; 2.686 ; 2.686 ; Rise       ; clk             ;
+; sensor_izq ; clk        ; 2.573 ; 2.573 ; Rise       ; clk             ;
++------------+------------+-------+-------+------------+-----------------+
+
+
++--------------------------------------------------------------------------+
+; Hold Times                                                               ;
++------------+------------+--------+--------+------------+-----------------+
+; Data Port  ; Clock Port ; Rise   ; Fall   ; Clock Edge ; Clock Reference ;
++------------+------------+--------+--------+------------+-----------------+
+; i2c_sda    ; clk        ; -1.813 ; -1.813 ; Rise       ; clk             ;
+; reset      ; clk        ; 0.389  ; 0.389  ; Rise       ; clk             ;
+; sensor_der ; clk        ; -1.982 ; -1.982 ; Rise       ; clk             ;
+; sensor_izq ; clk        ; -1.865 ; -1.865 ; Rise       ; clk             ;
++------------+------------+--------+--------+------------+-----------------+
+
+
++---------------------------------------------------------------------------+
+; Clock to Output Times                                                     ;
++---------------+------------+-------+-------+------------+-----------------+
+; Data Port     ; Clock Port ; Rise  ; Fall  ; Clock Edge ; Clock Reference ;
++---------------+------------+-------+-------+------------+-----------------+
+; i2c_scl       ; clk        ; 3.257 ; 3.257 ; Rise       ; clk             ;
+; i2c_sda       ; clk        ; 3.230 ; 3.230 ; Rise       ; clk             ;
+; led_1         ; clk        ; 3.414 ; 3.414 ; Rise       ; clk             ;
+; led_2         ; clk        ; 3.702 ; 3.702 ; Rise       ; clk             ;
+; led_3         ; clk        ; 3.490 ; 3.490 ; Rise       ; clk             ;
+; motor_a1      ; clk        ; 7.491 ; 7.491 ; Rise       ; clk             ;
+; motor_a2      ; clk        ; 5.410 ; 5.410 ; Rise       ; clk             ;
+; motor_b1      ; clk        ; 8.274 ; 8.274 ; Rise       ; clk             ;
+; motor_b2      ; clk        ; 5.514 ; 5.514 ; Rise       ; clk             ;
+; servo_gripper ; clk        ; 3.446 ; 3.446 ; Rise       ; clk             ;
+; servo_phi     ; clk        ; 3.445 ; 3.445 ; Rise       ; clk             ;
+; servo_theta1  ; clk        ; 3.546 ; 3.546 ; Rise       ; clk             ;
+; servo_theta2  ; clk        ; 3.445 ; 3.445 ; Rise       ; clk             ;
+; servo_theta3  ; clk        ; 3.561 ; 3.561 ; Rise       ; clk             ;
++---------------+------------+-------+-------+------------+-----------------+
+
+
++---------------------------------------------------------------------------+
+; Minimum Clock to Output Times                                             ;
++---------------+------------+-------+-------+------------+-----------------+
+; Data Port     ; Clock Port ; Rise  ; Fall  ; Clock Edge ; Clock Reference ;
++---------------+------------+-------+-------+------------+-----------------+
+; i2c_scl       ; clk        ; 3.257 ; 3.257 ; Rise       ; clk             ;
+; i2c_sda       ; clk        ; 3.230 ; 3.230 ; Rise       ; clk             ;
+; led_1         ; clk        ; 3.414 ; 3.414 ; Rise       ; clk             ;
+; led_2         ; clk        ; 3.702 ; 3.702 ; Rise       ; clk             ;
+; led_3         ; clk        ; 3.490 ; 3.490 ; Rise       ; clk             ;
+; motor_a1      ; clk        ; 3.675 ; 3.675 ; Rise       ; clk             ;
+; motor_a2      ; clk        ; 3.877 ; 3.877 ; Rise       ; clk             ;
+; motor_b1      ; clk        ; 3.625 ; 3.625 ; Rise       ; clk             ;
+; motor_b2      ; clk        ; 3.886 ; 3.886 ; Rise       ; clk             ;
+; servo_gripper ; clk        ; 3.446 ; 3.446 ; Rise       ; clk             ;
+; servo_phi     ; clk        ; 3.445 ; 3.445 ; Rise       ; clk             ;
+; servo_theta1  ; clk        ; 3.546 ; 3.546 ; Rise       ; clk             ;
+; servo_theta2  ; clk        ; 3.445 ; 3.445 ; Rise       ; clk             ;
+; servo_theta3  ; clk        ; 3.561 ; 3.561 ; Rise       ; clk             ;
++---------------+------------+-------+-------+------------+-----------------+
+
+
++---------------------------------------------------------------------------------+
+; Multicorner Timing Analysis Summary                                             ;
++------------------+-----------+-------+----------+---------+---------------------+
+; Clock            ; Setup     ; Hold  ; Recovery ; Removal ; Minimum Pulse Width ;
++------------------+-----------+-------+----------+---------+---------------------+
+; Worst-case Slack ; -18.040   ; 0.215 ; N/A      ; N/A     ; -1.814              ;
+;  clk             ; -18.040   ; 0.215 ; N/A      ; N/A     ; -1.814              ;
+; Design-wide TNS  ; -6314.016 ; 0.0   ; 0.0      ; 0.0     ; -1403.741           ;
+;  clk             ; -6314.016 ; 0.000 ; N/A      ; N/A     ; -1403.741           ;
++------------------+-----------+-------+----------+---------+---------------------+
+
+
++------------------------------------------------------------------------+
+; Setup Times                                                            ;
++------------+------------+-------+-------+------------+-----------------+
+; Data Port  ; Clock Port ; Rise  ; Fall  ; Clock Edge ; Clock Reference ;
++------------+------------+-------+-------+------------+-----------------+
+; i2c_sda    ; clk        ; 4.464 ; 4.464 ; Rise       ; clk             ;
+; reset      ; clk        ; 3.268 ; 3.268 ; Rise       ; clk             ;
+; sensor_der ; clk        ; 5.579 ; 5.579 ; Rise       ; clk             ;
+; sensor_izq ; clk        ; 5.259 ; 5.259 ; Rise       ; clk             ;
++------------+------------+-------+-------+------------+-----------------+
+
+
++--------------------------------------------------------------------------+
+; Hold Times                                                               ;
++------------+------------+--------+--------+------------+-----------------+
+; Data Port  ; Clock Port ; Rise   ; Fall   ; Clock Edge ; Clock Reference ;
++------------+------------+--------+--------+------------+-----------------+
+; i2c_sda    ; clk        ; -1.813 ; -1.813 ; Rise       ; clk             ;
+; reset      ; clk        ; 0.389  ; 0.389  ; Rise       ; clk             ;
+; sensor_der ; clk        ; -1.982 ; -1.982 ; Rise       ; clk             ;
+; sensor_izq ; clk        ; -1.865 ; -1.865 ; Rise       ; clk             ;
++------------+------------+--------+--------+------------+-----------------+
+
+
++-----------------------------------------------------------------------------+
+; Clock to Output Times                                                       ;
++---------------+------------+--------+--------+------------+-----------------+
+; Data Port     ; Clock Port ; Rise   ; Fall   ; Clock Edge ; Clock Reference ;
++---------------+------------+--------+--------+------------+-----------------+
+; i2c_scl       ; clk        ; 6.251  ; 6.251  ; Rise       ; clk             ;
+; i2c_sda       ; clk        ; 6.212  ; 6.212  ; Rise       ; clk             ;
+; led_1         ; clk        ; 6.560  ; 6.560  ; Rise       ; clk             ;
+; led_2         ; clk        ; 7.140  ; 7.140  ; Rise       ; clk             ;
+; led_3         ; clk        ; 6.690  ; 6.690  ; Rise       ; clk             ;
+; motor_a1      ; clk        ; 17.984 ; 17.984 ; Rise       ; clk             ;
+; motor_a2      ; clk        ; 12.110 ; 12.110 ; Rise       ; clk             ;
+; motor_b1      ; clk        ; 20.100 ; 20.100 ; Rise       ; clk             ;
+; motor_b2      ; clk        ; 12.459 ; 12.459 ; Rise       ; clk             ;
+; servo_gripper ; clk        ; 6.609  ; 6.609  ; Rise       ; clk             ;
+; servo_phi     ; clk        ; 6.606  ; 6.606  ; Rise       ; clk             ;
+; servo_theta1  ; clk        ; 6.889  ; 6.889  ; Rise       ; clk             ;
+; servo_theta2  ; clk        ; 6.604  ; 6.604  ; Rise       ; clk             ;
+; servo_theta3  ; clk        ; 6.906  ; 6.906  ; Rise       ; clk             ;
++---------------+------------+--------+--------+------------+-----------------+
+
+
++---------------------------------------------------------------------------+
+; Minimum Clock to Output Times                                             ;
++---------------+------------+-------+-------+------------+-----------------+
+; Data Port     ; Clock Port ; Rise  ; Fall  ; Clock Edge ; Clock Reference ;
++---------------+------------+-------+-------+------------+-----------------+
+; i2c_scl       ; clk        ; 3.257 ; 3.257 ; Rise       ; clk             ;
+; i2c_sda       ; clk        ; 3.230 ; 3.230 ; Rise       ; clk             ;
+; led_1         ; clk        ; 3.414 ; 3.414 ; Rise       ; clk             ;
+; led_2         ; clk        ; 3.702 ; 3.702 ; Rise       ; clk             ;
+; led_3         ; clk        ; 3.490 ; 3.490 ; Rise       ; clk             ;
+; motor_a1      ; clk        ; 3.675 ; 3.675 ; Rise       ; clk             ;
+; motor_a2      ; clk        ; 3.877 ; 3.877 ; Rise       ; clk             ;
+; motor_b1      ; clk        ; 3.625 ; 3.625 ; Rise       ; clk             ;
+; motor_b2      ; clk        ; 3.886 ; 3.886 ; Rise       ; clk             ;
+; servo_gripper ; clk        ; 3.446 ; 3.446 ; Rise       ; clk             ;
+; servo_phi     ; clk        ; 3.445 ; 3.445 ; Rise       ; clk             ;
+; servo_theta1  ; clk        ; 3.546 ; 3.546 ; Rise       ; clk             ;
+; servo_theta2  ; clk        ; 3.445 ; 3.445 ; Rise       ; clk             ;
+; servo_theta3  ; clk        ; 3.561 ; 3.561 ; Rise       ; clk             ;
++---------------+------------+-------+-------+------------+-----------------+
+
+
++--------------------------------------------------------------------+
+; Setup Transfers                                                    ;
++------------+----------+-----------+----------+----------+----------+
+; From Clock ; To Clock ; RR Paths  ; FR Paths ; RF Paths ; FF Paths ;
++------------+----------+-----------+----------+----------+----------+
+; clk        ; clk      ; 279931429 ; 0        ; 0        ; 0        ;
++------------+----------+-----------+----------+----------+----------+
+Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
+
+
++--------------------------------------------------------------------+
+; Hold Transfers                                                     ;
++------------+----------+-----------+----------+----------+----------+
+; From Clock ; To Clock ; RR Paths  ; FR Paths ; RF Paths ; FF Paths ;
++------------+----------+-----------+----------+----------+----------+
+; clk        ; clk      ; 279931429 ; 0        ; 0        ; 0        ;
++------------+----------+-----------+----------+----------+----------+
+Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
+
+
+---------------
+; Report TCCS ;
+---------------
+No dedicated SERDES Transmitter circuitry present in device or used in design
+
+
+---------------
+; Report RSKM ;
+---------------
+No dedicated SERDES Receiver circuitry present in device or used in design
+
+
++------------------------------------------------+
+; Unconstrained Paths                            ;
++---------------------------------+-------+------+
+; Property                        ; Setup ; Hold ;
++---------------------------------+-------+------+
+; Illegal Clocks                  ; 0     ; 0    ;
+; Unconstrained Clocks            ; 0     ; 0    ;
+; Unconstrained Input Ports       ; 4     ; 4    ;
+; Unconstrained Input Port Paths  ; 1060  ; 1060 ;
+; Unconstrained Output Ports      ; 14    ; 14   ;
+; Unconstrained Output Port Paths ; 102   ; 102  ;
++---------------------------------+-------+------+
+
+
++------------------------------------+
+; TimeQuest Timing Analyzer Messages ;
++------------------------------------+
+Info: *******************************************************************
+Info: Running Quartus II 64-Bit TimeQuest Timing Analyzer
+    Info: Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+    Info: Processing started: Sat Jun 13 01:54:18 2026
+Info: Command: quartus_sta SeguidorLinea_Brazo -c SeguidorLinea_Brazo
+Info: qsta_default_script.tcl version: #1
+Warning (20028): Parallel compilation is not licensed and has been disabled
+Critical Warning (332012): Synopsys Design Constraints File file not found: 'SeguidorLinea_Brazo.sdc'. A Synopsys Design Constraints File is required by the TimeQuest Timing Analyzer to get proper timing constraints. Without it, the Compiler will not properly optimize the design.
+Info (332142): No user constrained base clocks found in the design. Calling "derive_clocks -period 1.0"
+Info (332105): Deriving Clocks
+    Info (332105): create_clock -period 1.000 -name clk clk
+Info: Found TIMEQUEST_REPORT_SCRIPT_INCLUDE_DEFAULT_ANALYSIS = ON
+Info: Analyzing Slow Model
+Critical Warning (332148): Timing requirements not met
+Info (332146): Worst-case setup slack is -18.040
+    Info (332119):     Slack End Point TNS Clock 
+    Info (332119): ========= ============= =====================
+    Info (332119):   -18.040     -6314.016 clk 
+Info (332146): Worst-case hold slack is 0.445
+    Info (332119):     Slack End Point TNS Clock 
+    Info (332119): ========= ============= =====================
+    Info (332119):     0.445         0.000 clk 
+Info (332140): No Recovery paths to report
+Info (332140): No Removal paths to report
+Info (332146): Worst-case minimum pulse width slack is -1.814
+    Info (332119):     Slack End Point TNS Clock 
+    Info (332119): ========= ============= =====================
+    Info (332119):    -1.814     -1403.741 clk 
+Info (332001): The selected device family is not supported by the report_metastability command.
+Info: Analyzing Fast Model
+Critical Warning (332148): Timing requirements not met
+Info (332146): Worst-case setup slack is -6.198
+    Info (332119):     Slack End Point TNS Clock 
+    Info (332119): ========= ============= =====================
+    Info (332119):    -6.198     -1751.412 clk 
+Info (332146): Worst-case hold slack is 0.215
+    Info (332119):     Slack End Point TNS Clock 
+    Info (332119): ========= ============= =====================
+    Info (332119):     0.215         0.000 clk 
+Info (332140): No Recovery paths to report
+Info (332140): No Removal paths to report
+Info (332146): Worst-case minimum pulse width slack is -1.519
+    Info (332119):     Slack End Point TNS Clock 
+    Info (332119): ========= ============= =====================
+    Info (332119):    -1.519     -1150.364 clk 
+Info (332001): The selected device family is not supported by the report_metastability command.
+Info (332102): Design is not fully constrained for setup requirements
+Info (332102): Design is not fully constrained for hold requirements
+Info: Quartus II 64-Bit TimeQuest Timing Analyzer was successful. 0 errors, 4 warnings
+    Info: Peak virtual memory: 4587 megabytes
+    Info: Processing ended: Sat Jun 13 01:54:20 2026
+    Info: Elapsed time: 00:00:02
+    Info: Total CPU time (on all processors): 00:00:02
+
+
