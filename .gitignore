@@ -22,6 +22,7 @@ Codigo/work/
 *.done
 *.flow.rpt
 transcript
+Codigo/output_files/
 
 # Backups de desarrollo propios
 _vcheck/
@@ -33,3 +34,6 @@ Codigo/Adafruit_VL53L0X-master/
 *.toml
 Codigo/.claude/
 .vscode/
+db/
+incremental_db/
+ref_lib/
