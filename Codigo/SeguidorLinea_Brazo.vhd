@@ -127,8 +127,8 @@ architecture Behavioral of SeguidorLinea_Brazo is
     -- -------------------------------------------------------------------------
     component MaquinaEstados
         generic (
-            ZONA_CYCLES      : integer := 2_000_000; SALIR_CYCLES  : integer := 10_000_000;
-            FILTRO_CYCLES    : integer := 50_000;    LINE_LVL      : std_logic := '1'
+            FILTRO_CYCLES : integer := 50_000;
+            LINE_LVL      : std_logic := '0'
         );
         port (
             clk          : in  std_logic;
@@ -253,17 +253,8 @@ begin
         -- Velocidad/calibración: constantes DUTY_* dentro de MaquinaEstados.vhd.
         generic map (
             LINE_LVL      => '0',
-            FILTRO_CYCLES => 15_000,   -- antirrebote sensores ~300 us. Equilibrio: filtra el
-                                       -- ruido del LM393 (se salía random en recta) PERO no
-                                       -- tanto que borre la pista direccional al entrar a una
-                                       -- curva (un sensor pisa negro antes que el otro). Subir
-                                       -- si tiembla en recta; bajar si pierde curvas cerradas.
-            ZONA_CYCLES   => 15_000_000 -- CONFIRMAR zona = 1 s de negro-doble CONTINUO (viniendo
-                                        -- de RECTO). El robot avanza recto durante ese segundo,
-                                        -- así que el cuadro debe ser grande / el robot lento para
-                                        -- estar 1 s encima; si lo cruza en <1 s NO lo detecta ->
-                                        -- bajar este valor. Subir si una curva dispara zona falsa.
-        )
+            FILTRO_CYCLES => 15_000
+            )
         port map (
             clk => clk, rst => reset_int,
             sensor_izq => sensor_izq, sensor_der => sensor_der,

@@ -41,7 +41,6 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity MaquinaEstados is
     generic (
-        ZONA_CYCLES   : integer := 2_000_000;   -- negro-doble (desde recto) sostenido => zona
         SALIR_CYCLES  : integer := 10_000_000;  -- margen tras DEJAR el cuadro negro (0.2 s)
         FILTRO_CYCLES : integer := 50_000;      -- antirrebote de sensores (~1 ms @50MHz)
         LINE_LVL      : std_logic := '0'        -- nivel del sensor SOBRE la línea
@@ -114,6 +113,9 @@ architecture rtl of MaquinaEstados is
     -- falsa (evita los espasmos). El pívot de curva SÍ actúa siempre en (1,1); esto solo
     -- gatea el CONTADOR de zona. false = cualquier (1,1) sostenido cuenta (puede dar falsos).
     constant ZONA_DESDE_RECTO : boolean := true;
+
+    -- Negro-doble sostenido necesario para confirmar zona (~0.3 s @50 MHz).
+    constant ZONA_CYCLES : integer := 15_000_000;
 
     -- Sensores: filtro de histéresis (cuenta arriba/abajo) -> '1' = sobre línea (NEGRO)
     signal flt_izq, flt_der : integer range 0 to FILTRO_CYCLES := 0;

@@ -17,16 +17,15 @@ set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"
 # ============================================================================
 
 # ---- Jerarquía de fuentes del top (orden de dependencia) ----
-set_global_assignment -name VHDL_FILE vl53l0x_pkg.vhd
-set_global_assignment -name VHDL_FILE VL53L0X.vhd
-set_global_assignment -name VHDL_FILE kinematics.vhd
-set_global_assignment -name VHDL_FILE LIDAR.vhd
-set_global_assignment -name VHDL_FILE grab_ctrl.vhd
-set_global_assignment -name VHDL_FILE MaquinaEstados.vhd
-set_global_assignment -name VHDL_FILE polarPWM.vhd
-set_global_assignment -name VHDL_FILE SeguidorLinea_Brazo.vhd
-# Prueba de motores (diagnostico). Para usarla: TOP_LEVEL_ENTITY = TestMotores (abajo) y revertir luego.
-set_global_assignment -name VHDL_FILE Pruebas/Motores/TestMotores.vhd
+set_global_assignment -name VHDL_FILE Codigo/vl53l0x_pkg.vhd
+set_global_assignment -name VHDL_FILE Codigo/VL53L0X.vhd
+set_global_assignment -name VHDL_FILE Codigo/encoder_servo.vhd
+set_global_assignment -name VHDL_FILE Codigo/kinematics.vhd
+set_global_assignment -name VHDL_FILE Codigo/polarPWM.vhd
+set_global_assignment -name VHDL_FILE Codigo/LIDAR.vhd
+set_global_assignment -name VHDL_FILE Codigo/grab_ctrl.vhd
+set_global_assignment -name VHDL_FILE Codigo/MaquinaEstados.vhd
+set_global_assignment -name VHDL_FILE Codigo/SeguidorLinea_Brazo.vhd
 
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
