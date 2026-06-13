@@ -9,6 +9,8 @@ Codigo/work/
 # Archivos temporales / locales de Quartus
 *.qws
 *.qdf
+*.qpf
+*.qsf
 *.cdf
 *.jdi
 *.rpt
