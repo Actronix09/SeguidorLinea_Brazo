@@ -29,6 +29,7 @@ _vcheck/
 Codigo_backup_etapa1/
 Codigo/_backups/
 Codigo/Adafruit_VL53L0X-master/
+Codigo/db/
 
 # Otros
 *.toml
