@@ -46,3 +46,4 @@ incremental_db/
 ref_lib/
 *.json
 scripts/
+.claude/

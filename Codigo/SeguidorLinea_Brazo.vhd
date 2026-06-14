@@ -128,8 +128,14 @@ architecture Behavioral of SeguidorLinea_Brazo is
     component MaquinaEstados
         generic (
             USAR_ZONA     : boolean := false;
+            MODO_ZONA     : integer := 2;
+            N_RAYAS       : integer := 2;
+            N_ALTERN      : integer := 4;
             ZONA_CYCLES   : integer := 15_000_000;
-            SALIR_CYCLES  : integer := 10_000_000;
+            LEAD_CYCLES   : integer := 2_000_000;
+            W_MIN_CYCLES  : integer := 500_000;
+            W_MAX_CYCLES  : integer := 6_000_000;
+            T_GAP_CYCLES  : integer := 8_000_000;
             FILTRO_CYCLES : integer := 50_000;
             LINE_LVL      : std_logic := '0'
         );
@@ -256,6 +262,7 @@ begin
         -- Velocidad/calibración: constantes DUTY_* dentro de MaquinaEstados.vhd.
         generic map (
             USAR_ZONA     => false,         -- poner true para activar brazo/zona (LIDAR + depósito)
+            MODO_ZONA     => 2,             -- marcador de zona: 0=tiempo,1=ajedrez,2=rayas,3=cuadro
             LINE_LVL      => '0',
             FILTRO_CYCLES => 15_000
             )

@@ -1,9 +1,12 @@
 -- ============================================================================
--- tb_MaquinaEstados - Seguidor "AMBOS SENSORES DENTRO de la línea" + orquestación
---   del brazo (Etapa 2).
---   Verifica: CENTRADO (1,1) -> motores adelante; correcciones (1,0)/(0,1) y PERDIDA
---   (0,0); en ZONA (1,1 SOSTENIDO) SIN objeto -> start_scan; CON objeto -> trigger_drop.
---   (La zona se prueba con USAR_ZONA=true; el build real va con USAR_ZONA=false.)
+-- tb_MaquinaEstados - Verifica la TABLA del seguidor de LÍNEA FINA (sensores fuera).
+--   s_*='1' = ese sensor ve NEGRO (sobre la línea). Tabla (s_der, s_izq) -> giro:
+--     (0,0) NINGUNA -> recto            (ambas ruedas ~igual)
+--     (1,0) DER sobre línea -> IZQUIERDA (rueda DER empuja  -> cb1 > ca1)
+--     (0,1) IZQ sobre línea -> DERECHA   (rueda IZQ empuja  -> ca1 > cb1)
+--     (1,1) CASO ESPECIAL -> recto       (ambas ruedas ~igual)
+--   Mide el ciclo de trabajo de cada rueda (cuenta a1/b1 durante > 1 periodo PWM)
+--   y comprueba la asimetría esperada. USAR_ZONA=false (seguidor puro).
 --
 --   vlib work
 --   vcom -2008 MaquinaEstados.vhd tb_MaquinaEstados.vhd
@@ -21,8 +24,7 @@ architecture sim of tb_MaquinaEstados is
 
     component MaquinaEstados
         generic (
-            USAR_ZONA : boolean := false;
-            ZONA_CYCLES : integer := 2_000_000; SALIR_CYCLES : integer := 25_000_000;
+            USAR_ZONA : boolean := false; MODO_ZONA : integer := 0;
             FILTRO_CYCLES : integer := 50_000; LINE_LVL : std_logic := '1'
         );
         port (
@@ -44,16 +46,15 @@ architecture sim of tb_MaquinaEstados is
     signal led_estado, led_error : std_logic;
     signal simdone : boolean := false;
 
-    signal saw_scan, saw_drop, mot_active : boolean := false;
+    -- Medición de duty: cuenta ciclos con a1/b1 en alto mientras 'meas'.
+    signal meas : boolean := false;
+    signal ca1, cb1 : integer := 0;
 
 begin
 
-    -- LINE_LVL='1' aquí: en el tb sizq/sder='1' = "sobre la línea" (NEGRO).
-    -- ZONA_CYCLES=200 (4 us): las fases del seguidor mantienen cada estado < 4 us para NO
-    -- disparar zona; las fases de zona sostienen (1,1) > 4 us a propósito.
+    -- LINE_LVL='1': en el tb sizq/sder='1' = "sobre la línea" (NEGRO). USAR_ZONA=false.
     dut : MaquinaEstados
-        generic map (USAR_ZONA => true, ZONA_CYCLES => 200, SALIR_CYCLES => 60,
-                     FILTRO_CYCLES => 4, LINE_LVL => '1')
+        generic map (USAR_ZONA => false, MODO_ZONA => 0, FILTRO_CYCLES => 4, LINE_LVL => '1')
         port map (
             clk => clk, rst => rst, sensor_izq => sizq, sensor_der => sder,
             motor_a1 => a1, motor_a2 => a2, motor_b1 => b1, motor_b2 => b2,
@@ -70,65 +71,57 @@ begin
         wait;
     end process;
 
-    -- Monitores
-    mon : process(clk)
+    -- a1 = motor IZQ adelante, b1 = motor DER adelante (PWM). Integramos su duty.
+    count : process(clk)
     begin
         if rising_edge(clk) then
-            if start_scan = '1' then saw_scan <= true; end if;
-            if trigger_drop = '1' then saw_drop <= true; end if;
-            if a1 = '1' then mot_active <= true; end if;
+            if meas then
+                if a1 = '1' then ca1 <= ca1 + 1; end if;
+                if b1 = '1' then cb1 <= cb1 + 1; end if;
+            else
+                ca1 <= 0; cb1 <= 0;
+            end if;
         end if;
     end process;
 
     stim : process
     begin
-        rst <= '1'; wait for 100 ns; rst <= '0';
-        arm_ready <= '1';                       -- brazo libre al inicio
+        rst <= '1'; wait for 200 ns; rst <= '0';
         wait until rising_edge(clk);
 
-        -- ---- Fase A: CENTRADO (ambos sensores DENTRO del negro) -> recto ----
-        sizq <= '1'; sder <= '1';
-        wait for 2 us;                          -- < ZONA_CYCLES (4 us): no debe zonear
-        assert mot_active report "FALLO: los motores no se mueven al seguir centrado" severity error;
-        report "Fase A OK: motores activos al ir centrado (1,1)" severity note;
+        -- ---- (0,0) NINGUNA -> recto: ambas ruedas ~iguales ----
+        sder <= '0'; sizq <= '0'; wait for 2 us;
+        meas <= true; wait for 1.6 ms; meas <= false; wait for 1 us;
+        assert ca1 > 5000 and cb1 > 5000
+            report "FALLO (0,0): el robot no avanza (motores parados)" severity error;
+        assert (ca1 - cb1) < 8000 and (cb1 - ca1) < 8000
+            report "FALLO (0,0): debería ir RECTO (ruedas desbalanceadas)" severity error;
+        report "(0,0) NINGUNA -> recto OK" severity note;
 
-        -- ---- Fase B: correcciones (un sensor sale) + PERDIDA (0,0) ----
-        sizq <= '1'; sder <= '0'; wait for 1 us;   -- DER salió -> corrige IZQUIERDA
-        sizq <= '0'; sder <= '1'; wait for 1 us;   -- IZQ salió -> corrige DERECHA
-        sizq <= '0'; sder <= '0'; wait for 1 us;   -- AMBOS blanco -> PERDIÓ -> recupera
-        sizq <= '1'; sder <= '1'; wait for 1 us;   -- vuelve al centro
-        report "Fase B OK: correcciones + recuperación sin trabarse" severity note;
+        -- ---- (1,0) DER sobre línea -> IZQUIERDA: rueda DER (cb1) más fuerte ----
+        sder <= '1'; sizq <= '0'; wait for 2 us;
+        meas <= true; wait for 1.6 ms; meas <= false; wait for 1 us;
+        assert cb1 > ca1 + 5000
+            report "FALLO (1,0): debería girar IZQUIERDA (rueda DER no domina)" severity error;
+        report "(1,0) DER sobre linea -> IZQUIERDA OK" severity note;
 
-        -- ---- Fase C: ZONA SIN objeto -> start_scan ----
-        has_object <= '0';
-        sizq <= '1'; sder <= '1';               -- (1,1) SOSTENIDO -> cuadro
-        wait for 5 us;                          -- supera ZONA_CYCLES -> start_scan
-        assert saw_scan report "FALLO: no disparó start_scan en zona sin objeto" severity error;
-        report "Fase C OK: zona sin objeto -> start_scan" severity note;
-        -- emula barrido + agarre (brazo OCUPADO mientras scan_active=1)
-        scan_active <= '1'; arm_ready <= '0';
-        wait for 2 us;
-        scan_active <= '0';                     -- barrido terminó
-        sizq <= '0'; sder <= '0';               -- el robot sale de la zona (ambos_linea=0)
-        wait for 1 us;
-        arm_ready <= '1';                       -- brazo terminó (sin objeto)
-        wait for 3 us;                          -- E_SALIR_ZONA -> E_SEGUIR
+        -- ---- (0,1) IZQ sobre línea -> DERECHA: rueda IZQ (ca1) más fuerte ----
+        sder <= '0'; sizq <= '1'; wait for 2 us;
+        meas <= true; wait for 1.6 ms; meas <= false; wait for 1 us;
+        assert ca1 > cb1 + 5000
+            report "FALLO (0,1): debería girar DERECHA (rueda IZQ no domina)" severity error;
+        report "(0,1) IZQ sobre linea -> DERECHA OK" severity note;
 
-        -- ---- Fase D: ZONA CON objeto -> trigger_drop ----
-        has_object <= '1';
-        sizq <= '1'; sder <= '1';
-        wait for 5 us;                          -- zona -> trigger_drop
-        assert saw_drop report "FALLO: no disparó trigger_drop en zona con objeto" severity error;
-        report "Fase D OK: zona con objeto -> trigger_drop" severity note;
-        -- emula el depósito (grab_ctrl baja has_object y el robot sale)
-        arm_ready <= '0';
-        wait for 1 us;
-        has_object <= '0';                      -- soltó el cubo
-        sizq <= '0'; sder <= '0';
-        arm_ready <= '1';
-        wait for 3 us;
+        -- ---- (1,1) CASO ESPECIAL -> recto: ambas ruedas ~iguales ----
+        sder <= '1'; sizq <= '1'; wait for 2 us;
+        meas <= true; wait for 1.6 ms; meas <= false; wait for 1 us;
+        assert ca1 > 5000 and cb1 > 5000
+            report "FALLO (1,1): el robot no avanza" severity error;
+        assert (ca1 - cb1) < 8000 and (cb1 - ca1) < 8000
+            report "FALLO (1,1): debería ir RECTO" severity error;
+        report "(1,1) CASO ESPECIAL -> recto OK" severity note;
 
-        report "OK: seguidor (ambos dentro) + orquestación scan/drop funcionan" severity note;
+        report "OK: el seguidor sigue la tabla (0,0)recto (1,0)izq (0,1)der (1,1)especial" severity note;
         simdone <= true;
         wait;
     end process;
