@@ -19,11 +19,11 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity MaquinaEstados is
     generic (
-        DUTY_RECTO    : integer := 28000;  -- duty en recta (0..65535)
-        DUTY_GIRO_EXT : integer := 28000;  -- rueda exterior en curva (la que empuja)
-        DUTY_GIRO_INT : integer := 28000;  -- rueda interior en curva (magnitud)
+        DUTY_RECTO    : integer := 30000;  -- duty en recta (0..65535)
+        DUTY_GIRO_EXT : integer := 30000;  -- rueda exterior en curva (la que empuja)
+        DUTY_GIRO_INT : integer := 30000;  -- rueda interior en curva (magnitud)
         MODO_PIVOTE   : boolean := true;  -- false = arco suave; true = pivote (interior en reversa)
-        FILTRO_CYCLES : integer := 15000;  -- antirrebote del sensor (~0.3 ms @50MHz)
+        FILTRO_CYCLES : integer := 10000;  -- antirrebote del sensor (~0.3 ms @50MHz)
         LINE_LVL      : std_logic := '0'   -- valor del QRD SOBRE la línea: '0'=línea NEGRA, '1'=línea BLANCA
     );
     port (

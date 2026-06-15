@@ -25,7 +25,7 @@ entity grab_ctrl is
         GRIP_CYCLES : integer := 40_000_000;    -- ~0.8 s para abrir/cerrar la garra
         DROP_PHI    : integer := 90;            -- pose de DEPÓSITO (girar a la derecha + extender)
         DROP_T1     : integer := 45;
-        DROP_T2     : integer := 0;
+        DROP_T2     : integer := 45;
         DROP_T3     : integer := 0
     );
     port (
