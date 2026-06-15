@@ -29,9 +29,9 @@ set_global_assignment -name VHDL_FILE Pruebas/Brazo/SeguidorLinea_BrazoTestBrazo
 set_global_assignment -name VHDL_FILE Pruebas/Brazo/tb_grab_ctrl.vhd
 set_global_assignment -name VHDL_FILE Pruebas/Brazo/tb_kinematics.vhd
 
-# Lidar
-set_global_assignment -name VHDL_FILE Pruebas/Lidar/LIDAR_Grab_Top.vhd
-set_global_assignment -name VHDL_FILE Pruebas/Lidar/LIDAR_Scan_Top.vhd
+# Lidar (LIDAR_Grab_Top y LIDAR_Scan_Top viejos se quitaron: usaban la interfaz
+# antigua del LIDAR/grab_ctrl y rompÃƒÂ­an la sintesis. LIDAR_GrabLoop_Top los reemplaza.)
+set_global_assignment -name VHDL_FILE Pruebas/Lidar/LIDAR_GrabLoop_Top.vhd
 
 # Motores
 set_global_assignment -name VHDL_FILE Pruebas/Motores/TestMotores.vhd
@@ -49,11 +49,7 @@ set_global_assignment -name VHDL_FILE Pruebas/Sensores/TestSensores.vhd
 # Directorio de salida
 # ============================================================================
 
-set_global_assignment -name VHDL_FILE Codigo/Pruebas/Motores/TestMotores.vhd
-set_global_assignment -name VHDL_FILE Codigo/MaquinaEstados.vhd
 set_global_assignment -name VHDL_FILE Codigo/SeguidorLinea_Brazo.vhd
-set_global_assignment -name VHDL_FILE Codigo/Pruebas/Sensores/TestSensores.vhd
-set_global_assignment -name VHDL_FILE Codigo/Pruebas/Brazo/SeguidorLinea_BrazoTestBrazo.vhd
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output
 
 # ============================================================================
@@ -61,7 +57,7 @@ set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output
 # ============================================================================
 
 # Clock y reset
-set_location_assignment PIN_17  -to clk
+set_location_assignment PIN_17 -to clk
 set_location_assignment PIN_144 -to reset
 
 # VL53L0X
@@ -76,8 +72,8 @@ set_location_assignment PIN_132 -to servo_theta3
 set_location_assignment PIN_134 -to servo_gripper
 
 # Motores
-set_location_assignment PIN_4  -to motor_a1
-set_location_assignment PIN_8  -to motor_a2
+set_location_assignment PIN_4 -to motor_a1
+set_location_assignment PIN_8 -to motor_a2
 set_location_assignment PIN_31 -to motor_b1
 set_location_assignment PIN_24 -to motor_b2
 

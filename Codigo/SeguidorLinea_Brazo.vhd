@@ -82,45 +82,16 @@ architecture Behavioral of SeguidorLinea_Brazo is
             min_phi       : out   std_logic_vector(7 downto 0);
             found         : out   std_logic;
             scan_done     : out   std_logic;
+            scan_fault    : out   std_logic;
             dbg_meas_tick : out   std_logic
         );
     end component;
 
     -- -------------------------------------------------------------------------
-    -- Componente: grab_ctrl (orquestador del brazo: REST/agarre/HOLD/depósito)
-    -- -------------------------------------------------------------------------
-    component grab_ctrl
-        generic (
-            MOVE_CYCLES : integer := 125_000_000;
-            GRIP_CYCLES : integer := 40_000_000;
-            DROP_PHI    : integer := 90; DROP_T1 : integer := 45;
-            DROP_T2     : integer := 0;  DROP_T3 : integer := 0
-        );
-        port (
-            clk          : in  std_logic;
-            rst          : in  std_logic;
-            scan_active  : in  std_logic;
-            scan_done    : in  std_logic;
-            found        : in  std_logic;
-            min_t1       : in  std_logic_vector(7 downto 0);
-            min_d        : in  std_logic_vector(15 downto 0);
-            min_phi      : in  std_logic_vector(7 downto 0);
-            cmd_phi      : in  std_logic_vector(7 downto 0);
-            cmd_theta1   : in  std_logic_vector(7 downto 0);
-            cmd_theta2   : in  std_logic_vector(7 downto 0);
-            cmd_theta3   : in  std_logic_vector(7 downto 0);
-            cmd_grip     : in  std_logic;
-            trigger_drop : in  std_logic;
-            phi_out      : out std_logic_vector(7 downto 0);
-            theta1_out   : out std_logic_vector(7 downto 0);
-            theta2_out   : out std_logic_vector(7 downto 0);
-            theta3_out   : out std_logic_vector(7 downto 0);
-            grip_out     : out std_logic;
-            has_object   : out std_logic;
-            arm_ready    : out std_logic;
-            reachable    : out std_logic
-        );
-    end component;
+    -- grab_ctrl se instancia por ENTIDAD DIRECTA (entity work.grab_ctrl) más abajo,
+    -- igual que MaquinaEstados: así sus generics (MOVE/GRIP/DROP_*) son el ÚNICO mando.
+    -- Editar las poses de DEPÓSITO (DROP_PHI/T1/T2/T3) en grab_ctrl.vhd surte efecto
+    -- sin un default de component que las tape.
 
     -- MaquinaEstados se instancia por ENTIDAD DIRECTA (entity work.MaquinaEstados)
     -- más abajo, para que sus generics (DUTY_*, MODO_PIVOTE, LINE_LVL, ...) sean el
@@ -154,6 +125,7 @@ architecture Behavioral of SeguidorLinea_Brazo is
     signal scan_active : std_logic;
     signal scan_done   : std_logic;
     signal found       : std_logic;
+    signal scan_fault  : std_logic;   -- '1' = el barrido abortó: sensor VL53L0X no responde
     signal meas_tick   : std_logic;
     signal cmd_phi     : std_logic_vector(7 downto 0);
     signal cmd_theta1  : std_logic_vector(7 downto 0);
@@ -181,6 +153,7 @@ architecture Behavioral of SeguidorLinea_Brazo is
 
     -- LEDs
     signal me_led_estado : std_logic;
+    signal me_zona_fallo : std_logic;   -- '1' = detenido por fallo de sensor (LED 3)
 
 begin
 
@@ -198,18 +171,15 @@ begin
             cmd_phi => cmd_phi, cmd_theta1 => cmd_theta1, cmd_theta2 => cmd_theta2,
             cmd_theta3 => cmd_theta3, cmd_grip => cmd_grip,
             min_t1 => min_t1, min_d => min_d, min_phi => min_phi,
-            found => found, scan_done => scan_done, dbg_meas_tick => meas_tick
+            found => found, scan_done => scan_done, scan_fault => scan_fault,
+            dbg_meas_tick => meas_tick
         );
 
     -- =========================================================================
     -- grab_ctrl: ciclo del brazo (REST -> agarre -> HOLD -> depósito -> REST)
     -- =========================================================================
-    u_grab : grab_ctrl
-        -- Pose de DEPÓSITO al soltar el objeto: phi=90, theta1=90, theta2=0, theta3=0.
-        generic map (
-            DROP_PHI => 90, DROP_T1 => 90,
-            DROP_T2 => 0,   DROP_T3 => 0
-        )
+    -- Pose de DEPÓSITO y tiempos (MOVE/GRIP) se fijan en los generics de grab_ctrl.vhd.
+    u_grab : entity work.grab_ctrl
         port map (
             clk => clk, rst => reset_int,
             scan_active => scan_active, scan_done => scan_done, found => found,
@@ -223,24 +193,26 @@ begin
         );
 
     -- =========================================================================
-    -- MaquinaEstados: seguidor de línea SIMPLE (2 sensores DENTRO de la línea).
-    -- Ya NO orquesta el brazo; el LIDAR/brazo quedan instalados pero en reposo
-    -- (start_scan/trigger_drop fijos en '0').
+    -- MaquinaEstados: seguidor de línea SIMPLE (2 sensores DENTRO de la línea)
+    -- + ZONA DE RECOGIDA por rayas blancas (zebra). Al contar N_RAYAS y volver al
+    -- negro dispara start_scan; el brazo/LIDAR buscan y agarran (handshake con
+    -- grab_ctrl: scan_active/arm_ready/has_object) y luego reanuda el seguimiento.
     -- =========================================================================
     u_me : entity work.MaquinaEstados
-        -- Mandos (LINE_LVL, DUTY_*, MODO_PIVOTE, FILTRO_CYCLES) en los generics de
-        -- MaquinaEstados.vhd. LINE_LVL: '0'=línea negra, '1'=línea blanca.
+        -- Mandos (LINE_LVL, DUTY_*, MODO_PIVOTE, FILTRO_CYCLES, N_RAYAS, W_MAX/T_GAP)
+        -- en los generics de MaquinaEstados.vhd. LINE_LVL: '0'=línea negra, '1'=blanca.
         port map (
             clk => clk, rst => reset_int,
             sensor_izq => sensor_izq, sensor_der => sensor_der,
             motor_a1 => motor_a1, motor_a2 => motor_a2,
             motor_b1 => motor_b1, motor_b2 => motor_b2,
-            led_estado => me_led_estado
+            led_estado => me_led_estado,
+            -- Handshake con el brazo (zona alterna recogida/depósito)
+            start_scan => start_scan, trigger_drop => trigger_drop,
+            scan_active => scan_active,
+            arm_ready => arm_ready, has_object => has_object,
+            sensor_err => scan_fault, zona_fallo => me_zona_fallo
         );
-
-    -- Orquestación de zona desactivada: el brazo/LIDAR no se disparan.
-    start_scan   <= '0';
-    trigger_drop <= '0';
 
     -- =========================================================================
     -- polarPWM: 5 servos (theta1 ya invertido)
@@ -259,6 +231,6 @@ begin
     -- =========================================================================
     led_1 <= not me_led_estado;   -- vida (parpadeo 1 Hz)
     led_2 <= not has_object;      -- lleva el cubo
-    led_3 <= not scan_active;     -- escaneando
+    led_3 <= not me_zona_fallo;   -- ERROR: detenido por fallo de sensor VL53L0X
 
 end Behavioral;

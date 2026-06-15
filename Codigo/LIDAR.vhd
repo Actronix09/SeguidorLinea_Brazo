@@ -32,7 +32,8 @@ entity LIDAR is
         COARSE_T1_STEP  : integer := 9;           -- paso theta1 grueso (45..90 -> 6 pts)
         FINE_PHI_STEP   : integer := 3;           -- paso phi fino
         FINE_T1_STEP    : integer := 3;           -- paso theta1 fino
-        FOUND_TH        : integer := 200          -- mm: min_d < FOUND_TH => hay objeto
+        FOUND_TH        : integer := 200;         -- mm: min_d < FOUND_TH => hay objeto
+        WDOG_CYCLES     : integer := 100_000_000  -- watchdog: si el sensor no entrega medición en ~2 s, aborta el barrido
     );
     port (
         clk         : in    std_logic;
@@ -53,6 +54,7 @@ entity LIDAR is
         min_phi     : out   std_logic_vector(7 downto 0);    -- phi* del mínimo
         found       : out   std_logic;                       -- '1' si min_d < FOUND_TH (hay objeto)
         scan_done   : out   std_logic;
+        scan_fault  : out   std_logic;                       -- '1' (latcheado) si el último barrido se abortó: el sensor no responde
         dbg_meas_tick : out std_logic                       -- conmuta cada medición (LED de vida)
     );
 end LIDAR;
@@ -128,6 +130,12 @@ architecture rtl of LIDAR is
     signal min_phi_r   : std_logic_vector(7 downto 0)  := (others => '0');
     signal found_r     : std_logic := '0';
 
+    -- Watchdog del barrido: si el sensor deja de entregar mediciones (se atasca),
+    -- aborta en vez de esperar para siempre (el brazo no se queda congelado).
+    signal wdog        : integer range 0 to WDOG_CYCLES := 0;
+    signal aborted     : std_logic := '0';
+    signal scan_fault_r: std_logic := '0';   -- latcheado: '1' si el último barrido abortó (sensor)
+
     function imax(a, b : integer) return integer is
     begin
         if a > b then return a; else return b; end if;
@@ -175,6 +183,7 @@ begin
     min_phi   <= min_phi_r;
     found     <= found_r;
     scan_done <= scan_done_r;
+    scan_fault <= scan_fault_r;
     dbg_meas_tick <= meas_tick;
 
     -- --------------------------------------------------------------------
@@ -206,6 +215,9 @@ begin
             min_d_r     <= (others => '0');
             min_phi_r   <= (others => '0');
             found_r     <= '0';
+            wdog        <= 0;
+            aborted     <= '0';
+            scan_fault_r<= '0';
 
         elsif rising_edge(clk) then
 
@@ -215,6 +227,8 @@ begin
                 when S_IDLE =>
                     if start_scan = '1' then
                         scan_done_r <= '0';
+                        aborted  <= '0';
+                        wdog     <= 0;
                         best_d   <= (others => '1');
                         best_phi <= 90;
                         best_t1  <= T1_MAX;
@@ -241,6 +255,7 @@ begin
                         navg      <= 0;
                         discard1  <= '1';
                         tick_prev <= meas_tick;
+                        wdog      <= 0;                  -- arranca el watchdog del punto
                         st        <= S_AVG;
                     else
                         settle_cnt <= settle_cnt + 1;
@@ -250,6 +265,7 @@ begin
                 when S_AVG =>
                     if meas_tick /= tick_prev then
                         tick_prev <= meas_tick;
+                        wdog      <= 0;                  -- llegó medición: reinicia watchdog
                         if discard1 = '1' then
                             discard1 <= '0';             -- descarta la 1ª (puede ser de transición)
                         else
@@ -262,6 +278,11 @@ begin
                                 navg <= navg + 1;
                             end if;
                         end if;
+                    elsif wdog >= WDOG_CYCLES-1 then
+                        aborted <= '1';                 -- el sensor no responde: aborta el barrido
+                        st      <= S_DONE;
+                    else
+                        wdog <= wdog + 1;
                     end if;
 
                 -- Actualiza mínimo y avanza la rejilla
@@ -322,11 +343,14 @@ begin
                     min_t1_r  <= std_logic_vector(to_unsigned(best_t1, 8));
                     min_d_r   <= std_logic_vector(best_d);
                     min_phi_r <= std_logic_vector(to_unsigned(best_phi, 8));
-                    if best_d < to_unsigned(FOUND_TH, 16) then
+                    -- Si el barrido se abortó por watchdog, no declarar 'found'
+                    -- (el brazo vuelve a REST y el seguidor reanuda).
+                    if aborted = '0' and best_d < to_unsigned(FOUND_TH, 16) then
                         found_r <= '1';
                     else
                         found_r <= '0';
                     end if;
+                    scan_fault_r <= aborted;   -- '1' = el sensor no respondió (fallo)
                     scan_done_r <= '1';
                     st          <= S_IDLE;
 

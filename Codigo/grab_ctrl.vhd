@@ -22,7 +22,8 @@ use IEEE.NUMERIC_STD.ALL;
 entity grab_ctrl is
     generic (
         MOVE_CYCLES : integer := 125_000_000;   -- ~2.5 s para que el brazo llegue
-        GRIP_CYCLES : integer := 40_000_000;    -- ~0.8 s para abrir/cerrar la garra
+        GRIP_CYCLES : integer := 75_000_000;    -- ~1.5 s: la garra tarda ~1 s en cerrar (99°@rampa);
+                                                -- antes 0.8 s -> levantaba antes de terminar de agarrar
         DROP_PHI    : integer := 90;            -- pose de DEPÓSITO (girar a la derecha + extender)
         DROP_T1     : integer := 45;
         DROP_T2     : integer := 45;
@@ -60,27 +61,9 @@ end grab_ctrl;
 
 architecture rtl of grab_ctrl is
 
-    component kinematics
-        generic (
-            L1 : integer := 100; L2 : integer := 100; L3 : integer := 63;
-            L_GRIP : integer := 90; ALFA3_TGT : integer := -90;
-            Z_DROP : integer := 35; R_TRIM : integer := 20
-        );
-        port (
-            clk       : in  std_logic;
-            rst       : in  std_logic;
-            start     : in  std_logic;
-            in_t1     : in  std_logic_vector(7 downto 0);
-            in_d      : in  std_logic_vector(15 downto 0);
-            in_phi    : in  std_logic_vector(7 downto 0);
-            o_phi     : out std_logic_vector(7 downto 0);
-            o_theta1  : out std_logic_vector(7 downto 0);
-            o_theta2  : out std_logic_vector(7 downto 0);
-            o_theta3  : out std_logic_vector(7 downto 0);
-            reachable : out std_logic;
-            done      : out std_logic
-        );
-    end component;
+    -- kinematics se instancia por ENTIDAD DIRECTA (entity work.kinematics) más abajo:
+    -- así sus generics (L*, L_GRIP, Z_DROP, R_TRIM) son el ÚNICO mando de calibración.
+    -- Editar Z_DROP/R_TRIM en kinematics.vhd surte efecto sin un default de component que tape.
 
     function imax(a, b : integer) return integer is
     begin
@@ -108,7 +91,7 @@ architecture rtl of grab_ctrl is
 
 begin
 
-    u_kin : kinematics
+    u_kin : entity work.kinematics
         port map (
             clk => clk, rst => rst, start => ik_start,
             in_t1 => min_t1, in_d => min_d, in_phi => min_phi,

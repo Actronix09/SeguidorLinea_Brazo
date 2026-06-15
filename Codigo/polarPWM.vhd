@@ -113,15 +113,15 @@ architecture Behavioral of polarPWM is
     -- -------------------------------------------------------------------------
     -- Ángulos OBJETIVO (leídos de las entradas, sin compensación)
     -- -------------------------------------------------------------------------
-    signal tgt_phi  : integer range 0 to 180 := 0;
+    signal tgt_phi  : integer range 0 to 180 := 180;  -- reposo del brazo: phi=180 (sin tirón al encender)
     signal tgt_t1   : integer range 0 to 180 := 90;
     signal tgt_t2   : integer range 0 to 180 := 0;
     signal tgt_t3   : integer range 0 to 180 := 0;
     signal tgt_grip : integer range 0 to 180 := GRIP_CLOSE;
 
     -- cur_* inicializan en HOME para que al arrancar no haya salto de rampa
-    -- theta3 está invertida: HOME externo=0° → interno=180°
-    signal cur_phi  : integer range 0 to 180 := 0;
+    -- phi HOME=180 (= reposo del brazo); theta3 invertida: HOME externo=0° → interno=180°
+    signal cur_phi  : integer range 0 to 180 := 180;
     signal cur_t1   : integer range 0 to 180 := 90;
     signal cur_t2   : integer range 0 to 180 := 0;
     signal cur_t3   : integer range 0 to 180 := 180;  -- invertido: 180-0=180
@@ -150,7 +150,7 @@ begin
     begin
         if rising_edge(clk) then
             if rst = '1' then
-                tgt_phi  <= 0;
+                tgt_phi  <= 180;   -- reposo del brazo (sin tirón al encender)
                 tgt_t1   <= 90;
                 tgt_t2   <= 0;
                 tgt_t3   <= 180;   -- invertido: HOME externo=0° → interno=180°
@@ -198,7 +198,7 @@ begin
     begin
         if rising_edge(clk) then
             if rst = '1' then
-                cur_phi  <= 0;
+                cur_phi  <= 180;   -- reposo del brazo (sin tirón al encender)
                 cur_t1   <= 90;
                 cur_t2   <= 0;
                 cur_t3   <= 180;   -- invertido: HOME externo=0° → interno=180°

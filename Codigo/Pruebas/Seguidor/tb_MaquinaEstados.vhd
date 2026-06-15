@@ -1,13 +1,17 @@
 -- ============================================================================
--- tb_MaquinaEstados - Verifica el seguidor SIMPLE con los 2 sensores DENTRO de la
---   línea (línea ancha). s_*='1' = ese sensor está SOBRE el negro.
+-- tb_MaquinaEstados - Verifica el seguidor SIMPLE (2 sensores DENTRO de la línea)
+--   + la ZONA DE RECOGIDA por UNA línea blanca ancha.
+--
+--   s_*='1' = ese sensor está SOBRE la línea (LINE_LVL='1' en este tb).
 --   Tabla (s_izq=I, s_der=D):
---     (0,0) -> DETENERSE                 (ambas ruedas en 0)
---     (1,0) -> GIRAR IZQUIERDA           (DER empuja -> cb1>ca1)
---     (0,1) -> GIRAR DERECHA             (IZQ empuja -> ca1>cb1)
---     (1,1) -> AVANZAR                   (ambas ruedas ~igual)
---   Se prueba con MODO_PIVOTE=true: en los giros la rueda INTERIOR va en REVERSA
---   (se activa motor_a2/b2). Mide el duty de cada salida (cuenta > 1 periodo PWM).
+--     (1,1) -> AVANZAR            (ambas ruedas ~igual)
+--     (1,0) -> GIRAR IZQUIERDA    (DER empuja, IZQ en reversa por pívot)
+--     (0,1) -> GIRAR DERECHA      (IZQ empuja, DER en reversa por pívot)
+--     (0,0) -> doble blanco: AVANZA para cruzar; >=W_ARM arma; >W_STOP detiene
+--
+--   ZONA: doble blanco (0,0) >= W_ARM -> ARMA. Al volver a la línea (esperando que
+--   ambos sensores estén en (1,1)) se DISPARA start_scan. Doble blanco > W_STOP =
+--   pérdida -> DETENER. Si el barrido falla (sensor_err) -> E_FALLO (alto+zona_fallo).
 --
 --   vlib work
 --   vcom -2008 MaquinaEstados.vhd tb_MaquinaEstados.vhd
@@ -23,22 +27,10 @@ end tb_MaquinaEstados;
 
 architecture sim of tb_MaquinaEstados is
 
-    component MaquinaEstados
-        generic (
-            DUTY_RECTO    : integer := 30000;
-            DUTY_GIRO_EXT : integer := 45000;
-            DUTY_GIRO_INT : integer := 15000;
-            MODO_PIVOTE   : boolean := false;
-            FILTRO_CYCLES : integer := 15000;
-            LINE_LVL      : std_logic := '0'
-        );
-        port (
-            clk, rst : in std_logic;
-            sensor_izq, sensor_der : in std_logic;
-            motor_a1, motor_a2, motor_b1, motor_b2 : out std_logic;
-            led_estado : out std_logic
-        );
-    end component;
+    -- Umbrales chicos para simular rápido pero > 1 periodo PWM (65536) para medir duty.
+    constant C_FILTRO : integer := 4;
+    constant C_WARM   : integer := 200_000;   -- 4 ms @50MHz: arma la zona
+    constant C_WSTOP  : integer := 500_000;   -- 10 ms @50MHz: detiene (pérdida)
 
     signal clk : std_logic := '0';
     signal rst : std_logic := '1';
@@ -47,21 +39,41 @@ architecture sim of tb_MaquinaEstados is
     signal led_estado : std_logic;
     signal simdone : boolean := false;
 
+    -- Handshake con el brazo (los manda el tb).
+    signal start_scan   : std_logic;
+    signal trigger_drop : std_logic;
+    signal scan_active  : std_logic := '0';
+    signal arm_ready    : std_logic := '0';
+    signal has_object   : std_logic := '0';
+    signal sensor_err   : std_logic := '0';
+    signal zona_fallo   : std_logic;
+
     -- Medición de duty: cuenta ciclos en alto de cada salida mientras 'meas'.
-    -- a1/b1 = adelante (IZQ/DER); a2/b2 = reversa (IZQ/DER).
     signal meas : boolean := false;
     signal ca1, cb1, ca2, cb2 : integer := 0;
 
+    -- Cuenta de pulsos de start_scan / trigger_drop (la stim los lee).
+    signal n_scan : integer := 0;
+    signal n_drop : integer := 0;
+
 begin
 
-    -- LINE_LVL='1' en el tb: sizq/sder='1' = "sobre la línea". MODO_PIVOTE=true para
-    -- ejercitar el pívot (rueda interior en reversa).
-    dut : MaquinaEstados
-        generic map (MODO_PIVOTE => true, FILTRO_CYCLES => 4, LINE_LVL => '1')
+    dut : entity work.MaquinaEstados
+        generic map (
+            MODO_PIVOTE   => true,
+            FILTRO_CYCLES => C_FILTRO,
+            LINE_LVL      => '1',
+            W_ARM_CYCLES  => C_WARM,
+            W_STOP_CYCLES => C_WSTOP
+        )
         port map (
             clk => clk, rst => rst, sensor_izq => sizq, sensor_der => sder,
             motor_a1 => a1, motor_a2 => a2, motor_b1 => b1, motor_b2 => b2,
-            led_estado => led_estado
+            led_estado => led_estado,
+            start_scan => start_scan, trigger_drop => trigger_drop,
+            scan_active => scan_active,
+            arm_ready => arm_ready, has_object => has_object,
+            sensor_err => sensor_err, zona_fallo => zona_fallo
         );
 
     clk_proc : process
@@ -72,7 +84,6 @@ begin
         wait;
     end process;
 
-    -- Integra el duty de las 4 salidas (a1/b1=adelante, a2/b2=reversa).
     count : process(clk)
     begin
         if rising_edge(clk) then
@@ -87,20 +98,33 @@ begin
         end if;
     end process;
 
+    scancount : process(clk)
+    begin
+        if rising_edge(clk) then
+            if start_scan   = '1' then n_scan <= n_scan + 1; end if;
+            if trigger_drop = '1' then n_drop <= n_drop + 1; end if;
+        end if;
+    end process;
+
     stim : process
+        variable s0 : integer;
+        variable d0 : integer;
     begin
         rst <= '1'; wait for 200 ns; rst <= '0';
         wait until rising_edge(clk);
 
-        -- ---- (0,0) -> DETENERSE: ambas ruedas paradas ----
-        sizq <= '0'; sder <= '0'; wait for 2 us;
-        meas <= false; wait for 1 us;                 -- limpia contadores
-        meas <= true;  wait for 1.6 ms;               -- mide (> 1 periodo PWM); evalúa con meas activo
-        assert ca1 = 0 and cb1 = 0
-            report "FALLO (0,0): deberia DETENERSE (motores activos)" severity error;
-        report "(0,0) -> detenerse OK" severity note;
+        -- =====================================================================
+        -- FASE A: tabla normal (estado estable)
+        -- =====================================================================
+        sizq <= '1'; sder <= '1'; wait for 2 us;
+        meas <= false; wait for 1 us;
+        meas <= true;  wait for 1.6 ms;
+        assert ca1 > 5000 and cb1 > 5000
+            report "FALLO (1,1): el robot no avanza" severity error;
+        assert (ca1 - cb1) < 8000 and (cb1 - ca1) < 8000
+            report "FALLO (1,1): deberia AVANZAR recto" severity error;
+        report "(1,1) -> avanzar OK" severity note;
 
-        -- ---- (1,0) -> GIRAR IZQUIERDA: DER adelante, IZQ en REVERSA (pívot) ----
         sizq <= '1'; sder <= '0'; wait for 2 us;
         meas <= false; wait for 1 us;
         meas <= true;  wait for 1.6 ms;
@@ -108,9 +132,8 @@ begin
             report "FALLO (1,0): la rueda DER deberia empujar adelante" severity error;
         assert ca2 > 5000 and ca1 = 0
             report "FALLO (1,0): la rueda IZQ deberia ir en REVERSA (pivot)" severity error;
-        report "(1,0) -> girar izquierda (pivot: IZQ en reversa) OK" severity note;
+        report "(1,0) -> girar izquierda OK" severity note;
 
-        -- ---- (0,1) -> GIRAR DERECHA: IZQ adelante, DER en REVERSA (pívot) ----
         sizq <= '0'; sder <= '1'; wait for 2 us;
         meas <= false; wait for 1 us;
         meas <= true;  wait for 1.6 ms;
@@ -118,20 +141,126 @@ begin
             report "FALLO (0,1): la rueda IZQ deberia empujar adelante" severity error;
         assert cb2 > 5000 and cb1 = 0
             report "FALLO (0,1): la rueda DER deberia ir en REVERSA (pivot)" severity error;
-        report "(0,1) -> girar derecha (pivot: DER en reversa) OK" severity note;
+        report "(0,1) -> girar derecha OK" severity note;
 
-        -- ---- (1,1) -> AVANZAR: ambas ruedas ~iguales y en marcha ----
-        sizq <= '1'; sder <= '1'; wait for 2 us;
+        -- =====================================================================
+        -- FASE B: blanco BREVE (< W_ARM) -> AVANZA y NO dispara la zona
+        -- =====================================================================
+        s0 := n_scan;
+        sizq <= '0'; sder <= '0';                 -- doble blanco
+        wait for 1 us;
+        meas <= true;  wait for 1.6 ms;           -- aún < W_ARM(4ms): debe AVANZAR
+        assert ca1 > 5000 and cb1 > 5000
+            report "FALLO blanco breve: deberia AVANZAR para cruzar" severity error;
+        meas <= false;
+        sizq <= '1'; sder <= '1'; wait for 200 us;  -- vuelve a la linea
+        assert n_scan = s0
+            report "FALLO: blanco breve (<W_ARM) NO deberia disparar la zona" severity error;
+        report "blanco breve (<W_ARM) -> avanza, sin zona OK" severity note;
+
+        -- =====================================================================
+        -- FASE C: zona -> doble blanco >= W_ARM, espera a AMBOS sensores, dispara
+        -- =====================================================================
+        s0 := n_scan;
+        sizq <= '0'; sder <= '0'; wait for 6 ms;    -- doble blanco 6ms: ARMA (>=4ms, <10ms)
+        -- un sensor vuelve primero (0,1): aún NO debe disparar (espera al otro)
+        sizq <= '0'; sder <= '1'; wait for 1 ms;
+        assert n_scan = s0
+            report "FALLO zona: no debe disparar con un solo sensor (espera al otro)" severity error;
+        -- ahora vuelven AMBOS (1,1) -> dispara
+        sizq <= '1'; sder <= '1'; wait for 200 us;
+        assert n_scan > s0
+            report "FALLO zona: no disparo start_scan al volver ambos sensores" severity error;
+        report "zona: doble blanco >=0.5s + retorno a (1,1) -> start_scan OK" severity note;
+
+        -- Handshake del brazo: barrido y fin.
+        scan_active <= '1'; wait for 200 us;
+        scan_active <= '0'; arm_ready <= '1'; wait for 200 us;
+        arm_ready <= '0';
+
+        sizq <= '1'; sder <= '1'; wait for 50 us;
         meas <= false; wait for 1 us;
         meas <= true;  wait for 1.6 ms;
         assert ca1 > 5000 and cb1 > 5000
-            report "FALLO (1,1): el robot no avanza" severity error;
-        assert (ca1 - cb1) < 8000 and (cb1 - ca1) < 8000
-            report "FALLO (1,1): deberia AVANZAR recto (ruedas desbalanceadas)" severity error;
-        report "(1,1) -> avanzar OK" severity note;
-
+            report "FALLO zona: no reanudo el seguimiento tras arm_ready" severity error;
         meas <= false;
-        report "OK: seguidor simple (2 sensores dentro) sigue la tabla" severity note;
+        report "zona: reanuda seguimiento tras arm_ready OK" severity note;
+
+        -- =====================================================================
+        -- FASE C2: zona CON cubo -> DEPÓSITO (trigger_drop, NO start_scan)
+        -- =====================================================================
+        s0 := n_scan; d0 := n_drop;
+        has_object <= '1'; arm_ready <= '1';        -- lleva cubo, brazo en HOLD
+        sizq <= '0'; sder <= '0'; wait for 6 ms;    -- doble blanco: ARMA
+        sizq <= '1'; sder <= '1'; wait for 100 us;  -- vuelven ambos -> dispara la zona
+        assert n_drop > d0
+            report "FALLO deposito: no disparo trigger_drop al llegar con cubo" severity error;
+        assert n_scan = s0
+            report "FALLO deposito: con cubo NO debe escanear (start_scan)" severity error;
+        report "zona con cubo -> trigger_drop (deposita) OK" severity note;
+
+        -- Handshake del depósito: el brazo sale de HOLD (arm_ready=0), suelta y vuelve a REST.
+        arm_ready <= '0'; wait for 200 us;          -- depósito en curso
+        has_object <= '0';                          -- soltó el cubo
+        arm_ready <= '1'; wait for 200 us;          -- brazo de vuelta en reposo
+        arm_ready <= '0';
+
+        sizq <= '1'; sder <= '1'; wait for 50 us;
+        meas <= false; wait for 1 us;
+        meas <= true;  wait for 1.6 ms;
+        assert ca1 > 5000 and cb1 > 5000
+            report "FALLO deposito: no reanudo el seguimiento tras depositar" severity error;
+        meas <= false;
+        report "zona con cubo: deposita y reanuda seguimiento OK" severity note;
+
+        -- =====================================================================
+        -- FASE D: doble blanco SOSTENIDO (> W_STOP) -> ALTO FIJO (solo reset)
+        -- =====================================================================
+        rst <= '1'; sizq <= '1'; sder <= '1'; wait for 200 ns;
+        rst <= '0'; wait until rising_edge(clk);
+        wait for 1 us;
+
+        sizq <= '0'; sder <= '0'; wait for 11 ms;   -- > W_STOP(10ms): pérdida
+        meas <= true;  wait for 1.6 ms;
+        assert ca1 = 0 and cb1 = 0 and ca2 = 0 and cb2 = 0
+            report "FALLO perdida: doble blanco > 1s deberia DETENERSE" severity error;
+        meas <= false;
+        -- Alto FIJO: aunque vuelva la línea (1,1), NO debe reanudar.
+        sizq <= '1'; sder <= '1'; wait for 50 us;
+        meas <= false; wait for 1 us;
+        meas <= true;  wait for 1.6 ms;
+        assert ca1 = 0 and cb1 = 0 and ca2 = 0 and cb2 = 0
+            report "FALLO perdida: deberia quedar en ALTO FIJO (no reanuda con la linea)" severity error;
+        meas <= false;
+        report "doble blanco > W_STOP -> alto fijo (solo sale con reset) OK" severity note;
+
+        -- =====================================================================
+        -- FASE E: FALLO DE SENSOR -> E_FALLO (detiene + zona_fallo/LED error)
+        -- =====================================================================
+        rst <= '1'; sizq <= '1'; sder <= '1'; sensor_err <= '0'; wait for 200 ns;
+        rst <= '0'; wait until rising_edge(clk);
+        wait for 1 us;
+
+        sizq <= '0'; sder <= '0'; wait for 6 ms;    -- arma
+        sizq <= '1'; sder <= '1'; wait for 200 us;  -- dispara
+        scan_active <= '1'; wait for 200 us;
+        sensor_err  <= '1';                          -- el sensor no respondió
+        scan_active <= '0'; arm_ready <= '1'; wait for 200 us;
+        arm_ready <= '0';
+        assert zona_fallo = '1'
+            report "FALLO sensor: deberia entrar en E_FALLO (zona_fallo=1)" severity error;
+
+        sizq <= '1'; sder <= '1'; wait for 50 us;
+        meas <= false; wait for 1 us;
+        meas <= true;  wait for 1.6 ms;
+        assert ca1 = 0 and cb1 = 0 and ca2 = 0 and cb2 = 0
+            report "FALLO sensor: el robot deberia quedar DETENIDO en E_FALLO" severity error;
+        meas <= false;
+        assert zona_fallo = '1'
+            report "FALLO sensor: zona_fallo deberia seguir encendido" severity error;
+        report "fallo de sensor: robot detenido + zona_fallo (LED error) OK" severity note;
+
+        report "OK: seguidor + zona (1 linea blanca ancha) sigue la especificacion" severity note;
         simdone <= true;
         wait;
     end process;

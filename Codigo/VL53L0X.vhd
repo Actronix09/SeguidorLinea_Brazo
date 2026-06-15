@@ -44,6 +44,7 @@ architecture rtl of VL53L0X is
     -- Cuarto de periodo de SCL (4 fases por bit)
     constant QUARTER  : integer := CLK_FREQ_HZ / (I2C_FREQ_HZ * 4);
     constant POLL_MAX : integer := 255;     -- nº máx de sondeos data-ready
+    constant ERR_HARD : integer := 4;       -- errores ligeros seguidos antes de la recuperación DURA (bus + re-init)
 
     -- Corrección de offset del sensor en mm (lectura cruda = real + offset).
     -- Ajustar si el part-to-part offset de tu unidad es distinto.
@@ -57,8 +58,9 @@ architecture rtl of VL53L0X is
     constant CMD_WRITE : std_logic_vector(1 downto 0) := "10";
     constant CMD_READ  : std_logic_vector(1 downto 0) := "11";
 
-    type eng_state_t is (ES_IDLE, ES_START, ES_STOP, ES_WRITE, ES_READ, ES_FIN);
-    signal e_st    : eng_state_t := ES_IDLE;
+    -- ES_RECOVER/ES_RSTOP: recuperación del bus tras un reset (ver engine).
+    type eng_state_t is (ES_RECOVER, ES_RSTOP, ES_IDLE, ES_START, ES_STOP, ES_WRITE, ES_READ, ES_FIN);
+    signal e_st    : eng_state_t := ES_RECOVER;
     signal e_q     : integer range 0 to QUARTER-1 := 0;
     signal e_phase : integer range 0 to 3 := 0;
     signal e_bit   : integer range 0 to 8 := 0;
@@ -110,7 +112,9 @@ architecture rtl of VL53L0X is
                          A_CAL_STOP, A_CAL_STOP_W, A_CAL_RESTORE, A_CAL_RESTORE_W,
                          A_AFTER_INIT,
                          A_POLL, A_POLL_WAIT, A_RANGE, A_RANGE_WAIT,
-                         A_CLEAR, A_CLEAR_WAIT, A_UPDATE, A_ERROR);
+                         A_CLEAR, A_CLEAR_WAIT, A_UPDATE,
+                         A_RECLR, A_RECLR_W,            -- recuperación ligera (post-init)
+                         A_ERROR);
     signal app_state : app_state_t := A_PWRUP;
     signal idx       : integer range 0 to 31 := 0;
     signal tune_idx  : integer range 0 to 127 := 0;
@@ -125,6 +129,9 @@ architecture rtl of VL53L0X is
     signal pwr_cnt   : integer range 0 to PWRUP_CYCLES-1 := 0;
     signal tick_r    : std_logic := '0';
     signal cal_phase : integer range 0 to 1 := 0;  -- 0 = VHV, 1 = fase
+    signal inited    : std_logic := '0';           -- '1' tras el init: un error de medición se recupera ligero (no re-init)
+    signal err_streak: integer range 0 to ERR_HARD := 0;  -- errores ligeros consecutivos (0 tras una medición OK)
+    signal recover_req: std_logic := '0';          -- app -> motor I2C: pide limpiar el bus (pulsos SCL) antes de re-init
 
 begin
 
@@ -142,7 +149,10 @@ begin
         variable tick : boolean;
     begin
         if rst = '1' then
-            e_st    <= ES_IDLE;
+            -- Arranca en RECUPERACIÓN del bus (no en IDLE) para desatascar un
+            -- esclavo que quedó a media transacción si el reset se pulsó a mitad
+            -- de una lectura I2C (mantenía SDA en bajo esperando reloj).
+            e_st    <= ES_RECOVER;
             e_q     <= 0;
             e_phase <= 0;
             e_bit   <= 0;
@@ -167,8 +177,49 @@ begin
             end if;
 
             case e_st is
+                -- Recuperación del bus: con SDA liberado, pulsa SCL hasta 9 veces
+                -- para que un esclavo colgado a media transacción termine su byte y
+                -- suelte SDA. Se ejecuta una vez tras cada reset, antes de IDLE.
+                when ES_RECOVER =>
+                    case e_phase is
+                        when 0      => e_scl <= '0'; e_sda <= '1';
+                        when 1      => e_scl <= '1';
+                        when 2      => e_scl <= '1';
+                        when others => e_scl <= '0';
+                    end case;
+                    if tick then
+                        if e_phase = 3 then
+                            e_phase <= 0;
+                            if e_bit = 8 then        -- 9 pulsos de SCL hechos
+                                e_bit <= 0;
+                                e_st  <= ES_RSTOP;
+                            else
+                                e_bit <= e_bit + 1;
+                            end if;
+                        else
+                            e_phase <= e_phase + 1;
+                        end if;
+                    end if;
+
+                -- STOP de cierre tras la recuperación (SDA sube con SCL alto) -> bus libre.
+                when ES_RSTOP =>
+                    case e_phase is
+                        when 0      => e_sda <= '0'; e_scl <= '0';
+                        when 1      => e_sda <= '0'; e_scl <= '1';
+                        when others => e_sda <= '1'; e_scl <= '1';
+                    end case;
+                    if tick then
+                        if e_phase = 3 then e_st <= ES_IDLE; else e_phase <= e_phase + 1; end if;
+                    end if;
+
                 when ES_IDLE =>
-                    if eng_start = '1' then
+                    if recover_req = '1' then
+                        -- La app pide recuperar el bus (pulsos SCL) para desatascar
+                        -- un esclavo trabado a media transacción.
+                        e_q <= 0; e_phase <= 0; e_bit <= 0;
+                        e_scl <= '1'; e_sda <= '1';
+                        e_st  <= ES_RECOVER;
+                    elsif eng_start = '1' then
                         e_q     <= 0;
                         e_phase <= 0;
                         e_bit   <= 0;
@@ -406,6 +457,9 @@ begin
             distance_mm <= (others => '0');
             data_valid  <= '0';
             sensor_ok   <= '0';
+            inited      <= '0';
+            err_streak  <= 0;
+            recover_req <= '0';
             err_code    <= ERR_NONE;
             tick_r      <= '0';
             txn_start   <= '0';
@@ -413,14 +467,19 @@ begin
             txn_reg     <= (others => '0');
             txn_wdata   <= (others => '0');
         elsif rising_edge(clk) then
-            txn_start <= '0';   -- pulso por defecto a '0'
+            txn_start   <= '0';   -- pulso por defecto a '0'
+            recover_req <= '0';   -- pulso por defecto a '0'
 
             case app_state is
                 when A_PWRUP =>
                     if pwr_cnt = PWRUP_CYCLES-1 then
-                        rom_sel   <= '0';
-                        idx       <= 0;
-                        app_state <= A_EXEC;
+                        -- No arrancar el init hasta que el motor I2C esté libre (por si
+                        -- venimos de una recuperación del bus en curso); evita perder eng_start.
+                        if e_st = ES_IDLE then
+                            rom_sel   <= '0';
+                            idx       <= 0;
+                            app_state <= A_EXEC;
+                        end if;
                     else
                         pwr_cnt <= pwr_cnt + 1;
                     end if;
@@ -586,6 +645,7 @@ begin
 
                 when A_AFTER_INIT =>
                     sensor_ok <= '1';
+                    inited    <= '1';     -- a partir de aquí los errores se recuperan ligero
                     rom_sel   <= '1';
                     idx       <= 0;
                     app_state <= A_EXEC;
@@ -638,12 +698,48 @@ begin
                     end if;
                     data_valid  <= '1';
                     tick_r      <= not tick_r;
+                    err_streak  <= 0;            -- medición OK: limpia la racha de errores
                     rom_sel     <= '1';
                     idx         <= 0;
                     app_state   <= A_EXEC;       -- siguiente medición (continuo)
 
+                -- ----------------------------------------------------------
+                -- Recuperación LIGERA (sensor ya inicializado): limpia la
+                -- interrupción que quedó levantada y re-arma una medición. NO
+                -- re-inicializa (un re-init completo en caliente corrompe el
+                -- sensor y la calibración se cuelga -> error constante).
+                -- ----------------------------------------------------------
+                when A_RECLR =>
+                    txn_kind  <= TXN_WRITE; txn_reg <= REG_INT_CLEAR; txn_wdata <= x"01";
+                    txn_start <= '1';       app_state <= A_RECLR_W;
+
+                when A_RECLR_W =>
+                    if txn_done = '1' then
+                        poll_cnt  <= 0;
+                        rom_sel   <= '1'; idx <= 0;   -- re-arma single-shot (MEAS_ROM)
+                        app_state <= A_EXEC;
+                    end if;
+
                 when A_ERROR =>
-                    app_state <= A_ERROR;        -- se mantiene; se sale con reset
+                    -- Recuperación ESCALADA:
+                    --  * ya midiendo + pocos errores seguidos -> LIGERA (limpia int + re-arma).
+                    --  * demasiados errores seguidos, o error en el init -> DURA: libera el
+                    --    bus (pulsos SCL) y re-inicializa. Rompe atascos profundos (bus
+                    --    trabado / sensor confundido) que la ligera no resuelve.
+                    if inited = '1' and err_streak < ERR_HARD then
+                        err_streak <= err_streak + 1;
+                        app_state  <= A_RECLR;
+                    else
+                        err_streak  <= 0;
+                        inited      <= '0';
+                        sensor_ok   <= '0';
+                        data_valid  <= '0';
+                        recover_req <= '1';      -- el motor I2C limpia el bus antes del re-init
+                        pwr_cnt     <= 0;
+                        rom_sel     <= '0';
+                        idx         <= 0;
+                        app_state   <= A_PWRUP;
+                    end if;
             end case;
         end if;
     end process;
