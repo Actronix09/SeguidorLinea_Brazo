@@ -122,41 +122,9 @@ architecture Behavioral of SeguidorLinea_Brazo is
         );
     end component;
 
-    -- -------------------------------------------------------------------------
-    -- Componente: MaquinaEstados (seguidor de línea + orquestación)
-    -- -------------------------------------------------------------------------
-    component MaquinaEstados
-        generic (
-            USAR_ZONA     : boolean := false;
-            MODO_ZONA     : integer := 2;
-            N_RAYAS       : integer := 2;
-            N_ALTERN      : integer := 4;
-            ZONA_CYCLES   : integer := 15_000_000;
-            LEAD_CYCLES   : integer := 2_000_000;
-            W_MIN_CYCLES  : integer := 500_000;
-            W_MAX_CYCLES  : integer := 6_000_000;
-            T_GAP_CYCLES  : integer := 8_000_000;
-            FILTRO_CYCLES : integer := 50_000;
-            LINE_LVL      : std_logic := '0'
-        );
-        port (
-            clk          : in  std_logic;
-            rst          : in  std_logic;
-            sensor_izq   : in  std_logic;
-            sensor_der   : in  std_logic;
-            motor_a1     : out std_logic;
-            motor_a2     : out std_logic;
-            motor_b1     : out std_logic;
-            motor_b2     : out std_logic;
-            start_scan   : out std_logic;
-            trigger_drop : out std_logic;
-            scan_active  : in  std_logic;
-            arm_ready    : in  std_logic;
-            has_object   : in  std_logic;
-            led_estado   : out std_logic;
-            led_error    : out std_logic
-        );
-    end component;
+    -- MaquinaEstados se instancia por ENTIDAD DIRECTA (entity work.MaquinaEstados)
+    -- más abajo, para que sus generics (DUTY_*, MODO_PIVOTE, LINE_LVL, ...) sean el
+    -- ÚNICO mando: editarlos en MaquinaEstados.vhd surte efecto sin defaults que tapen.
 
     -- -------------------------------------------------------------------------
     -- Componente: polarPWM (5 servos)
@@ -255,26 +223,24 @@ begin
         );
 
     -- =========================================================================
-    -- MaquinaEstados: seguidor de línea + orquestación por estado de acarreo
+    -- MaquinaEstados: seguidor de línea SIMPLE (2 sensores DENTRO de la línea).
+    -- Ya NO orquesta el brazo; el LIDAR/brazo quedan instalados pero en reposo
+    -- (start_scan/trigger_drop fijos en '0').
     -- =========================================================================
-    u_me : MaquinaEstados
-        -- QRD físico: '1' en BLANCO, '0' en NEGRO -> "sobre la línea negra" = '0'.
-        -- Velocidad/calibración: constantes DUTY_* dentro de MaquinaEstados.vhd.
-        generic map (
-            USAR_ZONA     => false,         -- poner true para activar brazo/zona (LIDAR + depósito)
-            MODO_ZONA     => 2,             -- marcador de zona: 0=tiempo,1=ajedrez,2=rayas,3=cuadro
-            LINE_LVL      => '0',
-            FILTRO_CYCLES => 15_000
-            )
+    u_me : entity work.MaquinaEstados
+        -- Mandos (LINE_LVL, DUTY_*, MODO_PIVOTE, FILTRO_CYCLES) en los generics de
+        -- MaquinaEstados.vhd. LINE_LVL: '0'=línea negra, '1'=línea blanca.
         port map (
             clk => clk, rst => reset_int,
             sensor_izq => sensor_izq, sensor_der => sensor_der,
             motor_a1 => motor_a1, motor_a2 => motor_a2,
             motor_b1 => motor_b1, motor_b2 => motor_b2,
-            start_scan => start_scan, trigger_drop => trigger_drop,
-            scan_active => scan_active, arm_ready => arm_ready, has_object => has_object,
-            led_estado => me_led_estado, led_error => open
+            led_estado => me_led_estado
         );
+
+    -- Orquestación de zona desactivada: el brazo/LIDAR no se disparan.
+    start_scan   <= '0';
+    trigger_drop <= '0';
 
     -- =========================================================================
     -- polarPWM: 5 servos (theta1 ya invertido)

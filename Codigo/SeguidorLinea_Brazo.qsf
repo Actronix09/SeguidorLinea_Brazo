@@ -3,7 +3,7 @@
 # ============================================================================
 
 set_global_assignment -name FAMILY "Cyclone II"
-set_global_assignment -name DEVICE EP2C5T144C7
+set_global_assignment -name DEVICE EP2C5T144C8
 set_global_assignment -name TOP_LEVEL_ENTITY SeguidorLinea_Brazo
 
 # ============================================================================
@@ -40,7 +40,10 @@ set_global_assignment -name VHDL_FILE Pruebas/Motores/TestMotores.vhd
 set_global_assignment -name VHDL_FILE Pruebas/Seguidor/tb_MaquinaEstados.vhd
 
 # Sensor
-set_global_assignment -name VHDL_FILE Pruebas/Sensor/tb_VL53L0X.vhdd
+set_global_assignment -name VHDL_FILE Pruebas/Sensor/tb_VL53L0X.vhd
+
+# Sensores
+set_global_assignment -name VHDL_FILE Pruebas/Sensores/TestSensores.vhd
 
 # ============================================================================
 # Directorio de salida
@@ -49,6 +52,8 @@ set_global_assignment -name VHDL_FILE Pruebas/Sensor/tb_VL53L0X.vhdd
 set_global_assignment -name VHDL_FILE Codigo/Pruebas/Motores/TestMotores.vhd
 set_global_assignment -name VHDL_FILE Codigo/MaquinaEstados.vhd
 set_global_assignment -name VHDL_FILE Codigo/SeguidorLinea_Brazo.vhd
+set_global_assignment -name VHDL_FILE Codigo/Pruebas/Sensores/TestSensores.vhd
+set_global_assignment -name VHDL_FILE Codigo/Pruebas/Brazo/SeguidorLinea_BrazoTestBrazo.vhd
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output
 
 # ============================================================================

@@ -88,7 +88,7 @@ architecture Behavioral of SeguidorLinea_BrazoTestBrazo is
         --  phi   t1   t2   t3   grip
         ( 180,  90,   0,   0, '0'),
         (  45,  90,   0,   0, '1'),
-        (  45, 135,  45,   0, '1'),
+        (  45, 135,  45,   0, '1'), 
         ( 135, 135,  45,   0, '1'),
         ( 135,  90,   0,   0, '1'),
         ( 180,  90,   0,   0, '0')
