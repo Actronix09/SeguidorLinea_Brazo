@@ -24,6 +24,9 @@
 --   Si el barrido falla (sensor_err) -> E_FALLO: brazo en reposo, robot detenido,
 --   zona_fallo='1' (LED de error). Sale con reset.
 --
+--   ARRANQUE (anti-atasco): al ENCENDER y al SALIR de zona el robot venía PARADO; un
+--   empujón recto `DUTY_ARRANQUE` durante `T_ARRANQUE` lo despega antes de seguir la línea.
+--
 --   Motores L293 (PWM con signo): + adelante (INx1=PWM), - reversa (INx2=PWM), 0 = freno.
 --   Duty de marcha de cada rueda = |tgt_*| / 65536.
 -- ============================================================================
@@ -33,12 +36,15 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity MaquinaEstados is
     generic (
-        DUTY_RECTO    : integer := 29000;  -- duty en recta (0..65535)
-        DUTY_GIRO_EXT : integer := 28000;  -- rueda exterior en curva (la que empuja)
-        DUTY_GIRO_INT : integer := 28000;  -- rueda interior en curva (magnitud)
+        DUTY_RECTO    : integer := 30000;  -- duty en recta (0..65535)
+        DUTY_GIRO_EXT : integer := 29000;  -- rueda exterior en curva (la que empuja)
+        DUTY_GIRO_INT : integer := 29000;  -- rueda interior en curva (magnitud)
         MODO_PIVOTE   : boolean := true;   -- false = arco suave; true = pivote (interior en reversa)
         FILTRO_CYCLES : integer := 0;      -- antirrebote del sensor (~0.3 ms @50MHz)
         LINE_LVL      : std_logic := '0';  -- valor del QRD SOBRE la línea: '0'=línea NEGRA, '1'=línea BLANCA
+        -- Empujón de ARRANQUE (anti-atasco) al ENCENDER y al SALIR de zona (venía parado).
+        DUTY_ARRANQUE : integer := 40000;      -- duty recto del empujón (0..65535); 0 = desactiva
+        T_ARRANQUE    : integer := 12_500_000; -- duración del empujón (~0.25 s @50MHz)
         -- Zona de recogida (1 línea blanca ancha). Calibrar a velocidad y ancho reales.
         W_ARM_CYCLES  : integer := 12_500_000; -- doble blanco MÍNIMO para ARMAR la zona (~0.5 s @50MHz)
         W_STOP_CYCLES : integer := 25_000_000  -- doble blanco que DETIENE el robot (pérdida real, ~1 s)
@@ -91,11 +97,13 @@ architecture rtl of MaquinaEstados is
     --   E_PERDIDA: alto FIJO por pérdida de línea (doble blanco > W_STOP). Sale con reset.
     --   E_FALLO  : alto FIJO por fallo de sensor durante el barrido.        Sale con reset.
     --   E_DROP_INI/E_DROP_FIN: con cubo, la zona DEPOSITA (alterna recogida/depósito).
-    type est_t is (E_SEGUIR, E_ZONA, E_SCAN_INI, E_SCAN_FIN,
+    --   E_ARRANQUE: empujón recto configurable al encender y al salir de zona (anti-atasco).
+    type est_t is (E_ARRANQUE, E_SEGUIR, E_ZONA, E_SCAN_INI, E_SCAN_FIN,
                    E_DROP_INI, E_DROP_FIN, E_PERDIDA, E_FALLO);
-    signal est : est_t := E_SEGUIR;
+    signal est : est_t := E_ARRANQUE;
 
     signal white_cnt    : integer range 0 to W_STOP_CYCLES := 0;  -- ciclos de doble blanco (0,0)
+    signal arr_cnt      : integer range 0 to T_ARRANQUE := 0;     -- ciclos del empujón de arranque
     signal armed        : std_logic := '0';                      -- '1' = doble blanco >= 0.5 s, zona armada
     signal start_scan_r : std_logic := '0';
     signal trigger_drop_r : std_logic := '0';
@@ -155,8 +163,8 @@ begin
             flt_izq <= 0; flt_der <= 0;
             s_izq <= '0'; s_der <= '0';
             tgt_l <= 0; tgt_r <= 0;
-            est <= E_SEGUIR;
-            white_cnt <= 0; armed <= '0'; start_scan_r <= '0'; trigger_drop_r <= '0';
+            est <= E_ARRANQUE;
+            white_cnt <= 0; arr_cnt <= 0; armed <= '0'; start_scan_r <= '0'; trigger_drop_r <= '0';
         elsif rising_edge(clk) then
 
             start_scan_r   <= '0';   -- por defecto: sin pulso
@@ -185,6 +193,19 @@ begin
 
             -- ---- FSM de zona -------------------------------------------------
             case est is
+
+                -- ============ ARRANQUE: empujón recto configurable (anti-atasco) ============
+                --   Al encender y al salir de zona el robot venía PARADO; un empujón recto
+                --   `DUTY_ARRANQUE` durante `T_ARRANQUE` lo despega antes de seguir la línea.
+                when E_ARRANQUE =>
+                    tgt_l <= DUTY_ARRANQUE; tgt_r <= DUTY_ARRANQUE;
+                    if arr_cnt >= T_ARRANQUE-1 then
+                        arr_cnt <= 0;
+                        white_cnt <= 0; armed <= '0';
+                        est <= E_SEGUIR;
+                    else
+                        arr_cnt <= arr_cnt + 1;
+                    end if;
 
                 -- ============ SEGUIR: tabla normal + detección de zona ============
                 when E_SEGUIR =>
@@ -247,8 +268,8 @@ begin
                         if sensor_err = '1' then
                             est <= E_FALLO;                 -- el sensor falló: detener y avisar
                         else
-                            est <= E_SEGUIR;                -- todo bien: reanuda el seguimiento
-                            white_cnt <= 0; armed <= '0';
+                            est <= E_ARRANQUE;              -- todo bien: empujón y reanuda el seguimiento
+                            arr_cnt <= 0; white_cnt <= 0; armed <= '0';
                         end if;
                     end if;
 
@@ -263,8 +284,8 @@ begin
                 when E_DROP_FIN =>
                     tgt_l <= 0; tgt_r <= 0;
                     if arm_ready = '1' then              -- depósito completo: brazo en reposo
-                        est <= E_SEGUIR;
-                        white_cnt <= 0; armed <= '0';
+                        est <= E_ARRANQUE;               -- empujón y reanuda el seguimiento
+                        arr_cnt <= 0; white_cnt <= 0; armed <= '0';
                     end if;
 
                 -- ============ PÉRDIDA de línea: alto FIJO (sale con reset) ============

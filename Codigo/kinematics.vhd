@@ -34,8 +34,8 @@ entity kinematics is
         L3        : integer := 63;      -- mm (eje theta3 -> cara sensor), 62.7 redondeado
         L_GRIP    : integer := 90;      -- mm (eje theta3 -> punta de la garra): 62.7 + 27.5
         ALFA3_TGT : integer := -90;     -- grados: orientación absoluta de la garra (-90 = abajo)
-        Z_DROP    : integer := 30;      -- mm: baja la garra bajo la cima del cubo (calib HW: -5 -> subir 5 mm)
-        R_TRIM    : integer := 30       -- mm: recorta el radial del objetivo (calib HW: +10 -> 1 cm menos adelante)
+        Z_DROP    : integer := 40;      -- mm: baja la garra bajo la cima del cubo (calib HW 2026-06-15: +20 -> baja 2 cm al agarrar)
+        R_TRIM    : integer := 20       -- mm: recorta el radial del objetivo (calib HW: +10 -> 1 cm menos adelante)
     );
     port (
         clk       : in  std_logic;

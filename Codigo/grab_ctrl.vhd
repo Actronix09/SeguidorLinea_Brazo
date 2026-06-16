@@ -24,7 +24,7 @@ entity grab_ctrl is
         MOVE_CYCLES : integer := 125_000_000;   -- ~2.5 s para que el brazo llegue
         GRIP_CYCLES : integer := 75_000_000;    -- ~1.5 s: la garra tarda ~1 s en cerrar (99°@rampa);
                                                 -- antes 0.8 s -> levantaba antes de terminar de agarrar
-        DROP_PHI    : integer := 90;            -- pose de DEPÓSITO (girar a la derecha + extender)
+        DROP_PHI    : integer := 100;            -- pose de DEPÓSITO (girar a la derecha + extender)
         DROP_T1     : integer := 45;
         DROP_T2     : integer := 45;
         DROP_T3     : integer := 0

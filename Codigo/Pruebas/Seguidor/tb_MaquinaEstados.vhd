@@ -31,6 +31,7 @@ architecture sim of tb_MaquinaEstados is
     constant C_FILTRO : integer := 4;
     constant C_WARM   : integer := 200_000;   -- 4 ms @50MHz: arma la zona
     constant C_WSTOP  : integer := 500_000;   -- 10 ms @50MHz: detiene (pérdida)
+    constant C_ARR    : integer := 2_000;     -- 40 us @50MHz: empujón de arranque (corto para el tb)
 
     signal clk : std_logic := '0';
     signal rst : std_logic := '1';
@@ -63,6 +64,8 @@ begin
             MODO_PIVOTE   => true,
             FILTRO_CYCLES => C_FILTRO,
             LINE_LVL      => '1',
+            DUTY_ARRANQUE => 40000,
+            T_ARRANQUE    => C_ARR,
             W_ARM_CYCLES  => C_WARM,
             W_STOP_CYCLES => C_WSTOP
         )
@@ -112,6 +115,19 @@ begin
     begin
         rst <= '1'; wait for 200 ns; rst <= '0';
         wait until rising_edge(clk);
+
+        -- =====================================================================
+        -- FASE 0: ARRANQUE -> empujón recto al ENCENDER (anti-atasco)
+        -- =====================================================================
+        sizq <= '0'; sder <= '0';                 -- sensores irrelevantes: el empujón es ciego
+        meas <= true; wait for 25 us;             -- mide dentro del empujón (T_ARRANQUE=40us)
+        assert ca1 > 100 and cb1 > 100
+            report "FALLO arranque: el empujon deberia mover AMBOS motores adelante" severity error;
+        assert ca2 = 0 and cb2 = 0
+            report "FALLO arranque: el empujon NO deberia ir en reversa" severity error;
+        meas <= false;
+        report "arranque: empujon recto al encender OK" severity note;
+        wait for 50 us;                           -- deja terminar el empujón -> E_SEGUIR
 
         -- =====================================================================
         -- FASE A: tabla normal (estado estable)
