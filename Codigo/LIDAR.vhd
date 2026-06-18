@@ -1,182 +1,324 @@
 -- ============================================================================
--- LIDAR - Control del Sensor VL6180X
--- FPGA: Cyclone IV EP4CE6E22C8 | Sensor: VL6180X (I2C)
--- ============================================================================
--- Descripción: Escanea un área de -45° a +45° detectando objetos mediante
--- el sensor de distancia óptico VL6180X. Retorna las coordenadas polares
--- del objeto más cercano usando promedio ponderado.
+-- LIDAR - Escáner 2D con el brazo: localiza el objeto más cercano (cubo) y
+--         entrega el PUNTO CRUDO del mínimo (theta1*, d*, phi*) + 'found'.
+-- FPGA: Cyclone II EP2C5T144C7 | Placa: RZ-EasyFPGA A2.2 | Reloj: 50 MHz
+-- ----------------------------------------------------------------------------
+-- Patrón de barrido (al recibir start_scan):
+--   1) Pose: theta3 fijo = 0 (haz vertical hacia ABAJO), grip ABIERTO.
+--   2) Barrido GRUESO 2D: phi 45->135 y theta1 90->45 (con theta2 = 90-theta1
+--      ACOPLADO, L2 horizontal -> el haz baja vertical y se TRASLADA sobre la mesa).
+--      Serpentina; en cada punto promedia N_AVG mediciones y guarda el de MENOR
+--      distancia (= cima del cubo).
+--   3) Barrido FINO alrededor del mínimo (theta1 SIEMPRE en el mismo sentido).
+--   4) Latchea el mínimo crudo (best_t1, best_d, best_phi) -> salidas min_*, marca
+--      found = (min_d < FOUND_TH) y pulsa scan_done. La cinemática (FK+IK) la hace
+--      'kinematics' aguas abajo (en grab_ctrl), NO aquí.
+--
+-- Comanda ÁNGULOS ABSOLUTOS de servo (0-180) -> van a polarPWM. rst activo ALTO.
 -- ============================================================================
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
--- ============================================================================
--- ENTITY: LIDAR
--- ============================================================================
 entity LIDAR is
-    Port (
-        clk           : in  std_logic;                     -- 50 MHz
-        rst           : in  std_logic;                     -- Reset
-        start_scan    : in  std_logic;                     -- Inicio escaneo
-        i2c_scl       : out std_logic;                     -- I2C clock
-        i2c_sda       : inout std_logic;                   -- I2C data
-        i2c_gpio      : in  std_logic;                     -- GPIO (opcional)
-        best_phi      : out std_logic_vector(7 downto 0);  -- Phi mejor
-        best_theta    : out std_logic_vector(7 downto 0);  -- Theta mejor
-        best_distance : out std_logic_vector(7 downto 0);  -- Distancia
-        scan_complete : out std_logic;                     -- Fin escaneo
-        current_state : out std_logic_vector(3 downto 0);  -- Debug
-        debug_data    : out std_logic_vector(15 downto 0)  -- Debug
+    generic (
+        CLK_FREQ_HZ     : integer := 50_000_000;
+        I2C_FREQ_HZ     : integer := 100_000;
+        PWRUP_CYCLES    : integer := 500_000;
+        SETTLE_CYCLES   : integer := 5_000_000;  -- asentamiento del servo por punto
+        N_AVG           : integer := 8;
+        COARSE_PHI_STEP : integer := 10;
+        COARSE_T1_STEP  : integer := 9;
+        FINE_PHI_STEP   : integer := 3;
+        FINE_T1_STEP    : integer := 3;
+        FOUND_TH        : integer := 200;         -- mm: min_d < FOUND_TH => hay objeto
+        WDOG_CYCLES     : integer := 100_000_000  -- aborta si el sensor no entrega medicion en ~2 s
+    );
+    port (
+        clk           : in    std_logic;
+        rst           : in    std_logic;
+        start_scan    : in    std_logic;
+        i2c_scl       : out   std_logic;
+        i2c_sda       : inout std_logic;
+        scan_active   : out   std_logic;
+        cmd_phi       : out   std_logic_vector(7 downto 0);
+        cmd_theta1    : out   std_logic_vector(7 downto 0);
+        cmd_theta2    : out   std_logic_vector(7 downto 0);
+        cmd_theta3    : out   std_logic_vector(7 downto 0);
+        cmd_grip      : out   std_logic;
+        min_t1        : out   std_logic_vector(7 downto 0);
+        min_d         : out   std_logic_vector(15 downto 0);
+        min_phi       : out   std_logic_vector(7 downto 0);
+        found         : out   std_logic;
+        scan_done     : out   std_logic;
+        scan_fault    : out   std_logic;
+        dbg_meas_tick : out   std_logic
     );
 end LIDAR;
 
--- ============================================================================
--- ARCHITECTURE: Behavioral
--- ============================================================================
-architecture Behavioral of LIDAR is
+architecture rtl of LIDAR is
 
-    -- Constantes
-    constant NUM_SCAN_POINTS : integer := 19;  -- -45° a +45° en pasos de 5°
-    subtype distance_type is integer range 0 to 255;
-    subtype angle_type is integer range -45 to 45;
-    type distance_array is array (0 to NUM_SCAN_POINTS-1) of distance_type;
-    type angle_array is array (0 to NUM_SCAN_POINTS-1) of angle_type;
+    constant PHI_MIN     : integer := 45;
+    constant PHI_MAX     : integer := 135;
+    constant T1_MIN      : integer := 45;
+    constant T1_MAX      : integer := 90;
+    constant THETA3_POSE : integer := 0;
 
-    -- Máquina de estados
-    type state_type is (IDLE, INIT, STARTING, WAIT_M, READ_M, NEXT_PT, REFINE, CALC, OUTPUT, COMPLETE);
-    signal state : state_type := IDLE;
-    
-    -- Datos de escaneo
-    signal scan_idx      : integer range 0 to NUM_SCAN_POINTS-1 := 0;
-    signal phi_angle     : angle_type := 0;
-    signal measured_dist : distance_type := 0;
-    signal distances     : distance_array := (others => 0);
-    signal phi_values    : angle_array := (others => 0);
-    signal min_idx       : integer range 0 to NUM_SCAN_POINTS-1 := 0;
-    signal min_dist      : distance_type := 255;
-    
-    -- Resultados
-    signal best_phi_int   : angle_type := 0;
-    signal best_theta_int : integer range 0 to 180 := 90;
-    signal best_dist_int  : distance_type := 255;
-    signal scan_done      : std_logic := '0';
-    
-    -- I2C
-    signal i2c_scl_reg    : std_logic := '1';
-    signal i2c_sda_reg    : std_logic := '1';
-    signal i2c_timer      : integer range 0 to 249 := 0;
-    signal i2c_bit_cnt    : integer range 0 to 7 := 0;
-    signal i2c_done_pulse : std_logic := '0';
+    component VL53L0X
+        generic (
+            CLK_FREQ_HZ  : integer := 50_000_000;
+            I2C_FREQ_HZ  : integer := 100_000;
+            PWRUP_CYCLES : integer := 500_000
+        );
+        port (
+            clk         : in    std_logic;
+            rst         : in    std_logic;
+            i2c_scl     : out   std_logic;
+            i2c_sda     : inout std_logic;
+            distance_mm : out   std_logic_vector(15 downto 0);
+            data_valid  : out   std_logic;
+            sensor_ok   : out   std_logic;
+            err_code    : out   std_logic_vector(4 downto 0);
+            meas_tick   : out   std_logic
+        );
+    end component;
+
+    signal distance_mm : std_logic_vector(15 downto 0);
+    signal meas_tick   : std_logic;
+
+    type st_t is (S_IDLE, S_MOVE, S_SETTLE, S_AVG, S_NEXT, S_DONE);
+    signal st : st_t := S_IDLE;
+
+    signal phi_cur  : integer range 0 to 180 := 90;
+    signal t1_cur   : integer range 0 to 180 := T1_MAX;
+    signal phi_lo   : integer range 0 to 180 := PHI_MIN;
+    signal phi_hi   : integer range 0 to 180 := PHI_MAX;
+    signal t1_lo    : integer range 0 to 180 := T1_MIN;
+    signal t1_hi    : integer range 0 to 180 := T1_MAX;
+    signal phi_step : integer range 1 to 180 := COARSE_PHI_STEP;
+    signal t1_step  : integer range 1 to 180 := COARSE_T1_STEP;
+    signal t1_dir   : integer range -1 to 1  := 1;
+    signal fine_ph  : std_logic := '0';
+
+    signal best_d   : unsigned(15 downto 0) := (others => '1');
+    signal best_phi : integer range 0 to 180 := 90;
+    signal best_t1  : integer range 0 to 180 := T1_MAX;
+
+    signal settle_cnt : integer range 0 to SETTLE_CYCLES := 0;
+    signal acc        : unsigned(23 downto 0) := (others => '0');
+    signal navg       : integer range 0 to 255 := 0;
+    signal tick_prev  : std_logic := '0';
+    signal discard1   : std_logic := '1';  -- descarta la primera medicion por punto (puede ser de transicion)
+    signal avg_val    : unsigned(15 downto 0) := (others => '0');
+
+    signal scan_done_r  : std_logic := '0';
+    signal min_t1_r     : std_logic_vector(7 downto 0)  := (others => '0');
+    signal min_d_r      : std_logic_vector(15 downto 0) := (others => '0');
+    signal min_phi_r    : std_logic_vector(7 downto 0)  := (others => '0');
+    signal found_r      : std_logic := '0';
+
+    signal wdog         : integer range 0 to WDOG_CYCLES := 0;
+    signal aborted      : std_logic := '0';
+    signal scan_fault_r : std_logic := '0';
+
+    function imax(a, b : integer) return integer is
+    begin
+        if a > b then return a; else return b; end if;
+    end function;
+    function imin(a, b : integer) return integer is
+    begin
+        if a < b then return a; else return b; end if;
+    end function;
 
 begin
 
-    -- Proceso principal: I2C y máquina de estados
-    main_proc : process(clk, rst)
+    u_VL53L0X : VL53L0X
+        generic map (
+            CLK_FREQ_HZ  => CLK_FREQ_HZ,
+            I2C_FREQ_HZ  => I2C_FREQ_HZ,
+            PWRUP_CYCLES => PWRUP_CYCLES
+        )
+        port map (
+            clk         => clk,
+            rst         => rst,
+            i2c_scl     => i2c_scl,
+            i2c_sda     => i2c_sda,
+            distance_mm => distance_mm,
+            data_valid  => open,
+            sensor_ok   => open,
+            err_code    => open,
+            meas_tick   => meas_tick
+        );
+
+    cmd_phi    <= std_logic_vector(to_unsigned(phi_cur, 8));
+    cmd_theta1 <= std_logic_vector(to_unsigned(t1_cur, 8));
+    cmd_theta2 <= std_logic_vector(to_unsigned(90 - t1_cur, 8));  -- theta2 acoplado: L2 horizontal
+    cmd_theta3 <= std_logic_vector(to_unsigned(THETA3_POSE, 8));
+    cmd_grip   <= '1';                                             -- garra abierta durante el barrido
+    scan_active <= '0' when st = S_IDLE else '1';
+
+    min_t1        <= min_t1_r;
+    min_d         <= min_d_r;
+    min_phi       <= min_phi_r;
+    found         <= found_r;
+    scan_done     <= scan_done_r;
+    scan_fault    <= scan_fault_r;
+    dbg_meas_tick <= meas_tick;
+
+    process(clk, rst)
+        variable s    : unsigned(23 downto 0);
+        variable cphi : integer range 0 to 180;
+        variable ct1  : integer range 0 to 180;
+        variable nlo  : integer range 0 to 180;
+        variable nhi  : integer range 0 to 180;
     begin
-        if rst = '0' then
-            state <= IDLE;
-            scan_done <= '0';
-            i2c_scl_reg <= '1';
-            i2c_sda_reg <= '1';
+        if rst = '1' then
+            st           <= S_IDLE;
+            phi_cur      <= 90;
+            t1_cur       <= T1_MAX;
+            t1_dir       <= 1;
+            fine_ph      <= '0';
+            best_d       <= (others => '1');
+            best_phi     <= 90;
+            best_t1      <= T1_MAX;
+            settle_cnt   <= 0;
+            acc          <= (others => '0');
+            navg         <= 0;
+            discard1     <= '1';
+            avg_val      <= (others => '0');
+            scan_done_r  <= '0';
+            min_t1_r     <= (others => '0');
+            min_d_r      <= (others => '0');
+            min_phi_r    <= (others => '0');
+            found_r      <= '0';
+            wdog         <= 0;
+            aborted      <= '0';
+            scan_fault_r <= '0';
+
         elsif rising_edge(clk) then
-            current_state <= std_logic_vector(to_unsigned(state_type'pos(state), 4));
-            i2c_done_pulse <= '0';
-            
-            -- Temporizador I2C (100 kHz)
-            if i2c_timer < 249 then
-                i2c_timer <= i2c_timer + 1;
-            else
-                i2c_timer <= 0;
-                i2c_scl_reg <= not i2c_scl_reg;
-                if i2c_scl_reg = '0' and state /= IDLE then
-                    if i2c_bit_cnt < 7 then
-                        i2c_bit_cnt <= i2c_bit_cnt + 1;
-                    else
-                        i2c_bit_cnt <= 0;
-                        i2c_done_pulse <= '1';
-                    end if;
-                end if;
-            end if;
-            
-            -- Máquina de estados
-            case state is
-                when IDLE =>
-                    i2c_scl_reg <= '1';
-                    i2c_sda_reg <= '1';
-                    scan_done <= '0';
+
+            case st is
+
+                when S_IDLE =>
                     if start_scan = '1' then
-                        state <= INIT;
+                        scan_done_r <= '0';
+                        aborted  <= '0';
+                        wdog     <= 0;
+                        best_d   <= (others => '1');
+                        best_phi <= 90;
+                        best_t1  <= T1_MAX;
+                        phi_lo   <= PHI_MIN;  phi_hi <= PHI_MAX;
+                        t1_lo    <= T1_MIN;   t1_hi  <= T1_MAX;
+                        phi_step <= COARSE_PHI_STEP;
+                        t1_step  <= COARSE_T1_STEP;
+                        phi_cur  <= PHI_MIN;  t1_cur <= T1_MAX;
+                        t1_dir   <= -1;
+                        fine_ph  <= '0';
+                        st       <= S_MOVE;
                     end if;
-                    
-                when INIT =>
-                    i2c_sda_reg <= '0';
-                    state <= STARTING;
-                    
-                when STARTING =>
-                    scan_idx <= 0;
-                    phi_angle <= -45;
-                    min_dist <= 255;
-                    i2c_sda_reg <= '1';
-                    state <= WAIT_M;
-                    
-                when WAIT_M =>
-                    if i2c_done_pulse = '1' then
-                        state <= READ_M;
-                    end if;
-                    
-                when READ_M =>
-                    measured_dist <= 100;  -- Simulado (VL6180X real)
-                    distances(scan_idx) <= measured_dist;
-                    phi_values(scan_idx) <= phi_angle;
-                    if measured_dist > 0 and measured_dist < min_dist then
-                        min_dist <= measured_dist;
-                        min_idx <= scan_idx;
-                    end if;
-                    state <= NEXT_PT;
-                    
-                when NEXT_PT =>
-                    if scan_idx < NUM_SCAN_POINTS-1 then
-                        scan_idx <= scan_idx + 1;
-                        phi_angle <= phi_angle + 5;
-                        state <= WAIT_M;
+
+                when S_MOVE =>
+                    settle_cnt <= 0;
+                    st         <= S_SETTLE;
+
+                when S_SETTLE =>
+                    if settle_cnt >= SETTLE_CYCLES-1 then
+                        acc       <= (others => '0');
+                        navg      <= 0;
+                        discard1  <= '1';
+                        tick_prev <= meas_tick;
+                        wdog      <= 0;
+                        st        <= S_AVG;
                     else
-                        state <= REFINE;
+                        settle_cnt <= settle_cnt + 1;
                     end if;
-                    
-                when REFINE =>
-                    state <= CALC;
-                    
-                when CALC =>
-                    best_phi_int <= phi_values(min_idx);
-                    best_theta_int <= 90;
-                    best_dist_int <= distances(min_idx);
-                    state <= OUTPUT;
-                    
-                when OUTPUT =>
-                    scan_done <= '1';
-                    state <= COMPLETE;
-                    
-                when COMPLETE =>
-                    scan_done <= '1';
-                    if start_scan = '0' then
-                        state <= IDLE;
+
+                when S_AVG =>
+                    if meas_tick /= tick_prev then
+                        tick_prev <= meas_tick;
+                        wdog      <= 0;
+                        if discard1 = '1' then
+                            discard1 <= '0';
+                        else
+                            s := acc + resize(unsigned(distance_mm), 24);
+                            acc <= s;
+                            if navg = N_AVG-1 then
+                                avg_val <= resize(s / N_AVG, 16);
+                                st      <= S_NEXT;
+                            else
+                                navg <= navg + 1;
+                            end if;
+                        end if;
+                    elsif wdog >= WDOG_CYCLES-1 then
+                        aborted <= '1';
+                        st      <= S_DONE;
+                    else
+                        wdog <= wdog + 1;
                     end if;
-                    
-                when others =>
-                    state <= IDLE;
+
+                when S_NEXT =>
+                    if avg_val < best_d then
+                        cphi := phi_cur;  ct1 := t1_cur;
+                        best_d   <= avg_val;
+                        best_phi <= phi_cur;
+                        best_t1  <= t1_cur;
+                    else
+                        cphi := best_phi;  ct1 := best_t1;
+                    end if;
+
+                    if t1_dir = 1 and (t1_cur + t1_step) <= t1_hi then
+                        t1_cur <= t1_cur + t1_step;
+                        st     <= S_MOVE;
+                    elsif t1_dir = -1 and (t1_cur - t1_step) >= t1_lo then
+                        t1_cur <= t1_cur - t1_step;
+                        st     <= S_MOVE;
+                    else
+                        if (phi_cur + phi_step) <= phi_hi then
+                            phi_cur <= phi_cur + phi_step;
+                            if fine_ph = '1' then
+                                -- barrido fino: theta1 siempre en el mismo sentido
+                                -- (evita reversion de theta2 acoplado en la serpentina)
+                                t1_cur <= t1_lo;
+                                t1_dir <= 1;
+                            else
+                                t1_dir <= -t1_dir;
+                            end if;
+                            st <= S_MOVE;
+                        else
+                            if fine_ph = '0' then
+                                nlo := imax(PHI_MIN, cphi - COARSE_PHI_STEP);
+                                nhi := imin(PHI_MAX, cphi + COARSE_PHI_STEP);
+                                phi_lo <= nlo;  phi_hi <= nhi;  phi_cur <= nlo;
+                                nlo := imax(T1_MIN, ct1 - COARSE_T1_STEP);
+                                nhi := imin(T1_MAX, ct1 + COARSE_T1_STEP);
+                                t1_lo  <= nlo;  t1_hi  <= nhi;  t1_cur <= nlo;
+                                phi_step <= FINE_PHI_STEP;
+                                t1_step  <= FINE_T1_STEP;
+                                t1_dir   <= 1;
+                                fine_ph  <= '1';
+                                st       <= S_MOVE;
+                            else
+                                st <= S_DONE;
+                            end if;
+                        end if;
+                    end if;
+
+                when S_DONE =>
+                    min_t1_r  <= std_logic_vector(to_unsigned(best_t1, 8));
+                    min_d_r   <= std_logic_vector(best_d);
+                    min_phi_r <= std_logic_vector(to_unsigned(best_phi, 8));
+                    if aborted = '0' and best_d < to_unsigned(FOUND_TH, 16) then
+                        found_r <= '1';
+                    else
+                        found_r <= '0';
+                    end if;
+                    scan_fault_r <= aborted;
+                    scan_done_r  <= '1';
+                    st           <= S_IDLE;
+
             end case;
         end if;
     end process;
 
-    -- Salidas
-    i2c_scl <= i2c_scl_reg;
-    i2c_sda <= i2c_sda_reg when state /= IDLE else '1';
-    best_phi <= std_logic_vector(to_unsigned(best_phi_int + 45, 8));
-    best_theta <= std_logic_vector(to_unsigned(best_theta_int, 8));
-    best_distance <= std_logic_vector(to_unsigned(best_dist_int, 8));
-    scan_complete <= scan_done;
-    debug_data <= std_logic_vector(to_unsigned(measured_dist, 8)) & 
-                  std_logic_vector(to_unsigned(scan_idx, 8));
-
-end Behavioral;
+end rtl;
