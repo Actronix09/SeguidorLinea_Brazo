@@ -4,7 +4,7 @@
 
 set_global_assignment -name FAMILY "Cyclone II"
 set_global_assignment -name DEVICE EP2C5T144C8
-set_global_assignment -name TOP_LEVEL_ENTITY LIDAR_GrabLoop_Top
+set_global_assignment -name TOP_LEVEL_ENTITY SeguidorLinea_Brazo
 
 # ============================================================================
 # Archivos Principales VHDL
@@ -30,7 +30,7 @@ set_global_assignment -name VHDL_FILE Pruebas/Brazo/tb_grab_ctrl.vhd
 set_global_assignment -name VHDL_FILE Pruebas/Brazo/tb_kinematics.vhd
 
 # Lidar (LIDAR_Grab_Top y LIDAR_Scan_Top viejos se quitaron: usaban la interfaz
-# antigua del LIDAR/grab_ctrl y rompÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­an la sintesis. LIDAR_GrabLoop_Top los reemplaza.)
+# antigua del LIDAR/grab_ctrl y rompÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­an la sintesis. LIDAR_GrabLoop_Top los reemplaza.)
 set_global_assignment -name VHDL_FILE Pruebas/Lidar/LIDAR_GrabLoop_Top.vhd
 
 # Motores

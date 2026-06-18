@@ -21,18 +21,16 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity grab_ctrl is
     generic (
-        MOVE_CYCLES : integer := 125_000_000;   -- ~2.5 s para que el brazo llegue
-        GRIP_CYCLES : integer := 75_000_000;    -- ~1.5 s: la garra tarda ~1 s en cerrar (99°@rampa);
-                                                -- antes 0.8 s -> levantaba antes de terminar de agarrar
-        DROP_PHI    : integer := 100;            -- pose de DEPÓSITO (girar a la derecha + extender)
+        MOVE_CYCLES : integer := 125_000_000;
+        GRIP_CYCLES : integer := 75_000_000;
+        DROP_PHI    : integer := 100;
         DROP_T1     : integer := 45;
         DROP_T2     : integer := 45;
         DROP_T3     : integer := 0
     );
     port (
         clk          : in  std_logic;
-        rst          : in  std_logic;                      -- activo alto
-        -- del LIDAR (escáner)
+        rst          : in  std_logic;
         scan_active  : in  std_logic;
         scan_done    : in  std_logic;
         found        : in  std_logic;
@@ -44,26 +42,19 @@ entity grab_ctrl is
         cmd_theta2   : in  std_logic_vector(7 downto 0);
         cmd_theta3   : in  std_logic_vector(7 downto 0);
         cmd_grip     : in  std_logic;
-        -- de la máquina de estados
-        trigger_drop : in  std_logic;                      -- pulso: deposita el objeto
-        -- a polarPWM (multiplexado)
+        trigger_drop : in  std_logic;
         phi_out      : out std_logic_vector(7 downto 0);
         theta1_out   : out std_logic_vector(7 downto 0);
         theta2_out   : out std_logic_vector(7 downto 0);
         theta3_out   : out std_logic_vector(7 downto 0);
         grip_out     : out std_logic;
-        -- estado
-        has_object   : out std_logic;                      -- '1' mientras acarrea el cubo
-        arm_ready    : out std_logic;                      -- '1' en REST(libre) o HOLD
-        reachable    : out std_logic                       -- el último objetivo estaba en alcance
+        has_object   : out std_logic;
+        arm_ready    : out std_logic;
+        reachable    : out std_logic
     );
 end grab_ctrl;
 
 architecture rtl of grab_ctrl is
-
-    -- kinematics se instancia por ENTIDAD DIRECTA (entity work.kinematics) más abajo:
-    -- así sus generics (L*, L_GRIP, Z_DROP, R_TRIM) son el ÚNICO mando de calibración.
-    -- Editar Z_DROP/R_TRIM en kinematics.vhd surte efecto sin un default de component que tape.
 
     function imax(a, b : integer) return integer is
     begin
@@ -80,12 +71,11 @@ architecture rtl of grab_ctrl is
     signal gst : gst_t := G_REST;
     signal tmr : integer range 0 to TMR_MAX := 0;
 
-    -- Pose REST/HOME: phi=180, theta1=90, resto 0, garra CERRADA
-    signal grab_phi : std_logic_vector(7 downto 0) := std_logic_vector(to_unsigned(180, 8));
-    signal grab_t1  : std_logic_vector(7 downto 0) := std_logic_vector(to_unsigned(90, 8));
-    signal grab_t2  : std_logic_vector(7 downto 0) := std_logic_vector(to_unsigned(0, 8));
-    signal grab_t3  : std_logic_vector(7 downto 0) := std_logic_vector(to_unsigned(0, 8));
-    signal grab_grip   : std_logic := '0';   -- 0=cerrada (1=abre, como TestBrazo)
+    signal grab_phi  : std_logic_vector(7 downto 0) := std_logic_vector(to_unsigned(180, 8));
+    signal grab_t1   : std_logic_vector(7 downto 0) := std_logic_vector(to_unsigned(100, 8));
+    signal grab_t2   : std_logic_vector(7 downto 0) := std_logic_vector(to_unsigned(10, 8));
+    signal grab_t3   : std_logic_vector(7 downto 0) := std_logic_vector(to_unsigned(0, 8));
+    signal grab_grip : std_logic := '0';
     signal has_obj_r   : std_logic := '0';
     signal reach_latch : std_logic := '0';
 
@@ -112,25 +102,23 @@ begin
             ik_start <= '0';
             case gst is
 
-                -- REPOSO: pose tucked, garra cerrada. Espera a que arranque un barrido.
                 when G_REST =>
-                    grab_phi <= std_logic_vector(to_unsigned(180, 8));
-                    grab_t1  <= std_logic_vector(to_unsigned(90, 8));
-                    grab_t2  <= std_logic_vector(to_unsigned(0, 8));
-                    grab_t3  <= std_logic_vector(to_unsigned(0, 8));
+                    grab_phi  <= std_logic_vector(to_unsigned(180, 8));
+                    grab_t1   <= std_logic_vector(to_unsigned(100, 8));
+                    grab_t2   <= std_logic_vector(to_unsigned(0, 8));
+                    grab_t3   <= std_logic_vector(to_unsigned(0, 8));
                     grab_grip <= '0';
                     if scan_active = '1' then
                         gst <= G_SCANWAIT;
                     end if;
 
-                -- Barrido en curso (servos los manda el LIDAR vía MUX). Garra abierta lista.
                 when G_SCANWAIT =>
                     grab_grip <= '1';
                     if scan_done = '1' then
                         if found = '1' then
                             gst <= G_IK;
                         else
-                            gst <= G_REST;       -- no hay objeto -> sigue sin agarrar
+                            gst <= G_REST;
                         end if;
                     end if;
 
@@ -141,15 +129,15 @@ begin
                 when G_IK_WAIT =>
                     if ik_done = '1' then
                         if reach = '1' then
-                            grab_phi <= gphi; grab_t1 <= gt1;
-                            grab_t2  <= gt2;  grab_t3 <= gt3;
-                            grab_grip <= '1';            -- garra abierta para acercarse
+                            grab_phi  <= gphi; grab_t1 <= gt1;
+                            grab_t2   <= gt2;  grab_t3 <= gt3;
+                            grab_grip <= '1';
                             reach_latch <= '1';
                             tmr <= 0;
                             gst <= G_MOVE;
                         else
                             reach_latch <= '0';
-                            gst <= G_REST;               -- fuera de alcance -> no agarra
+                            gst <= G_REST;
                         end if;
                     end if;
 
@@ -161,30 +149,28 @@ begin
                     end if;
 
                 when G_GRIP =>
-                    grab_grip <= '0'; has_obj_r <= '1';  -- CIERRA sobre el cubo
+                    grab_grip <= '0'; has_obj_r <= '1';
                     if tmr >= GRIP_CYCLES-1 then
                         tmr <= 0; gst <= G_HOLD;
                     else
                         tmr <= tmr + 1;
                     end if;
 
-                -- ACARREO: cubo agarrado, pose de recogida (phi=180,t1=135). Espera trigger_drop.
                 when G_HOLD =>
-                    grab_phi <= std_logic_vector(to_unsigned(180, 8));
-                    grab_t1  <= std_logic_vector(to_unsigned(135, 8));
-                    grab_t2  <= std_logic_vector(to_unsigned(0, 8));
-                    grab_t3  <= std_logic_vector(to_unsigned(0, 8));
+                    grab_phi  <= std_logic_vector(to_unsigned(180, 8));
+                    grab_t1   <= std_logic_vector(to_unsigned(100, 8));
+                    grab_t2   <= std_logic_vector(to_unsigned(10, 8));
+                    grab_t3   <= std_logic_vector(to_unsigned(0, 8));
                     grab_grip <= '0';
                     if trigger_drop = '1' then
                         tmr <= 0; gst <= G_DROP;
                     end if;
 
-                -- DEPÓSITO: gira phi=90 y extiende (garra aún CERRADA mientras llega).
                 when G_DROP =>
-                    grab_phi <= std_logic_vector(to_unsigned(DROP_PHI, 8));
-                    grab_t1  <= std_logic_vector(to_unsigned(DROP_T1, 8));
-                    grab_t2  <= std_logic_vector(to_unsigned(DROP_T2, 8));
-                    grab_t3  <= std_logic_vector(to_unsigned(DROP_T3, 8));
+                    grab_phi  <= std_logic_vector(to_unsigned(DROP_PHI, 8));
+                    grab_t1   <= std_logic_vector(to_unsigned(DROP_T1, 8));
+                    grab_t2   <= std_logic_vector(to_unsigned(DROP_T2, 8));
+                    grab_t3   <= std_logic_vector(to_unsigned(DROP_T3, 8));
                     grab_grip <= '0';
                     if tmr >= MOVE_CYCLES-1 then
                         tmr <= 0; gst <= G_RELEASE;
@@ -192,9 +178,8 @@ begin
                         tmr <= tmr + 1;
                     end if;
 
-                -- SUELTA: abre la garra y libera el objeto.
                 when G_RELEASE =>
-                    grab_grip <= '1'; has_obj_r <= '0';  -- ABRE -> suelta
+                    grab_grip <= '1'; has_obj_r <= '0';
                     if tmr >= GRIP_CYCLES-1 then
                         tmr <= 0; gst <= G_REST;
                     else
@@ -205,7 +190,7 @@ begin
         end if;
     end process;
 
-    -- MUX: barrido -> LIDAR (cmd_*); resto -> la pose del estado actual
+    -- MUX: durante scan_active los servos los manda el LIDAR
     phi_out    <= cmd_phi    when scan_active = '1' else grab_phi;
     theta1_out <= cmd_theta1 when scan_active = '1' else grab_t1;
     theta2_out <= cmd_theta2 when scan_active = '1' else grab_t2;
@@ -214,7 +199,6 @@ begin
 
     has_object <= has_obj_r;
     reachable  <= reach_latch;
-    -- listo (la FSM puede mandar el siguiente comando) en REST libre o en HOLD
     arm_ready  <= '1' when (gst = G_REST and scan_active = '0') or gst = G_HOLD else '0';
 
 end rtl;

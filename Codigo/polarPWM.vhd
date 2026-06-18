@@ -32,7 +32,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity polarPWM is
     Port (
         clk         : in  std_logic;
-        rst         : in  std_logic;                     -- activo ALTO
+        rst         : in  std_logic;                     -- activo alto
         phi_in      : in  std_logic_vector(7 downto 0);
         theta1_in   : in  std_logic_vector(7 downto 0);
         theta2_in   : in  std_logic_vector(7 downto 0);
@@ -48,30 +48,17 @@ end polarPWM;
 
 architecture Behavioral of polarPWM is
 
-    -- -------------------------------------------------------------------------
-    -- Constantes PWM (50 MHz)
-    --   Periodo : 20 ms  = 1_000_000 ciclos
-    --   0°      : 0.5 ms =    25_000 ciclos   ← estándar hobby real
-    --   180°    : 2.5 ms =   125_000 ciclos   ← estándar hobby real
-    --   Paso    : (125_000 - 25_000) / 180 = 556 ciclos/°
-    -- -------------------------------------------------------------------------
     constant PWM_PERIOD : integer := 1_000_000;
-    constant PWM_MIN    : integer :=    25_000;   -- 0.5 ms → 0°
-    constant PWM_MAX    : integer :=   125_000;   -- 2.5 ms → 180°
+    constant PWM_MIN    : integer :=    25_000;   -- 0.5 ms -> 0 grados
+    constant PWM_MAX    : integer :=   125_000;   -- 2.5 ms -> 180 grados
     constant PWM_STEP   : integer :=       556;   -- ciclos por grado
 
-    -- Gripper: normalmente abierto, cierra al 55% (99°)
+    -- gripper: normalmente abierto, cierra al 55% (99 grados)
     constant GRIP_OPEN  : integer :=   0;
     constant GRIP_CLOSE : integer :=  99;
 
-    -- Rampa: ciclos entre incrementos de 1°
-    --   8_000_000 ciclos → ~6 °/s → 0-180° en ~28 s  (torque suave)
-    --   Ajuste: bajar para más velocidad, subir para menos torque
-    constant RAMP_STEP  : integer := 500_000;
+    constant RAMP_STEP  : integer := 500_000;     -- ~100 grados/s
 
-    -- -------------------------------------------------------------------------
-    -- LUT ángulo (0-180) → ciclos de pulso
-    -- -------------------------------------------------------------------------
     type angle_pwm_t is array (0 to 180) of integer range PWM_MIN to PWM_MAX;
 
     function build_lut return angle_pwm_t is
@@ -88,9 +75,6 @@ architecture Behavioral of polarPWM is
 
     constant ANGLE_PWM : angle_pwm_t := build_lut;
 
-    -- -------------------------------------------------------------------------
-    -- Función clamping
-    -- -------------------------------------------------------------------------
     function clamp180(x : integer) return integer is
     begin
         if    x < 0   then return 0;
@@ -99,9 +83,6 @@ architecture Behavioral of polarPWM is
         end if;
     end function;
 
-    -- -------------------------------------------------------------------------
-    -- Función rampa: avanza 1° hacia el objetivo
-    -- -------------------------------------------------------------------------
     function ramp1(cur : integer; tgt : integer) return integer is
     begin
         if    cur < tgt then return cur + 1;
@@ -110,31 +91,24 @@ architecture Behavioral of polarPWM is
         end if;
     end function;
 
-    -- -------------------------------------------------------------------------
-    -- Ángulos OBJETIVO (leídos de las entradas, sin compensación)
-    -- -------------------------------------------------------------------------
-    signal tgt_phi  : integer range 0 to 180 := 180;  -- reposo del brazo: phi=180 (sin tirón al encender)
+    signal tgt_phi  : integer range 0 to 180 := 180;
     signal tgt_t1   : integer range 0 to 180 := 90;
     signal tgt_t2   : integer range 0 to 180 := 0;
     signal tgt_t3   : integer range 0 to 180 := 0;
     signal tgt_grip : integer range 0 to 180 := GRIP_CLOSE;
 
-    -- cur_* inicializan en HOME para que al arrancar no haya salto de rampa
-    -- phi HOME=180 (= reposo del brazo); theta3 invertida: HOME externo=0° → interno=180°
+    -- cur_* inicializan en HOME para evitar salto de rampa al encender
     signal cur_phi  : integer range 0 to 180 := 180;
     signal cur_t1   : integer range 0 to 180 := 90;
     signal cur_t2   : integer range 0 to 180 := 0;
-    signal cur_t3   : integer range 0 to 180 := 180;  -- invertido: 180-0=180
+    signal cur_t3   : integer range 0 to 180 := 180;  -- theta3 invertido: HOME externo=0 -> interno=180
     signal cur_grip : integer range 0 to 180 := GRIP_CLOSE;
 
-    -- Tick de rampa
     signal ramp_cnt  : integer range 0 to RAMP_STEP-1 := 0;
     signal ramp_tick : std_logic := '0';
 
-    -- Contador PWM
     signal cuenta : integer range 0 to PWM_PERIOD-1 := 0;
 
-    -- Registros de salida
     signal r_phi  : std_logic := '0';
     signal r_t1   : std_logic := '0';
     signal r_t2   : std_logic := '0';
@@ -143,23 +117,20 @@ architecture Behavioral of polarPWM is
 
 begin
 
-    -- =========================================================================
-    -- Proceso 1: Leer entradas → ángulos objetivo
-    -- =========================================================================
     read_targets : process(clk)
     begin
         if rising_edge(clk) then
             if rst = '1' then
-                tgt_phi  <= 180;   -- reposo del brazo (sin tirón al encender)
+                tgt_phi  <= 180;
                 tgt_t1   <= 90;
                 tgt_t2   <= 0;
-                tgt_t3   <= 180;   -- invertido: HOME externo=0° → interno=180°
+                tgt_t3   <= 180;
                 tgt_grip <= GRIP_CLOSE;
             else
                 tgt_phi  <= clamp180(to_integer(unsigned(phi_in)));
                 tgt_t1   <= clamp180(to_integer(unsigned(theta1_in)));
                 tgt_t2   <= clamp180(to_integer(unsigned(theta2_in)));
-                -- theta3 montado invertido mecánicamente: se invierte aquí
+                -- theta3 montado invertido mecanicamente: se invierte aqui
                 tgt_t3   <= clamp180(180 - to_integer(unsigned(theta3_in)));
                 if grip_cmd = '1' then
                     tgt_grip <= GRIP_CLOSE;
@@ -170,9 +141,6 @@ begin
         end if;
     end process read_targets;
 
-    -- =========================================================================
-    -- Proceso 2: Generador de tick de rampa
-    -- =========================================================================
     gen_ramp_tick : process(clk)
     begin
         if rising_edge(clk) then
@@ -191,17 +159,14 @@ begin
         end if;
     end process gen_ramp_tick;
 
-    -- =========================================================================
-    -- Proceso 3: Interpolación progresiva
-    -- =========================================================================
     interpolate : process(clk)
     begin
         if rising_edge(clk) then
             if rst = '1' then
-                cur_phi  <= 180;   -- reposo del brazo (sin tirón al encender)
+                cur_phi  <= 180;
                 cur_t1   <= 90;
                 cur_t2   <= 0;
-                cur_t3   <= 180;   -- invertido: HOME externo=0° → interno=180°
+                cur_t3   <= 180;
                 cur_grip <= GRIP_CLOSE;
             elsif ramp_tick = '1' then
                 cur_phi  <= ramp1(cur_phi,  tgt_phi);
@@ -213,9 +178,6 @@ begin
         end if;
     end process interpolate;
 
-    -- =========================================================================
-    -- Proceso 4: Generador PWM — 5 canales, 20 ms periodo
-    -- =========================================================================
     gen_pwm : process(clk)
     begin
         if rising_edge(clk) then
@@ -239,9 +201,6 @@ begin
         end if;
     end process gen_pwm;
 
-    -- =========================================================================
-    -- Salidas
-    -- =========================================================================
     pwm_phi     <= r_phi;
     pwm_theta1  <= r_t1;
     pwm_theta2  <= r_t2;

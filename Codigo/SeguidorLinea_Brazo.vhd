@@ -27,43 +27,29 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity SeguidorLinea_Brazo is
     port (
-        -- Control
-        clk          : in    std_logic;                 -- PIN_17, 50 MHz
+        clk          : in    std_logic;                 -- PIN_17
         reset        : in    std_logic;                 -- PIN_144, activo bajo
-
-        -- VL53L0X I2C
         i2c_scl      : out   std_logic;                 -- PIN_142
         i2c_sda      : inout std_logic;                 -- PIN_136
-
-        -- Servomotores (5 ejes)
         servo_phi    : out   std_logic;                 -- PIN_118
         servo_theta1 : out   std_logic;                 -- PIN_122
         servo_theta2 : out   std_logic;                 -- PIN_126
         servo_theta3 : out   std_logic;                 -- PIN_132
         servo_gripper: out   std_logic;                 -- PIN_134
-
-        -- Sensores de línea QRD1114
         sensor_izq   : in    std_logic;
         sensor_der   : in    std_logic;
-
-        -- Motores DC (PWM directo en las 4 entradas del L293, enables fijos en HW)
-        motor_a1     : out   std_logic;                 -- PIN_21  (IZQ adelante)
-        motor_a2     : out   std_logic;                 -- PIN_8   (IZQ atrás, =0)
-        motor_b1     : out   std_logic;                 -- PIN_26  (DER adelante)
-        motor_b2     : out   std_logic;                 -- PIN_24  (DER atrás, =0)
-
-        -- LEDs de la placa (activo-bajo: '0' enciende)
-        led_1        : out   std_logic;                 -- vida (1 Hz)
-        led_2        : out   std_logic;                 -- has_object (lleva cubo)
-        led_3        : out   std_logic                  -- scan_active (escaneando)
+        motor_a1     : out   std_logic;                 -- PIN_4
+        motor_a2     : out   std_logic;                 -- PIN_8
+        motor_b1     : out   std_logic;                 -- PIN_31
+        motor_b2     : out   std_logic;                 -- PIN_24
+        led_1        : out   std_logic;                 -- vida 1 Hz (activo bajo)
+        led_2        : out   std_logic;                 -- has_object (activo bajo)
+        led_3        : out   std_logic                  -- zona_fallo (activo bajo)
     );
 end SeguidorLinea_Brazo;
 
 architecture Behavioral of SeguidorLinea_Brazo is
 
-    -- -------------------------------------------------------------------------
-    -- Componente: LIDAR (escáner, entrega el mínimo crudo + found)
-    -- -------------------------------------------------------------------------
     component LIDAR
         port (
             clk           : in    std_logic;
@@ -87,19 +73,6 @@ architecture Behavioral of SeguidorLinea_Brazo is
         );
     end component;
 
-    -- -------------------------------------------------------------------------
-    -- grab_ctrl se instancia por ENTIDAD DIRECTA (entity work.grab_ctrl) más abajo,
-    -- igual que MaquinaEstados: así sus generics (MOVE/GRIP/DROP_*) son el ÚNICO mando.
-    -- Editar las poses de DEPÓSITO (DROP_PHI/T1/T2/T3) en grab_ctrl.vhd surte efecto
-    -- sin un default de component que las tape.
-
-    -- MaquinaEstados se instancia por ENTIDAD DIRECTA (entity work.MaquinaEstados)
-    -- más abajo, para que sus generics (DUTY_*, MODO_PIVOTE, LINE_LVL, ...) sean el
-    -- ÚNICO mando: editarlos en MaquinaEstados.vhd surte efecto sin defaults que tapen.
-
-    -- -------------------------------------------------------------------------
-    -- Componente: polarPWM (5 servos)
-    -- -------------------------------------------------------------------------
     component polarPWM
         port (
             clk         : in  std_logic;
@@ -117,15 +90,13 @@ architecture Behavioral of SeguidorLinea_Brazo is
         );
     end component;
 
-    -- Reset interno (activo alto para todos los submódulos)
     signal reset_int : std_logic;
 
-    -- LIDAR <-> grab_ctrl / MaquinaEstados
     signal start_scan  : std_logic;
     signal scan_active : std_logic;
     signal scan_done   : std_logic;
     signal found       : std_logic;
-    signal scan_fault  : std_logic;   -- '1' = el barrido abortó: sensor VL53L0X no responde
+    signal scan_fault  : std_logic;
     signal meas_tick   : std_logic;
     signal cmd_phi     : std_logic_vector(7 downto 0);
     signal cmd_theta1  : std_logic_vector(7 downto 0);
@@ -136,7 +107,6 @@ architecture Behavioral of SeguidorLinea_Brazo is
     signal min_d       : std_logic_vector(15 downto 0);
     signal min_phi     : std_logic_vector(7 downto 0);
 
-    -- grab_ctrl -> polarPWM / MaquinaEstados
     signal trigger_drop : std_logic;
     signal has_object   : std_logic;
     signal arm_ready    : std_logic;
@@ -147,22 +117,17 @@ architecture Behavioral of SeguidorLinea_Brazo is
     signal theta3_in    : std_logic_vector(7 downto 0);
     signal grip_in      : std_logic;
 
-    -- theta1 compensado: el servo theta1 está montado INVERTIDO; se corrige aquí
-    -- (180 - theta1) para barrido Y agarre, justo antes de polarPWM.
+    -- servo theta1 montado invertido: corregido antes de polarPWM
     signal theta1_pwm  : std_logic_vector(7 downto 0);
 
-    -- LEDs
     signal me_led_estado : std_logic;
-    signal me_zona_fallo : std_logic;   -- '1' = detenido por fallo de sensor (LED 3)
+    signal me_zona_fallo : std_logic;
 
 begin
 
     reset_int  <= not reset;
     theta1_pwm <= std_logic_vector(to_unsigned(180 - to_integer(unsigned(theta1_in)), 8));
 
-    -- =========================================================================
-    -- LIDAR (escáner): la MaquinaEstados lo dispara con start_scan
-    -- =========================================================================
     u_lidar : LIDAR
         port map (
             clk => clk, rst => reset_int, start_scan => start_scan,
@@ -175,10 +140,6 @@ begin
             dbg_meas_tick => meas_tick
         );
 
-    -- =========================================================================
-    -- grab_ctrl: ciclo del brazo (REST -> agarre -> HOLD -> depósito -> REST)
-    -- =========================================================================
-    -- Pose de DEPÓSITO y tiempos (MOVE/GRIP) se fijan en los generics de grab_ctrl.vhd.
     u_grab : entity work.grab_ctrl
         port map (
             clk => clk, rst => reset_int,
@@ -192,31 +153,19 @@ begin
             has_object => has_object, arm_ready => arm_ready, reachable => reachable
         );
 
-    -- =========================================================================
-    -- MaquinaEstados: seguidor de línea SIMPLE (2 sensores DENTRO de la línea)
-    -- + ZONA DE RECOGIDA por rayas blancas (zebra). Al contar N_RAYAS y volver al
-    -- negro dispara start_scan; el brazo/LIDAR buscan y agarran (handshake con
-    -- grab_ctrl: scan_active/arm_ready/has_object) y luego reanuda el seguimiento.
-    -- =========================================================================
     u_me : entity work.MaquinaEstados
-        -- Mandos (LINE_LVL, DUTY_*, MODO_PIVOTE, FILTRO_CYCLES, N_RAYAS, W_MAX/T_GAP)
-        -- en los generics de MaquinaEstados.vhd. LINE_LVL: '0'=línea negra, '1'=blanca.
         port map (
             clk => clk, rst => reset_int,
             sensor_izq => sensor_izq, sensor_der => sensor_der,
             motor_a1 => motor_a1, motor_a2 => motor_a2,
             motor_b1 => motor_b1, motor_b2 => motor_b2,
             led_estado => me_led_estado,
-            -- Handshake con el brazo (zona alterna recogida/depósito)
             start_scan => start_scan, trigger_drop => trigger_drop,
             scan_active => scan_active,
             arm_ready => arm_ready, has_object => has_object,
             sensor_err => scan_fault, zona_fallo => me_zona_fallo
         );
 
-    -- =========================================================================
-    -- polarPWM: 5 servos (theta1 ya invertido)
-    -- =========================================================================
     u_pwm : polarPWM
         port map (
             clk => clk, rst => reset_int,
@@ -226,11 +175,9 @@ begin
             pwm_theta3 => servo_theta3, pwm_gripper => servo_gripper
         );
 
-    -- =========================================================================
-    -- LEDs de la placa (activo-bajo: '0' enciende)
-    -- =========================================================================
-    led_1 <= not me_led_estado;   -- vida (parpadeo 1 Hz)
-    led_2 <= not has_object;      -- lleva el cubo
-    led_3 <= not me_zona_fallo;   -- ERROR: detenido por fallo de sensor VL53L0X
+    -- activo-bajo: '0' enciende
+    led_1 <= not me_led_estado;
+    led_2 <= not has_object;
+    led_3 <= not me_zona_fallo;
 
 end Behavioral;
